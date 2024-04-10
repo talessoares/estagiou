@@ -1,6 +1,6 @@
 # Passo a Passo para Configuração Inicial
 
-* Abra a pasta <strong>back</strong>
+* Abra a pasta <strong>back</strong> na sua IDE de desenvolvimento
 
 * Crie o arquivo application.properties
 
