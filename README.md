@@ -32,7 +32,7 @@ Projeto do Grupo 10 da disciplina de Laboratório de Engenharia de Software Apli
 
 - [@Antonio Zubiaurre](https://github.com/Francisco1669)
 - [@Felipe Cardoso](https://www.github.com/FCardozera)
-- [@Joao Medina](https://www.github.com/joaomedinap)
+- [@João Medina](https://www.github.com/joaomedinap)
 - [@Ricardo Costa](https://www.github.com/ricardolhc)
 - [@Tales Soares](https://www.github.com/talessoares)
 
