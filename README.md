@@ -27,7 +27,7 @@ Projeto do Grupo 10 da disciplina de Laboratório de Engenharia de Software Apli
 
 
 <img align="center" alt="Java" title="Java" height="100" width="100" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg">
-<img align="center" alt="Spring" title="Spring" height="100" width="100" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/spring/spring-original.svg">
+<img align="center" alt="Springboot" title="Springboot" height="100" width="100" src="https://user-images.githubusercontent.com/25181517/183891303-41f257f8-6b3d-487c-aa56-c497b880d0fb.png">
 <img align="center" alt="Flutter" title="Flutter" height="100" width="100" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/flutter/flutter-original.svg">
 <img align="center" alt="Postgresql" title="Postgresql" height="100" width="100" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/postgresql/postgresql-original.svg">
 
