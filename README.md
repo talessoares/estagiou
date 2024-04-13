@@ -23,9 +23,15 @@ Projeto do Grupo 10 da disciplina de Laboratório de Engenharia de Software Apli
     - [ ] Teste de Sistema
 
 ## Tecnologias Usadas
-* Java
-* Springboot
-* Flutter
+<div style="display: inline_block">
+
+
+<img align="center" alt="Java" title="Java" height="100" width="100" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg">
+<img align="center" alt="Spring" title="Spring" height="100" width="100" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/spring/spring-original.svg">
+<img align="center" alt="Flutter" title="Flutter" height="100" width="100" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/flutter/flutter-original.svg">
+<img align="center" alt="Postgresql" title="Postgresql" height="100" width="100" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/postgresql/postgresql-original.svg">
+
+</div>
 
 
 ## Autores
