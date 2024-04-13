@@ -10,11 +10,11 @@ Projeto do Grupo 10 da disciplina de Laboratório de Engenharia de Software Apli
 ## Roadmap
 
 - **Elicitação dos Requisitos:**
-    - [ ] Especificação dos Requisitos
+    - [x] MoSCoW
     - [ ] Protótipos
 
 - **Processo de Desenvolvimento:**
-    - [ ] Template SpringBoot MVC
+    - [X] Template SpringBoot MVC
 
 - **Verificação e Validação:**
     - [ ] Casos de Teste
