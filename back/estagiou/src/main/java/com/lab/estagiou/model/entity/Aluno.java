@@ -42,10 +42,74 @@ public class Aluno {
     private Curso curso;
 
     @OneToMany(mappedBy = "aluno")
-    private List<Inscricao> inscricoes = new ArrayList<>();
+    private List<Inscricao> inscricoes;
 
     @OneToOne
     @JoinColumn(name = "endereco_id")
     private Endereco endereco;
-    
+
+    private static final String INSCRICAO_NULA = "Inscrição não pode ser nula";
+
+    public Aluno(String nome, String sobrenome, String email, Curso curso, Endereco endereco) {
+        if (nome == null || nome.isBlank()) {
+            throw new IllegalArgumentException("Nome do aluno não pode ser nulo");
+        }
+
+        if (sobrenome == null || sobrenome.isBlank()) {
+            throw new IllegalArgumentException("Sobrenome do aluno não pode ser nulo");
+        }
+
+        if (email == null || email.isBlank()) {
+            throw new IllegalArgumentException("Email do aluno não pode ser nulo");
+        }
+
+        this.id = null;
+        this.nome = nome;
+        this.sobrenome = sobrenome;
+        this.email = email;
+        this.curso = curso;
+        this.endereco = endereco;
+        this.inscricoes = new ArrayList<>();
+    }
+
+    public boolean addInscricao(Inscricao inscricao) {
+        if (inscricao == null) {
+            throw new IllegalArgumentException(INSCRICAO_NULA);
+        }
+
+        return this.inscricoes.add(inscricao);
+    }
+
+    public boolean removeInscricao(Inscricao inscricao) {
+        if (inscricao == null) {
+            throw new IllegalArgumentException(INSCRICAO_NULA);
+        }
+
+        return this.inscricoes.remove(inscricao);
+    }
+
+    public boolean containsInscricao(Inscricao inscricao) {
+        if (inscricao == null) {
+            throw new IllegalArgumentException(INSCRICAO_NULA);
+        }
+
+        return this.inscricoes.contains(inscricao);
+    }
+
+    public boolean isInscricoesEmpty() {
+        return this.inscricoes.isEmpty();
+    }
+
+    public int getQuantidadeInscricoes() {
+        return this.inscricoes.size();
+    }
+
+    public boolean equalsCurso(Curso curso) {
+        return this.curso.equals(curso);
+    }
+
+    public boolean equalsEndereco(Endereco endereco) {
+        return this.endereco.equals(endereco);
+    }
+
 }
