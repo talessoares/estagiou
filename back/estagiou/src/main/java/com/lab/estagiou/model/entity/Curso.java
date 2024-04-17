@@ -31,6 +31,12 @@ public class Curso {
     private String nome;
 
     @OneToMany(mappedBy = "curso")
-    private List<Aluno> alunos = new ArrayList<>();
+    private List<Aluno> alunos;
+
+    public Curso(String nome) {
+        this.id = null;
+        this.nome = nome;
+        this.alunos = new ArrayList<>();
+    }
     
 }
