@@ -33,10 +33,52 @@ public class Curso {
     @OneToMany(mappedBy = "curso")
     private List<Aluno> alunos;
 
+    private static final String ALUNO_NULO = "Aluno não pode ser nulo";
+
     public Curso(String nome) {
+        if (nome == null || nome.isBlank()) {
+            throw new IllegalArgumentException("Nome do curso não pode ser nulo");
+        }
+
         this.id = null;
         this.nome = nome;
         this.alunos = new ArrayList<>();
+    }
+
+    public boolean equalsName(String name) {
+        return this.nome.equals(name);
+    }
+
+    public int getQuantidadeAlunos() {
+        return this.alunos.size();
+    }
+
+    public boolean addAluno(Aluno aluno) {
+        if (aluno == null) {
+            throw new IllegalArgumentException(ALUNO_NULO);
+        }
+
+        return this.alunos.add(aluno);
+    }
+
+    public boolean removeAluno(Aluno aluno) {
+        if (aluno == null) {
+            throw new IllegalArgumentException(ALUNO_NULO);
+        }
+
+        return this.alunos.remove(aluno);
+    }
+
+    public boolean containsAluno(Aluno aluno) {
+        if (aluno == null) {
+            throw new IllegalArgumentException(ALUNO_NULO);
+        }
+
+        return this.alunos.contains(aluno);
+    }
+
+    public boolean isEmpty() {
+        return this.alunos.isEmpty();
     }
     
 }
