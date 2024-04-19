@@ -38,5 +38,42 @@ public class Endereco {
     private String numero;
 
     private String complemento;
+
+    public Endereco(String pais, String uf, String municipio, String bairro, String logradouro, String numero,
+            String complemento) {
+
+        if (pais == null || pais.isBlank()) {
+            throw new IllegalArgumentException("País não pode ser nulo ou vazio");
+        }
+
+        if (uf == null || uf.isBlank()) {
+            throw new IllegalArgumentException("UF não pode ser nulo ou vazio");
+        }
+
+        if (municipio == null || municipio.isBlank()) {
+            throw new IllegalArgumentException("Município não pode ser nulo ou vazio");
+        }
+
+        if (bairro == null || bairro.isBlank()) {
+            throw new IllegalArgumentException("Bairro não pode ser nulo ou vazio");
+        }
+
+        if (logradouro == null || logradouro.isBlank()) {
+            throw new IllegalArgumentException("Logradouro não pode ser nulo ou vazio");
+        }
+
+        if (numero == null || numero.isBlank()) {
+            throw new IllegalArgumentException("Número não pode ser nulo ou vazio");
+        }
+
+        this.id = null;
+        this.pais = pais;
+        this.uf = uf;
+        this.municipio = municipio;
+        this.bairro = bairro;
+        this.logradouro = logradouro;
+        this.numero = numero;
+        this.complemento = complemento;
+    }
     
 }
