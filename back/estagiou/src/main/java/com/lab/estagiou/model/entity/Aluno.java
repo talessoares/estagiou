@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.lab.estagiou.controller.dto.request.aluno.RequestCadastroAluno;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -31,26 +34,29 @@ public class Aluno {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(nullable = false)
     private String nome;
 
+    @Column(nullable = false)
     private String sobrenome;
 
+    @Column(nullable = false, unique = true)
     private String email;
 
     @ManyToOne
-    @JoinColumn(name = "curso_id")
+    @JoinColumn(name = "curso_id", nullable = true)
     private Curso curso;
 
     @OneToMany(mappedBy = "aluno")
     private List<Inscricao> inscricoes;
 
     @OneToOne
-    @JoinColumn(name = "endereco_id")
+    @JoinColumn(name = "endereco_id", nullable = true)
     private Endereco endereco;
 
     private static final String INSCRICAO_NULA = "Inscrição não pode ser nula";
 
-    public Aluno(String nome, String sobrenome, String email, Curso curso, Endereco endereco) {
+    public Aluno(String nome, String sobrenome, String email) {
         if (nome == null || nome.isBlank()) {
             throw new IllegalArgumentException("Nome do aluno não pode ser nulo");
         }
@@ -67,9 +73,16 @@ public class Aluno {
         this.nome = nome;
         this.sobrenome = sobrenome;
         this.email = email;
-        this.curso = curso;
-        this.endereco = endereco;
         this.inscricoes = new ArrayList<>();
+    }
+
+    public Aluno(String nome, String sobrenome, String email, Endereco endereco) {
+        this(nome, sobrenome, email);
+        this.endereco = endereco;
+    }
+
+    public Aluno(RequestCadastroAluno requestCadastroAluno) {
+        this(requestCadastroAluno.getNome(), requestCadastroAluno.getSobrenome(), requestCadastroAluno.getEmail());
     }
 
     public boolean addInscricao(Inscricao inscricao) {
@@ -110,6 +123,20 @@ public class Aluno {
 
     public boolean equalsEndereco(Endereco endereco) {
         return this.endereco.equals(endereco);
+    }
+
+    public void update(RequestCadastroAluno requestCadastroAluno) {
+        if (requestCadastroAluno.getNome() != null && !requestCadastroAluno.getNome().isBlank()) {
+            this.nome = requestCadastroAluno.getNome();
+        }
+
+        if (requestCadastroAluno.getSobrenome() != null && !requestCadastroAluno.getSobrenome().isBlank()) {
+            this.sobrenome = requestCadastroAluno.getSobrenome();
+        }
+
+        if (requestCadastroAluno.getEmail() != null && !requestCadastroAluno.getEmail().isBlank()) {
+            this.email = requestCadastroAluno.getEmail();
+        }
     }
 
 }
