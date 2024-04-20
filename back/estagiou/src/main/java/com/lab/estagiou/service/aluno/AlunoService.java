@@ -1,4 +1,4 @@
-package com.lab.estagiou.service;
+package com.lab.estagiou.service.aluno;
 
 import java.net.URI;
 

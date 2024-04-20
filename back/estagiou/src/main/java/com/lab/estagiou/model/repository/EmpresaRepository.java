@@ -8,4 +8,7 @@ import com.lab.estagiou.model.entity.Empresa;
 
 public interface EmpresaRepository extends JpaRepository<Empresa, UUID> {
     
+    boolean existsByEmail(String email);
+    boolean existsByCnpj(String cnpj);
+
 }
