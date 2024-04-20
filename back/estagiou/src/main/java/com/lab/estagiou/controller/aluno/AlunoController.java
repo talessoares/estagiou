@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.lab.estagiou.controller.dto.request.aluno.RequestCadastroAluno;
 import com.lab.estagiou.model.entity.Aluno;
-import com.lab.estagiou.service.AlunoService;
+import com.lab.estagiou.service.aluno.AlunoService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
