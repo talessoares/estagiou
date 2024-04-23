@@ -1,5 +1,6 @@
 package com.lab.estagiou.model.entity;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -23,7 +24,9 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Inscricao {
+public class Inscricao implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
