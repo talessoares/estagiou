@@ -1,7 +1,5 @@
 package com.lab.estagiou.service.aluno;
 
-import java.net.URI;
-
 import java.util.List;
 import java.util.UUID;
 
@@ -9,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.lab.estagiou.controller.dto.request.aluno.RequestCadastroAluno;
+import com.lab.estagiou.controller.dto.request.auth.RequestCadastro;
 import com.lab.estagiou.model.entity.Aluno;
 import com.lab.estagiou.model.repository.AlunoRepository;
 
@@ -18,20 +16,6 @@ public class AlunoService {
 
     @Autowired
     private AlunoRepository alunoRepository;
-
-    public ResponseEntity<Void> cadastrarAluno(RequestCadastroAluno request) {
-        if (alunoRepository.existsByEmail(request.getEmail())) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        Aluno aluno = new Aluno(request);
-
-        aluno = alunoRepository.save(aluno);
-
-        URI uri = URI.create("/aluno/" + aluno.getId());
-
-        return ResponseEntity.created(uri).build();
-    }
 
     public ResponseEntity<List<Aluno>> listarAlunos() {
         List<Aluno> alunos = alunoRepository.findAll();
@@ -63,7 +47,7 @@ public class AlunoService {
         return ResponseEntity.noContent().build();
     }
 
-    public ResponseEntity<Object> atualizarAluno(UUID id, RequestCadastroAluno requestCadastroAluno) {
+    public ResponseEntity<Object> atualizarAluno(UUID id, RequestCadastro requestCadastroAluno) {
         Aluno aluno = alunoRepository.findById(id).orElse(null);
 
         if (aluno == null) {
