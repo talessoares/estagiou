@@ -7,16 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.lab.estagiou.controller.dto.request.empresa.RequestCadastroEmpresa;
-import com.lab.estagiou.controller.dto.response.error.ErrorResponse;
 import com.lab.estagiou.model.entity.Empresa;
 import com.lab.estagiou.service.empresa.EmpresaService;
 
@@ -25,7 +24,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping(value = "/v1/empresa", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -34,17 +32,6 @@ public class EmpresaController {
 
     @Autowired
     private EmpresaService empresaService;
-
-    @Operation(summary = "Cadastrar empresa", description = "Cadastra uma empresa")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Empresa cadastrada com sucesso", content = @Content),
-        @ApiResponse(responseCode = "400", description = "CNPJ/Email já cadastrado"),
-        @ApiResponse(responseCode = "500", description = "Erro interno no servidor", content = @Content)
-    })
-    @PostMapping(path = "/cadastrar", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ErrorResponse> cadastrarEmpresa(@RequestBody @Valid RequestCadastroEmpresa requestCadastroEmpresa) {
-        return empresaService.cadastrarEmpresa(requestCadastroEmpresa);
-    }
 
     @Operation(summary = "Listar empresa", description = "Lista todas as empresas")
     @ApiResponses(value = {
