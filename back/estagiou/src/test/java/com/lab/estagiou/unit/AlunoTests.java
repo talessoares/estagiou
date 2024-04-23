@@ -15,7 +15,7 @@ class AlunoTests {
     @Test
     @DisplayName("Teste de criação de aluno")
     void testCreateAluno() {
-        Aluno aluno = new Aluno("João", "Silva", EMAIL_ALUNO);
+        Aluno aluno = new Aluno("João", "Silva", EMAIL_ALUNO, null);
         assertNotNull(aluno);
     }
 
@@ -23,7 +23,7 @@ class AlunoTests {
     @DisplayName("Teste de criação de aluno sem nome")
     void testCreateAlunoWithoutName() {
         try {
-            new Aluno(null, "Silva", EMAIL_ALUNO);
+            new Aluno(null, "Silva", EMAIL_ALUNO, null);
         } catch (IllegalArgumentException e) {
             assertEquals("Nome do aluno não pode ser nulo", e.getMessage());
         }
@@ -33,7 +33,7 @@ class AlunoTests {
     @DisplayName("Teste de criação de aluno com nome vazio")
     void testCreateAlunoWithEmptyName() {
         try {
-            new Aluno("", "Silva", EMAIL_ALUNO);
+            new Aluno("", "Silva", EMAIL_ALUNO, null);
         } catch (IllegalArgumentException e) {
             assertEquals("Nome do aluno não pode ser nulo", e.getMessage());
         }
@@ -43,7 +43,7 @@ class AlunoTests {
     @DisplayName("Teste de criação de aluno sem sobrenome")
     void testCreateAlunoWithoutLastName() {
         try {
-            new Aluno("João", null, EMAIL_ALUNO);
+            new Aluno("João", null, EMAIL_ALUNO, null);
         } catch (IllegalArgumentException e) {
             assertEquals("Sobrenome do aluno não pode ser nulo", e.getMessage());
         }
@@ -53,7 +53,7 @@ class AlunoTests {
     @DisplayName("Teste de criação de aluno com sobrenome vazio")
     void testCreateAlunoWithEmptyLastName() {
         try {
-            new Aluno("João", "", EMAIL_ALUNO);
+            new Aluno("João", "", EMAIL_ALUNO, null);
         } catch (IllegalArgumentException e) {
             assertEquals("Sobrenome do aluno não pode ser nulo", e.getMessage());
         }
@@ -63,7 +63,7 @@ class AlunoTests {
     @DisplayName("Teste de criação de aluno sem email")
     void testCreateAlunoWithoutEmail() {
         try {
-            new Aluno("João", "Silva", null);
+            new Aluno("João", "Silva", null, null);
         } catch (IllegalArgumentException e) {
             assertEquals("Email do aluno não pode ser nulo", e.getMessage());
         }
@@ -73,7 +73,7 @@ class AlunoTests {
     @DisplayName("Teste de criação de aluno com email vazio")
     void testCreateAlunoWithEmptyEmail() {
         try {
-            new Aluno("João", "Silva", "");
+            new Aluno("João", "Silva", "", null);
         } catch (IllegalArgumentException e) {
             assertEquals("Email do aluno não pode ser nulo", e.getMessage());
         }
@@ -83,7 +83,7 @@ class AlunoTests {
     @DisplayName("Teste de criação de aluno com curso nulo")
     void testCreateAlunoWithoutCurso() {
         try {
-            new Aluno("João", "Silva", EMAIL_ALUNO);
+            new Aluno("João", "Silva", EMAIL_ALUNO, null);
         } catch (IllegalArgumentException e) {
             assertEquals("Curso do aluno não pode ser nulo", e.getMessage());
         }
@@ -92,14 +92,14 @@ class AlunoTests {
     @Test
     @DisplayName("Teste de criação de aluno com endereço completo")
     void testCreateAlunoWithEndereco() {
-        Aluno aluno = new Aluno("João", "Silva", EMAIL_ALUNO);
+        Aluno aluno = new Aluno("João", "Silva", EMAIL_ALUNO, null);
         assertNotNull(aluno);
     }
 
     @Test
     @DisplayName("Teste de adição de inscrição nula")
     void testAddNullInscricao() {
-        Aluno aluno = new Aluno("João", "Silva", EMAIL_ALUNO);
+        Aluno aluno = new Aluno("João", "Silva", EMAIL_ALUNO, null);
         try {
             aluno.addInscricao(null);
         } catch (IllegalArgumentException e) {
@@ -110,7 +110,7 @@ class AlunoTests {
     @Test
     @DisplayName("Teste de remoção de inscrição nula")
     void testRemoveNullInscricao() {
-        Aluno aluno = new Aluno("João", "Silva", EMAIL_ALUNO);
+        Aluno aluno = new Aluno("João", "Silva", EMAIL_ALUNO, null);
         try {
             aluno.removeInscricao(null);
         } catch (IllegalArgumentException e) {
@@ -121,7 +121,7 @@ class AlunoTests {
     @Test
     @DisplayName("Teste de verificação de inscrição nula")
     void testContainsNullInscricao() {
-        Aluno aluno = new Aluno("João", "Silva", EMAIL_ALUNO);
+        Aluno aluno = new Aluno("João", "Silva", EMAIL_ALUNO, null);
         try {
             aluno.containsInscricao(null);
         } catch (IllegalArgumentException e) {
