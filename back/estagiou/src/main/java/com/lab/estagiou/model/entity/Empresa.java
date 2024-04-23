@@ -2,15 +2,13 @@ package com.lab.estagiou.model.entity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
+import com.lab.estagiou.controller.dto.request.auth.RequestCadastro;
 import com.lab.estagiou.controller.dto.request.empresa.RequestCadastroEmpresa;
+import com.lab.estagiou.model.entity.enums.UserRole;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -27,19 +25,10 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Empresa {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+public class Empresa extends Usuario {
 
     @Column(nullable = false)
     private String nome;
-
-    @Column(unique = true, nullable = false)
-    private String email;
-
-    @Column(nullable = false)
-    private String senha;
 
     @Column(unique = true, nullable = false)
     private String cnpj;
@@ -57,6 +46,8 @@ public class Empresa {
     private static final String VAGA_NULA = "Vaga não pode ser nula";
     
     public Empresa(String nome, String email, String senha, String cnpj, String responsavel) {
+        super(null, email, senha, UserRole.EMPRESA);
+
         if (nome == null || nome.isBlank()) {
             throw new IllegalArgumentException("Nome da empresa não pode ser nulo");
         }
@@ -77,17 +68,14 @@ public class Empresa {
             throw new IllegalArgumentException("Responsável pela empresa não pode ser nulo");
         }
 
-        this.id = null;
         this.nome = nome;
-        this.email = email;
-        this.senha = senha;
         this.cnpj = cnpj;
         this.responsavel = responsavel;
         this.vagas = new ArrayList<>();
     }
 
-    public Empresa(RequestCadastroEmpresa requestCadastroEmpresa) {
-        this(requestCadastroEmpresa.getNome(), requestCadastroEmpresa.getEmail(), requestCadastroEmpresa.getSenha(), requestCadastroEmpresa.getCnpj(), requestCadastroEmpresa.getResponsavel());
+    public Empresa(RequestCadastro requestCadastro, String senha) {
+        this(requestCadastro.getNome(), requestCadastro.getEmail(), senha, requestCadastro.getCnpj(), requestCadastro.getResponsavel());
     }
 
     public boolean addVaga(Vaga vaga) {
@@ -132,11 +120,11 @@ public class Empresa {
         }
 
         if (requestCadastroEmpresa.getEmail() != null && !requestCadastroEmpresa.getEmail().isBlank()) {
-            this.email = requestCadastroEmpresa.getEmail();
+            super.setEmail(requestCadastroEmpresa.getEmail());
         }
 
         if (requestCadastroEmpresa.getSenha() != null && !requestCadastroEmpresa.getSenha().isBlank()) {
-            this.senha = requestCadastroEmpresa.getSenha();
+            super.setSenha(requestCadastroEmpresa.getSenha());
         }
 
         if (requestCadastroEmpresa.getCnpj() != null && !requestCadastroEmpresa.getCnpj().isBlank()) {
@@ -146,5 +134,25 @@ public class Empresa {
         if (requestCadastroEmpresa.getResponsavel() != null && !requestCadastroEmpresa.getResponsavel().isBlank()) {
             this.responsavel = requestCadastroEmpresa.getResponsavel();
         }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        Empresa empresa = (Empresa) obj;
+
+        return super.getId().equals(empresa.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return this.getId().hashCode();
     }
 }

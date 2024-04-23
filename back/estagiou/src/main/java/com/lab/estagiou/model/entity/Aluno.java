@@ -2,22 +2,18 @@ package com.lab.estagiou.model.entity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-import com.lab.estagiou.controller.dto.request.aluno.RequestCadastroAluno;
+import com.lab.estagiou.controller.dto.request.auth.RequestCadastro;
+import com.lab.estagiou.model.entity.enums.UserRole;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -25,23 +21,15 @@ import lombok.ToString;
 @Entity(name = "aluno")
 @Table(name = "tb_aluno")
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @ToString
-public class Aluno {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+@NoArgsConstructor
+public class Aluno extends Usuario {
 
     @Column(nullable = false)
     private String nome;
 
     @Column(nullable = false)
     private String sobrenome;
-
-    @Column(nullable = false, unique = true)
-    private String email;
 
     @ManyToOne
     @JoinColumn(name = "curso_id", nullable = true)
@@ -56,7 +44,9 @@ public class Aluno {
 
     private static final String INSCRICAO_NULA = "Inscrição não pode ser nula";
 
-    public Aluno(String nome, String sobrenome, String email) {
+    public Aluno(String nome, String sobrenome, String email, String senha) {
+        super(null, email, senha, UserRole.USER);
+
         if (nome == null || nome.isBlank()) {
             throw new IllegalArgumentException("Nome do aluno não pode ser nulo");
         }
@@ -69,20 +59,18 @@ public class Aluno {
             throw new IllegalArgumentException("Email do aluno não pode ser nulo");
         }
 
-        this.id = null;
         this.nome = nome;
         this.sobrenome = sobrenome;
-        this.email = email;
         this.inscricoes = new ArrayList<>();
     }
 
-    public Aluno(String nome, String sobrenome, String email, Endereco endereco) {
-        this(nome, sobrenome, email);
+    public Aluno(String nome, String sobrenome, String email, String senha, Endereco endereco) {
+        this(nome, sobrenome, email, senha);
         this.endereco = endereco;
     }
 
-    public Aluno(RequestCadastroAluno requestCadastroAluno) {
-        this(requestCadastroAluno.getNome(), requestCadastroAluno.getSobrenome(), requestCadastroAluno.getEmail());
+    public Aluno(RequestCadastro requestCadastroAluno, String senha) {
+        this(requestCadastroAluno.getNome(), requestCadastroAluno.getSobrenome(), requestCadastroAluno.getEmail(), senha);
     }
 
     public boolean addInscricao(Inscricao inscricao) {
@@ -125,7 +113,7 @@ public class Aluno {
         return this.endereco.equals(endereco);
     }
 
-    public void update(RequestCadastroAluno requestCadastroAluno) {
+    public void update(RequestCadastro requestCadastroAluno) {
         if (requestCadastroAluno.getNome() != null && !requestCadastroAluno.getNome().isBlank()) {
             this.nome = requestCadastroAluno.getNome();
         }
@@ -135,8 +123,28 @@ public class Aluno {
         }
 
         if (requestCadastroAluno.getEmail() != null && !requestCadastroAluno.getEmail().isBlank()) {
-            this.email = requestCadastroAluno.getEmail();
+            super.setEmail(requestCadastroAluno.getEmail());
         }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        Aluno aluno = (Aluno) obj;
+
+        return super.equals(aluno) && this.nome.equals(aluno.getNome()) && this.sobrenome.equals(aluno.getSobrenome());
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 
 }
