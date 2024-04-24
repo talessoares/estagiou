@@ -3,7 +3,7 @@ package com.lab.estagiou.model.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lab.estagiou.controller.dto.request.auth.RequestCadastro;
+import com.lab.estagiou.controller.dto.request.auth.RequestCadastroAluno;
 import com.lab.estagiou.model.entity.enums.UserRole;
 
 import jakarta.persistence.Column;
@@ -69,8 +69,8 @@ public class Aluno extends Usuario {
         this.endereco = endereco;
     }
 
-    public Aluno(RequestCadastro requestCadastroAluno, String senha) {
-        this(requestCadastroAluno.getNome(), requestCadastroAluno.getSobrenome(), requestCadastroAluno.getEmail(), senha);
+    public Aluno(RequestCadastroAluno request) {
+        this(request.getNome(), request.getSobrenome(), request.getEmail(), request.getSenha());
     }
 
     public boolean addInscricao(Inscricao inscricao) {
@@ -113,7 +113,7 @@ public class Aluno extends Usuario {
         return this.endereco.equals(endereco);
     }
 
-    public void update(RequestCadastro requestCadastroAluno) {
+    public void update(RequestCadastroAluno requestCadastroAluno) {
         if (requestCadastroAluno.getNome() != null && !requestCadastroAluno.getNome().isBlank()) {
             this.nome = requestCadastroAluno.getNome();
         }

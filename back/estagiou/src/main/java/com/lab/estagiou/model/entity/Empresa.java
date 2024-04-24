@@ -3,8 +3,7 @@ package com.lab.estagiou.model.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lab.estagiou.controller.dto.request.auth.RequestCadastro;
-import com.lab.estagiou.controller.dto.request.empresa.RequestCadastroEmpresa;
+import com.lab.estagiou.controller.dto.request.auth.RequestCadastroEmpresa;
 import com.lab.estagiou.model.entity.enums.UserRole;
 
 import jakarta.persistence.Column;
@@ -74,8 +73,8 @@ public class Empresa extends Usuario {
         this.vagas = new ArrayList<>();
     }
 
-    public Empresa(RequestCadastro requestCadastro, String senha) {
-        this(requestCadastro.getNome(), requestCadastro.getEmail(), senha, requestCadastro.getCnpj(), requestCadastro.getResponsavel());
+    public Empresa(RequestCadastroEmpresa requestCadastro) {
+        this(requestCadastro.getNome(), requestCadastro.getEmail(), requestCadastro.getSenha(), requestCadastro.getCnpj(), requestCadastro.getResponsavel());
     }
 
     public boolean addVaga(Vaga vaga) {
