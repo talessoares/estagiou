@@ -7,14 +7,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.lab.estagiou.controller.dto.request.auth.RequestCadastro;
+import com.lab.estagiou.controller.dto.request.auth.RequestCadastroAluno;
 import com.lab.estagiou.model.entity.Aluno;
 import com.lab.estagiou.service.aluno.AlunoService;
 
@@ -23,6 +25,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
 @Controller
 @RequestMapping(value = "/v1/aluno", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Aluno", description = "API para gerenciamento de alunos")
@@ -30,6 +33,17 @@ public class AlunoController {
 
     @Autowired
     private AlunoService alunoService;
+
+    @Operation(summary = "Registrar aluno", description = "Registra um aluno")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Aluno registrado com sucesso", content = @Content),
+        @ApiResponse(responseCode = "400", description = "Erro na requisição", content = @Content),
+        @ApiResponse(responseCode = "500", description = "Erro interno no servidor", content = @Content)
+    })
+    @PostMapping("/register")
+    public ResponseEntity<Object> registerAluno(@RequestBody RequestCadastroAluno request) {
+        return alunoService.register(request);
+    }
 
     @Operation(summary = "Listar alunos", description = "Lista todos os alunos")
     @ApiResponses(value = {
@@ -71,7 +85,7 @@ public class AlunoController {
         @ApiResponse(responseCode = "500", description = "Erro interno no servidor", content = @Content)
     })
     @PutMapping("/{id}")
-    public ResponseEntity<Object> atualizarAluno(@PathVariable UUID id, @RequestBody RequestCadastro requestCadastro) {
+    public ResponseEntity<Object> atualizarAluno(@PathVariable UUID id, @RequestBody RequestCadastroAluno requestCadastro) {
         return alunoService.atualizarAluno(id, requestCadastro);
     }
 
