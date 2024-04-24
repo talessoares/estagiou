@@ -1,6 +1,6 @@
 package com.lab.estagiou.model.entity;
 
-import com.lab.estagiou.controller.dto.request.auth.RequestCadastro;
+import com.lab.estagiou.controller.dto.request.auth.RequestCadastroAdmin;
 import com.lab.estagiou.model.entity.enums.UserRole;
 
 import jakarta.persistence.Entity;
@@ -14,8 +14,8 @@ import lombok.ToString;
 @NoArgsConstructor
 public class Admin extends Usuario {
 
-    public Admin(RequestCadastro requestCadastro, String senha) {
-        super(null, requestCadastro.getEmail(), senha, UserRole.ADMIN);
+    public Admin(RequestCadastroAdmin request) {
+        super(null, request.getEmail(), request.getSenha(), UserRole.ADMIN);
     }
 
 }
