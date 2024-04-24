@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.lab.estagiou.model.entity.enums.UserRole;
 
@@ -20,12 +21,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -43,6 +42,13 @@ public abstract class Usuario implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private UserRole role;
+
+    protected Usuario(UUID id, String email, String senha, UserRole role) {
+        this.id = id;
+        this.email = email;
+        this.senha = new BCryptPasswordEncoder().encode(senha);
+        this.role = role;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
