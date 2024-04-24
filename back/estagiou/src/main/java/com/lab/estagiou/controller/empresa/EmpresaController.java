@@ -6,16 +6,18 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.lab.estagiou.controller.dto.request.empresa.RequestCadastroEmpresa;
+import com.lab.estagiou.controller.dto.request.auth.RequestCadastroEmpresa;
 import com.lab.estagiou.model.entity.Empresa;
 import com.lab.estagiou.service.empresa.EmpresaService;
 
@@ -33,6 +35,11 @@ public class EmpresaController {
     @Autowired
     private EmpresaService empresaService;
 
+    @PostMapping("/register")
+    public ResponseEntity<Object> registerEmpresa(@RequestBody RequestCadastroEmpresa request, Authentication authentication) {
+        return empresaService.register(request, authentication);
+    }
+
     @Operation(summary = "Listar empresa", description = "Lista todas as empresas")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Empresas listadas com sucesso"),
@@ -43,7 +50,6 @@ public class EmpresaController {
     public ResponseEntity<List<Empresa>> listarEmpresas() {
         return empresaService.listarEmpresas();
     }
-
     
     @Operation(summary = "Buscar empresa por ID", description = "Busca uma empresa por Id")
     @ApiResponses(value = {
