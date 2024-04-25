@@ -16,6 +16,9 @@ spring.datasource.username=
 
 # Adicione a senha do banco de dados
 spring.datasource.password=
+
+# Adicione o segredo jwt (Você pode adicionar qualquer coisa)
+jwt.secret=
 ```
 
 * Crie o banco de dados com nome de <strong>estagiou</strong> através do pgAdmin ou qualquer outro método disponível
