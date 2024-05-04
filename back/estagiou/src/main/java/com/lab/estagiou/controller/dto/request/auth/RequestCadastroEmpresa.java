@@ -7,7 +7,6 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class RequestCadastroEmpresa extends RequestCadastro {
 
-    private String role;
     private String cnpj;
     private String responsavel;
     

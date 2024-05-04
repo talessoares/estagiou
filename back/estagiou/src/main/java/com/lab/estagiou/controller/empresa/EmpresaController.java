@@ -36,8 +36,8 @@ public class EmpresaController {
     private EmpresaService empresaService;
 
     @PostMapping("/register")
-    public ResponseEntity<Object> registerEmpresa(@RequestBody RequestCadastroEmpresa request, Authentication authentication) {
-        return empresaService.register(request, authentication);
+    public ResponseEntity<Object> registerEmpresa(@RequestBody RequestCadastroEmpresa request) {
+        return empresaService.register(request);
     }
 
     @Operation(summary = "Listar empresa", description = "Lista todas as empresas")

@@ -19,6 +19,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfigurations {
 
+    private static final String ADMIN = "ADMIN";
+
     @Bean 
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, SecurityFilter securityFilter) throws Exception {
         return httpSecurity
@@ -26,9 +28,11 @@ public class SecurityConfigurations {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers(HttpMethod.POST,"/v1/auth/login").permitAll()
-                .requestMatchers(HttpMethod.POST,"/v1/auth/register").permitAll()
-                .requestMatchers(HttpMethod.GET, "/v1/aluno/listar").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.GET, "/v1/empresa/listar").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST,"/v1/aluno/register").permitAll()
+                .requestMatchers(HttpMethod.POST,"/v1/admin/register").hasRole(ADMIN)
+                .requestMatchers(HttpMethod.POST,"/v1/empresa/register").hasRole(ADMIN)
+                .requestMatchers(HttpMethod.GET, "/v1/aluno/listar").hasRole(ADMIN)
+                .requestMatchers(HttpMethod.GET, "/v1/empresa/listar").hasRole(ADMIN)
                 .anyRequest().permitAll()
             )
         .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

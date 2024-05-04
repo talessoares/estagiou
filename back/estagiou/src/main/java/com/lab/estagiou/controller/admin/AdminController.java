@@ -23,8 +23,8 @@ public class AdminController {
     private AdminService adminService;
 
     @PostMapping("/register")
-    public ResponseEntity<Object> registerAdmin(@RequestBody RequestCadastroAdmin request, Authentication authentication) {
-        return adminService.register(request, authentication);
+    public ResponseEntity<Object> registerAdmin(@RequestBody RequestCadastroAdmin request) {
+        return adminService.register(request);
     }
     
 }

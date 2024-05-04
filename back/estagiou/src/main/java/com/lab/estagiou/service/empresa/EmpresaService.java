@@ -22,11 +22,7 @@ public class EmpresaService extends ServiceUsuarioExistsAuthAdmin {
     @Autowired
     private EmpresaRepository empresaRepository;
 
-    public ResponseEntity<Object> register(RequestCadastroEmpresa request, Authentication authentication) {
-        if (!isAdmin(authentication)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), "Usuário não autorizado"));
-        }
-
+    public ResponseEntity<Object> register(RequestCadastroEmpresa request) {
         if (usuarioExists(request)) {
             return ResponseEntity.badRequest().body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Email já cadastrado"));
         }

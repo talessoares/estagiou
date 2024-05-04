@@ -14,11 +14,7 @@ import com.lab.estagiou.service.impl.ServiceUsuarioExistsAuthAdmin;
 @Service
 public class AdminService extends ServiceUsuarioExistsAuthAdmin {
 
-    public ResponseEntity<Object> register(RequestCadastroAdmin request, Authentication authentication) {
-        if (!isAdmin(authentication)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), "Usuário não autorizado"));
-        }
-
+    public ResponseEntity<Object> register(RequestCadastroAdmin request) {
         if (usuarioExists(request)) {
             return ResponseEntity.badRequest().body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Email já cadastrado"));
         }
