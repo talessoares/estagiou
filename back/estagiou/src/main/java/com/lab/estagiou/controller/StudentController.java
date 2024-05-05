@@ -17,11 +17,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.lab.estagiou.dto.request.model.RequestRegisterStudent;
+import com.lab.estagiou.dto.response.error.ErrorResponse;
 import com.lab.estagiou.model.student.StudentEntity;
 import com.lab.estagiou.service.StudentService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -36,9 +38,9 @@ public class StudentController {
 
     @Operation(summary = "Register student", description = "Register a student")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Student registered successfully", content = @Content),
-        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
-        @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
+        @ApiResponse(responseCode = "201", description = "Student registered successfully"),
+        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping("/register")
     public ResponseEntity<Object> registerCompany(@RequestBody RequestRegisterStudent request) {
@@ -48,10 +50,12 @@ public class StudentController {
     @Operation(summary = "List students", description = "List all students")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Students listed successfully"),
-        @ApiResponse(responseCode = "204", description = "No students found", content = @Content),
-        @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
+        @ApiResponse(responseCode = "204", description = "No students found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "403", description = "User not authorized", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @GetMapping(path = "/listar", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<StudentEntity>> listStudents() {
         return studentService.listStudents();
     }
@@ -59,6 +63,8 @@ public class StudentController {
     @Operation(summary = "Search student by ID", description = "Search a student by ID")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Student found successfully"),
+        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "403", description = "User not authorized", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "404", description = "Student not found", content = @Content),
         @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
     })
@@ -70,8 +76,10 @@ public class StudentController {
     @Operation(summary = "Delete student by ID", description = "Delete a student by ID")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "204", description = "Student deleted successfully", content = @Content),
-        @ApiResponse(responseCode = "404", description = "Student not found", content = @Content),
-        @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
+        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "403", description = "User not authorized", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "404", description = "Student not found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteStudentById(@PathVariable UUID id) {
@@ -81,6 +89,8 @@ public class StudentController {
     @Operation(summary = "Update student", description = "Update a student")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "204", description = "Student updated successfully", content = @Content),
+        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "403", description = "User not authorized", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "404", description = "Student not found", content = @Content),
         @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
     })

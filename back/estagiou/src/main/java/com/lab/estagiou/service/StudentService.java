@@ -1,5 +1,6 @@
 package com.lab.estagiou.service;
 
+import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,9 +31,13 @@ public class StudentService extends UtilUserExists {
             UserEntity student = new StudentEntity(request);
             super.userRepository.save(student);
 
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
+            URI location = URI.create("/v1/student/" + student.getId()); 
+
+            return ResponseEntity.created(location).build();
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
         }
     }
 
