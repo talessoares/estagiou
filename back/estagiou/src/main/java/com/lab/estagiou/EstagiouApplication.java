@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 
 @SpringBootApplication
-@OpenAPIDefinition(info = @Info(title = "Estagiou API", version = "v1", description = "API para gerenciamento de estágios"))
+@OpenAPIDefinition(info = @Info(title = "Estagiou API", version = "v1", description = "API for management of students and companies"))
 public class EstagiouApplication {
 
 	public static void main(String[] args) {

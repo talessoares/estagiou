@@ -11,7 +11,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.lab.estagiou.model.entity.Usuario;
+import com.lab.estagiou.model.user.UserEntity;
 
 
 @Service
@@ -20,7 +20,7 @@ public class TokenService {
     @Value("${jwt.secret}")
     private String secret;
 
-    public String generateToken(Usuario usuario) {
+    public String generateToken(UserEntity usuario) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
 

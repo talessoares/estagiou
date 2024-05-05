@@ -11,9 +11,9 @@ import org.springframework.stereotype.Component;
 
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import org.springframework.security.core.context.SecurityContextHolder;
+import com.lab.estagiou.model.user.UserRepository;
 
-import com.lab.estagiou.model.repository.UsuarioRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -28,7 +28,7 @@ public class SecurityFilter extends OncePerRequestFilter {
     private TokenService tokenService;
 
     @Autowired
-    private UsuarioRepository userRepository;
+    private UserRepository userRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
