@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.lab.estagiou.dto.request.model.RequestRegisterCompany;
 import com.lab.estagiou.model.address.AddressEntity;
+import com.lab.estagiou.model.company.exception.RegisterCompanyException;
 import com.lab.estagiou.model.jobvacancy.JobVacancyEntity;
 import com.lab.estagiou.model.user.UserEntity;
 import com.lab.estagiou.model.user.UserRoleEnum;
@@ -51,23 +52,15 @@ public class CompanyEntity extends UserEntity {
         super(null, email, password, UserRoleEnum.COMPANY);
 
         if (name == null || name.isBlank()) {
-            throw new IllegalArgumentException("Nome da empresa não pode ser nulo");
-        }
-
-        if (email == null || email.isBlank()) {
-            throw new IllegalArgumentException("Email da empresa não pode ser nulo");
-        }
-
-        if (password == null || password.isBlank()) {
-            throw new IllegalArgumentException("Senha da empresa não pode ser nulo");
+            throw new RegisterCompanyException("Nome da empresa não pode ser nulo");
         }
 
         if (cnpj == null || cnpj.isBlank()) {
-            throw new IllegalArgumentException("CNPJ da empresa não pode ser nulo");
+            throw new RegisterCompanyException("CNPJ da empresa não pode ser nulo");
         }
 
         if (accountableName == null || accountableName.isBlank()) {
-            throw new IllegalArgumentException("Responsável pela empresa não pode ser nulo");
+            throw new RegisterCompanyException("Responsável pela empresa não pode ser nulo");
         }
 
         this.name = name;
