@@ -1,0 +1,19 @@
+{
+    "properties": [
+        {
+            "name": "logs.show.enabled",
+            "type": "java.lang.Boolean",
+            "description": "Enable or disable the logs show feature."
+        },
+        {
+            "name": "logs.save.enabled",
+            "type": "java.lang.Boolean",
+            "description": "Enable or disable the logs save feature."
+        },
+        {
+            "name": "jwt.secret",
+            "type": "java.lang.String",
+            "description": "The secret key used to sign the JWT token."
+        }
+    ]
+}
