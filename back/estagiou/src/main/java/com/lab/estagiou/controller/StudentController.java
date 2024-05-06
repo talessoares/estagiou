@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -43,8 +44,8 @@ public class StudentController {
         @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping("/register")
-    public ResponseEntity<Object> registerCompany(@RequestBody RequestRegisterStudent request) {
-        return studentService.registerCompany(request);
+    public ResponseEntity<Object> registerStudent(@RequestBody RequestRegisterStudent request) {
+        return studentService.registerStudent(request);
     }
 
     @Operation(summary = "List students", description = "List all students")
@@ -56,21 +57,21 @@ public class StudentController {
         @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping(path = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<StudentEntity>> listStudents() {
+    public ResponseEntity<List<StudentEntity>> listStudents(Authentication authentication) {
         return studentService.listStudents();
     }
     
     @Operation(summary = "Search student by ID", description = "Search a student by ID")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Student found successfully"),
+        @ApiResponse(responseCode = "200", description = "Student found successfully", content = @Content(schema = @Schema(implementation = StudentEntity.class))),
         @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "403", description = "User not authorized", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "404", description = "Student not found", content = @Content),
         @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
     })
     @GetMapping(path = "/{id}")
-    public ResponseEntity<StudentEntity> searchStudentById(@PathVariable UUID id) {
-        return studentService.searchStudentById(id);
+    public ResponseEntity<Object> searchStudentById(@PathVariable UUID id, Authentication authentication) {
+        return studentService.searchStudentById(id, authentication);
     }
 
     @Operation(summary = "Delete student by ID", description = "Delete a student by ID")
@@ -82,8 +83,8 @@ public class StudentController {
         @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteStudentById(@PathVariable UUID id) {
-        return studentService.deleteStudentById(id);
+    public ResponseEntity<Object> deleteStudentById(@PathVariable UUID id, Authentication authentication) {
+        return studentService.deleteStudentById(id, authentication);
     }
 
     @Operation(summary = "Update student", description = "Update a student")
@@ -95,8 +96,8 @@ public class StudentController {
         @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
     })
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updateStudent(@PathVariable UUID id, @RequestBody RequestRegisterStudent requestCadastro) {
-        return studentService.updateStudent(id, requestCadastro);
+    public ResponseEntity<Object> updateStudent(@PathVariable UUID id, @RequestBody RequestRegisterStudent requestCadastro, Authentication authentication) {
+        return studentService.updateStudent(id, requestCadastro, authentication);
     }
 
 }

@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -74,8 +75,8 @@ public class CompanyController {
         @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteCompanyById(@PathVariable UUID id) {
-        return companyService.deleteCompanyById(id);
+    public ResponseEntity<Object> deleteCompanyById(@PathVariable UUID id, Authentication authentication) {
+        return companyService.deleteCompanyById(id, authentication);
     }
 
     @Operation(summary = "Update company", description = "Update a company")
@@ -85,8 +86,8 @@ public class CompanyController {
         @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
     })
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updateCompany(@PathVariable UUID id, @RequestBody RequestRegisterCompany request) {
-        return companyService.updateCompany(id, request);
+    public ResponseEntity<Object> updateCompany(@PathVariable UUID id, @RequestBody RequestRegisterCompany request, Authentication authentication) {
+        return companyService.updateCompany(id, request, authentication);
     }
 
 }

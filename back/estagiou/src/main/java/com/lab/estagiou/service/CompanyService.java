@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.lab.estagiou.dto.request.model.RequestRegisterCompany;
@@ -13,10 +14,10 @@ import com.lab.estagiou.dto.response.error.ErrorResponse;
 import com.lab.estagiou.model.company.CompanyEntity;
 import com.lab.estagiou.model.company.CompanyRepository;
 import com.lab.estagiou.model.user.UserEntity;
-import com.lab.estagiou.service.util.UtilUserExists;
+import com.lab.estagiou.service.util.UtilUserAuthAndExists;
 
 @Service
-public class CompanyService extends UtilUserExists {
+public class CompanyService extends UtilUserAuthAndExists {
 
     @Autowired
     private CompanyRepository companyRepository;
@@ -60,7 +61,11 @@ public class CompanyService extends UtilUserExists {
         return ResponseEntity.ok(company);
     }
 
-    public ResponseEntity<Object> deleteCompanyById(UUID id) {
+    public ResponseEntity<Object> deleteCompanyById(UUID id, Authentication authentication) {
+        if (!super.userIsSameOrAdmin(authentication, id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(HttpStatus.FORBIDDEN.value(), "Usuário não autorizado"));
+        }
+
         if (!companyRepository.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
@@ -70,7 +75,11 @@ public class CompanyService extends UtilUserExists {
         return ResponseEntity.noContent().build();
     }
 
-    public ResponseEntity<Object> updateCompany(UUID id, RequestRegisterCompany request) {
+    public ResponseEntity<Object> updateCompany(UUID id, RequestRegisterCompany request, Authentication authentication) {
+        if (!super.userIsSameOrAdmin(authentication, id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(HttpStatus.FORBIDDEN.value(), "Usuário não autorizado"));
+        }
+
         CompanyEntity company = companyRepository.findById(id).orElse(null);
 
         if (company == null) {

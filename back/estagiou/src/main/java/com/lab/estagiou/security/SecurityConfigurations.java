@@ -21,18 +21,38 @@ public class SecurityConfigurations {
 
     private static final String ADMIN = "ADMIN";
 
+    private static final String USER = "USER";
+
+    private static final String COMPANY = "COMPANY";
+
     @Bean 
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, SecurityFilter securityFilter) throws Exception {
         return httpSecurity
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authorize -> authorize
+
+                /* AUTH */
                 .requestMatchers(HttpMethod.POST,"/v1/auth/login").permitAll()
+                .requestMatchers(HttpMethod.POST,"/v1/auth/logout").permitAll()
+
+                /* STUDENT */
                 .requestMatchers(HttpMethod.POST,"/v1/student/register").permitAll()
-                .requestMatchers(HttpMethod.POST,"/v1/admin/register").hasRole(ADMIN)
-                .requestMatchers(HttpMethod.POST,"/v1/company/register").hasRole(ADMIN)
                 .requestMatchers(HttpMethod.GET, "/v1/student/list").hasRole(ADMIN)
-                .requestMatchers(HttpMethod.GET, "/v1/company/list").hasRole(ADMIN)
+                .requestMatchers(HttpMethod.GET, "/v1/student/*/").hasRole(USER)
+                .requestMatchers(HttpMethod.DELETE, "/v1/student/*/").hasRole(USER)
+                .requestMatchers(HttpMethod.PUT, "/v1/student/*/").hasRole(USER)
+
+                /* COMPANY */
+                .requestMatchers(HttpMethod.POST,"/v1/company/register").hasRole(ADMIN)
+                .requestMatchers(HttpMethod.GET,"/v1/company/list").hasRole(ADMIN)
+                .requestMatchers(HttpMethod.GET,"/v1/company/*/").hasRole(USER)
+                .requestMatchers(HttpMethod.DELETE,"/v1/company/*/").hasRole(COMPANY)
+                .requestMatchers(HttpMethod.PUT,"/v1/company/*/").hasRole(COMPANY)
+
+                /* ADMIN */
+                .requestMatchers(HttpMethod.POST,"/v1/admin/register").hasRole(ADMIN)
+
                 .anyRequest().permitAll()
             )
         .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
