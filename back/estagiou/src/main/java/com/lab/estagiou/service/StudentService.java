@@ -5,16 +5,17 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.lab.estagiou.dto.request.model.RequestRegisterStudent;
-import com.lab.estagiou.dto.response.error.ErrorResponse;
+import com.lab.estagiou.exception.generic.EmailAlreadyRegisteredException;
 import com.lab.estagiou.model.log.LogEnum;
 import com.lab.estagiou.model.student.StudentEntity;
 import com.lab.estagiou.model.student.StudentRepository;
+import com.lab.estagiou.model.student.exception.NoStudentFoundException;
+import com.lab.estagiou.model.student.exception.NoStudentsRegisteredException;
 import com.lab.estagiou.model.user.UserEntity;
 import com.lab.estagiou.service.util.UtilService;
 
@@ -24,12 +25,11 @@ public class StudentService extends UtilService {
     @Autowired
     private StudentRepository studentRepository;
 
-    private static final String NOT_AUTHORIZED = "Usuário não autorizado";
+    private static final String STUDENT_NOT_FOUND = "Student not found: ";
 
     public ResponseEntity<Object> registerStudent(RequestRegisterStudent request) {
         if (super.userExists(request)) {
-            logger(LogEnum.WARN, "Email registration attempt: " + request.getEmail());
-            return ResponseEntity.badRequest().body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Email já cadastrado"));
+            throw new EmailAlreadyRegisteredException("Email registration attempt: " + request.getEmail());
         }
 
         UserEntity student = new StudentEntity(request);
@@ -45,8 +45,7 @@ public class StudentService extends UtilService {
         List<StudentEntity> students = studentRepository.findAll();
 
         if (students.isEmpty()) {
-            logger(LogEnum.INFO, "No students registered");
-            return ResponseEntity.noContent().build();
+            throw new NoStudentsRegisteredException("No students registered");
         }
 
         logger(LogEnum.INFO, "List students: " + students.size() + " students");
@@ -54,16 +53,12 @@ public class StudentService extends UtilService {
     }
 
     public ResponseEntity<Object> searchStudentById(UUID id, Authentication authentication) {
-        if (!super.userIsSameOrAdmin(authentication, id)){
-            logger(LogEnum.WARN, "Unauthorized access attempt: " + ((UserEntity) authentication.getPrincipal()).getId());
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(HttpStatus.FORBIDDEN.value(), NOT_AUTHORIZED));
-        }
+        super.verifyAuthorization(authentication, id);
 
         StudentEntity student = studentRepository.findById(id).orElse(null);
 
         if (student == null) {
-            logger(LogEnum.WARN, "Student not found: " + id);
-            return ResponseEntity.notFound().build();
+            throw new NoStudentFoundException(STUDENT_NOT_FOUND + id);
         }
 
         logger(LogEnum.INFO, "Student found: " + student.getId());
@@ -71,14 +66,10 @@ public class StudentService extends UtilService {
     }
 
     public ResponseEntity<Object> deleteStudentById(UUID id, Authentication authentication) {
-        if (!super.userIsSameOrAdmin(authentication, id)) {
-            logger(LogEnum.WARN, "Unauthorized access attempt: " + ((UserEntity) authentication.getPrincipal()).getId());
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(HttpStatus.FORBIDDEN.value(), NOT_AUTHORIZED));
-        }
+        super.verifyAuthorization(authentication, id);
 
         if (!studentRepository.existsById(id)) {
-            logger(LogEnum.WARN, "Student not found: " + id);
-            return ResponseEntity.notFound().build();
+            throw new NoStudentFoundException(STUDENT_NOT_FOUND + id);
         }
 
         studentRepository.deleteById(id);
@@ -88,16 +79,12 @@ public class StudentService extends UtilService {
     }
 
     public ResponseEntity<Object> updateStudent(UUID id, RequestRegisterStudent request, Authentication authentication) {
-        if (!super.userIsSameOrAdmin(authentication, id)) {
-            logger(LogEnum.WARN, "Unauthorized access attempt: " + ((UserEntity) authentication.getPrincipal()).getId());
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(HttpStatus.FORBIDDEN.value(), NOT_AUTHORIZED));
-        }
+        super.verifyAuthorization(authentication, id);
 
         StudentEntity student = studentRepository.findById(id).orElse(null);
 
         if (student == null) {
-            logger(LogEnum.WARN, "Student not found: " + id);
-            return ResponseEntity.notFound().build();
+            throw new NoStudentFoundException(STUDENT_NOT_FOUND + id);
         }
 
         student.update(request);

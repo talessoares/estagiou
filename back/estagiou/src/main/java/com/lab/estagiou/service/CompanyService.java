@@ -4,15 +4,17 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.lab.estagiou.dto.request.model.RequestRegisterCompany;
-import com.lab.estagiou.dto.response.error.ErrorResponse;
+import com.lab.estagiou.exception.generic.EmailAlreadyRegisteredException;
 import com.lab.estagiou.model.company.CompanyEntity;
 import com.lab.estagiou.model.company.CompanyRepository;
+import com.lab.estagiou.model.company.exception.CnpjAlreadyRegisteredException;
+import com.lab.estagiou.model.company.exception.NoCompaniesRegisteredException;
+import com.lab.estagiou.model.company.exception.NoCompanyFoundException;
 import com.lab.estagiou.model.log.LogEnum;
 import com.lab.estagiou.model.user.UserEntity;
 import com.lab.estagiou.service.util.UtilService;
@@ -23,20 +25,13 @@ public class CompanyService extends UtilService {
     @Autowired
     private CompanyRepository companyRepository;
 
+    private static final String COMPANY_NOT_FOUND = "Company not found: ";
+
     public ResponseEntity<Object> registerCompany(RequestRegisterCompany request) {
-
-        if (super.userExists(request)) {
-            logger(LogEnum.WARN, "Email registration attempt: " + request.getEmail());
-            return ResponseEntity.badRequest().body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Email já cadastrado"));
-        }
-
-        if (companyRepository.existsByCnpj(request.getCnpj())) {
-            logger(LogEnum.WARN, "CNPJ registration attempt: " + request.getCnpj());
-            return ResponseEntity.badRequest().body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "CNPJ já cadastrado"));
-        }
-
+        validateUserAndCompany(request);
+        
         UserEntity company = new CompanyEntity(request);
-        super.userRepository.save(company);
+        userRepository.save(company);
 
         logger(LogEnum.INFO, "Registered company: " + company.getId());
         return ResponseEntity.ok().build();
@@ -46,8 +41,7 @@ public class CompanyService extends UtilService {
         List<CompanyEntity> companies = companyRepository.findAll();
 
         if (companies.isEmpty()) {
-            logger(LogEnum.INFO, "No companies registered");
-            return ResponseEntity.noContent().build();
+            throw new NoCompaniesRegisteredException("No companies registered");
         }
 
         logger(LogEnum.INFO, "List companies: " + companies.size() + " companies");
@@ -55,26 +49,18 @@ public class CompanyService extends UtilService {
     }
 
     public ResponseEntity<CompanyEntity> searchCompanyById(UUID id) {
-        CompanyEntity company = companyRepository.findById(id).orElse(null);
-
-        if (company == null) {
-            logger(LogEnum.WARN, "Company not found: " + id);
-            return ResponseEntity.notFound().build();
-        }
+        CompanyEntity company = companyRepository.findById(id)
+                .orElseThrow(() -> new NoCompanyFoundException(COMPANY_NOT_FOUND + id));
 
         logger(LogEnum.INFO, "Company found: " + company.getEmail());
         return ResponseEntity.ok(company);
     }
 
     public ResponseEntity<Object> deleteCompanyById(UUID id, Authentication authentication) {
-        if (!super.userIsSameOrAdmin(authentication, id)) {
-            logger(LogEnum.WARN, "Unauthorized user: " + ((UserEntity) authentication.getPrincipal()).getId());
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(HttpStatus.FORBIDDEN.value(), "Usuário não autorizado"));
-        }
+        verifyAuthorization(authentication, id);
 
         if (!companyRepository.existsById(id)) {
-            logger(LogEnum.WARN, "Company not found: " + id);
-            return ResponseEntity.notFound().build();
+            throw new NoCompanyFoundException(COMPANY_NOT_FOUND + id);
         }
 
         companyRepository.deleteById(id);
@@ -84,17 +70,10 @@ public class CompanyService extends UtilService {
     }
 
     public ResponseEntity<Object> updateCompany(UUID id, RequestRegisterCompany request, Authentication authentication) {
-        if (!super.userIsSameOrAdmin(authentication, id)) {
-            logger(LogEnum.WARN, "Unauthorized user: " + ((UserEntity) authentication.getPrincipal()).getId());
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(HttpStatus.FORBIDDEN.value(), "Usuário não autorizado"));
-        }
+        verifyAuthorization(authentication, id);
 
-        CompanyEntity company = companyRepository.findById(id).orElse(null);
-
-        if (company == null) {
-            logger(LogEnum.WARN, "Company not found: " + id);
-            return ResponseEntity.notFound().build();
-        }
+        CompanyEntity company = companyRepository.findById(id)
+                .orElseThrow(() -> new NoCompanyFoundException(COMPANY_NOT_FOUND + id));
 
         company.update(request);
         companyRepository.save(company);
@@ -102,5 +81,14 @@ public class CompanyService extends UtilService {
         logger(LogEnum.INFO, "Company updated: " + company.getId());
         return ResponseEntity.noContent().build();
     }
-    
+
+    private void validateUserAndCompany(RequestRegisterCompany request) {
+        if (userExists(request)) {
+            throw new EmailAlreadyRegisteredException("Email registration attempt: " + request.getEmail());
+        }
+
+        if (companyRepository.existsByCnpj(request.getCnpj())) {
+            throw new CnpjAlreadyRegisteredException("CNPJ registration attempt: " + request.getCnpj());
+        }
+    }
 }
