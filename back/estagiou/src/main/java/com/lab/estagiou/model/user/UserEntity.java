@@ -9,6 +9,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.lab.estagiou.model.user.exception.RegisterUserException;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -42,6 +44,18 @@ public abstract class UserEntity implements UserDetails {
     private UserRoleEnum role;
 
     protected UserEntity(UUID id, String email, String password, UserRoleEnum role) {
+        if (email == null || email.isBlank()) {
+            throw new RegisterUserException("Email não pode ser nulo");
+        }
+
+        if (password == null || password.isBlank()) {
+            throw new RegisterUserException("Senha não pode ser nula");
+        }
+
+        if (role == null) {
+            throw new RegisterUserException("Role não pode ser nula");
+        }
+
         this.id = id;
         this.email = email;
         this.password = new BCryptPasswordEncoder().encode(password);
