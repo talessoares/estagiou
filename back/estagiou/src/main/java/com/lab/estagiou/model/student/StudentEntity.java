@@ -7,6 +7,7 @@ import com.lab.estagiou.dto.request.model.RequestRegisterStudent;
 import com.lab.estagiou.model.address.AddressEntity;
 import com.lab.estagiou.model.course.CourseEntity;
 import com.lab.estagiou.model.enrollment.EnrollmentEntity;
+import com.lab.estagiou.model.student.exception.RegisterStudentException;
 import com.lab.estagiou.model.user.UserEntity;
 import com.lab.estagiou.model.user.UserRoleEnum;
 
@@ -52,15 +53,11 @@ public class StudentEntity extends UserEntity {
         super(null, email, password, UserRoleEnum.USER);
 
         if (name == null || name.isBlank()) {
-            throw new IllegalArgumentException("Nome do aluno não pode ser nulo");
+            throw new RegisterStudentException("Nome do aluno não pode ser nulo");
         }
 
         if (lastName == null || lastName.isBlank()) {
-            throw new IllegalArgumentException("Sobrenome do aluno não pode ser nulo");
-        }
-
-        if (email == null || email.isBlank()) {
-            throw new IllegalArgumentException("Email do aluno não pode ser nulo");
+            throw new RegisterStudentException("Sobrenome do aluno não pode ser nulo");
         }
 
         this.name = name;
