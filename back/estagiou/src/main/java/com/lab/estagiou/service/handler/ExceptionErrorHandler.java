@@ -1,4 +1,4 @@
-package com.lab.estagiou.service.handle;
+package com.lab.estagiou.service.handler;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ public class ExceptionErrorHandler extends UtilService {
     @ExceptionHandler(value = IllegalArgumentException.class)
     public ResponseEntity<Object> handleIllegalArgumentException(Exception e) {
         logger(LogEnum.ERROR, "Illegal argument: " + e.getMessage());
-        return ResponseEntity.internalServerError().body(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
+        return ResponseEntity.badRequest().body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
     }
     
 }
