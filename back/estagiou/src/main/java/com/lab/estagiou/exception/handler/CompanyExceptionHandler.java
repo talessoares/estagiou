@@ -23,25 +23,25 @@ public class CompanyExceptionHandler extends HandlerExceptionUtil {
 
     @ExceptionHandler(value = RegisterCompanyException.class)
     public ResponseEntity<Object> handleRegisterCompanyException(Exception e, HttpServletRequest request) {
-        logger(LogEnum.WARN, e.getMessage());
+        logger(LogEnum.WARN, e.getMessage(), HttpStatus.BAD_REQUEST.value(), request);
         return ResponseEntity.badRequest().body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage(), request));
     }
 
     @ExceptionHandler(value = CnpjAlreadyRegisteredException.class)
     public ResponseEntity<Object> handleCnpjAlreadyRegisteredException(Exception e, HttpServletRequest request) {
-        logger(LogEnum.WARN, e.getMessage());
+        logger(LogEnum.WARN, e.getMessage(), HttpStatus.BAD_REQUEST.value(), request);
         return ResponseEntity.badRequest().body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "CNPJ já cadastrado", request));
     }
 
     @ExceptionHandler(value = NoCompaniesRegisteredException.class)
     public ResponseEntity<Object> handleNoCompaniesRegisteredException(Exception e, HttpServletRequest request) {
-        logger(LogEnum.INFO, e.getMessage());
+        logger(LogEnum.INFO, e.getMessage(), HttpStatus.NO_CONTENT.value(), request);
         return ResponseEntity.noContent().build();
     }
 
     @ExceptionHandler(value = NoCompanyFoundException.class)
     public ResponseEntity<Object> handleNoCompanyFoundException(Exception e, HttpServletRequest request) {
-        logger(LogEnum.INFO, e.getMessage());
+        logger(LogEnum.INFO, e.getMessage(), HttpStatus.NO_CONTENT.value(), request);
         return ResponseEntity.noContent().build();
     }
 

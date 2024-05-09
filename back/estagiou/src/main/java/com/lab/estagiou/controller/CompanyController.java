@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.lab.estagiou.dto.request.model.RequestRegisterCompany;
+import com.lab.estagiou.dto.request.model.company.CompanyRegisterRequest;
 import com.lab.estagiou.model.company.CompanyEntity;
 import com.lab.estagiou.service.CompanyService;
 
@@ -42,7 +42,7 @@ public class CompanyController {
         @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
     })
     @PostMapping("/register")
-    public ResponseEntity<Object> registerCompany(@RequestBody RequestRegisterCompany request) {
+    public ResponseEntity<Object> registerCompany(@RequestBody CompanyRegisterRequest request) {
         return companyService.registerCompany(request);
     }
 
@@ -86,7 +86,7 @@ public class CompanyController {
         @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
     })
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updateCompany(@PathVariable UUID id, @RequestBody RequestRegisterCompany request, Authentication authentication) {
+    public ResponseEntity<Object> updateCompany(@PathVariable UUID id, @RequestBody CompanyRegisterRequest request, Authentication authentication) {
         return companyService.updateCompany(id, request, authentication);
     }
 

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.lab.estagiou.dto.request.model.RequestRegisterStudent;
+import com.lab.estagiou.dto.request.model.student.StudentRegisterRequest;
 import com.lab.estagiou.dto.response.error.ErrorResponse;
 import com.lab.estagiou.model.student.StudentEntity;
 import com.lab.estagiou.service.StudentService;
@@ -44,7 +44,7 @@ public class StudentController {
         @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping("/register")
-    public ResponseEntity<Object> registerStudent(@RequestBody RequestRegisterStudent request) {
+    public ResponseEntity<Object> registerStudent(@RequestBody StudentRegisterRequest request) {
         return studentService.registerStudent(request);
     }
 
@@ -96,7 +96,7 @@ public class StudentController {
         @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
     })
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updateStudent(@PathVariable UUID id, @RequestBody RequestRegisterStudent requestCadastro, Authentication authentication) {
+    public ResponseEntity<Object> updateStudent(@PathVariable UUID id, @RequestBody StudentRegisterRequest requestCadastro, Authentication authentication) {
         return studentService.updateStudent(id, requestCadastro, authentication);
     }
 

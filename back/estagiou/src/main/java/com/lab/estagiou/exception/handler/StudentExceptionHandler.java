@@ -22,19 +22,19 @@ public class StudentExceptionHandler extends HandlerExceptionUtil {
 
     @ExceptionHandler(value = RegisterStudentException.class)
     public ResponseEntity<Object> handleRegisterStudentException(Exception e, HttpServletRequest request) {
-        logger(LogEnum.WARN, e.getMessage());
+        logger(LogEnum.WARN, e.getMessage(), HttpStatus.BAD_REQUEST.value(), request);
         return ResponseEntity.badRequest().body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage(), request));
     }
 
     @ExceptionHandler(value = NoStudentsRegisteredException.class)
     public ResponseEntity<Object> handleNoStudentsRegisteredException(Exception e, HttpServletRequest request) {
-        logger(LogEnum.INFO, e.getMessage());
+        logger(LogEnum.INFO, e.getMessage(), HttpStatus.NO_CONTENT.value(), request);
         return ResponseEntity.noContent().build();
     }
 
     @ExceptionHandler(value = NoStudentFoundException.class)
     public ResponseEntity<Object> handleNoStudentFoundException(Exception e, HttpServletRequest request) {
-        logger(LogEnum.INFO, e.getMessage());
+        logger(LogEnum.INFO, e.getMessage(), HttpStatus.NO_CONTENT.value(), request);
         return ResponseEntity.noContent().build();
     }
     

@@ -4,11 +4,12 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import com.lab.estagiou.dto.request.model.RequestRegisterCompany;
+import com.lab.estagiou.dto.request.model.company.CompanyRegisterRequest;
 import com.lab.estagiou.exception.generic.EmailAlreadyRegisteredException;
 import com.lab.estagiou.model.company.CompanyEntity;
 import com.lab.estagiou.model.company.CompanyRepository;
@@ -27,13 +28,13 @@ public class CompanyService extends UtilService {
 
     private static final String COMPANY_NOT_FOUND = "Company not found: ";
 
-    public ResponseEntity<Object> registerCompany(RequestRegisterCompany request) {
+    public ResponseEntity<Object> registerCompany(CompanyRegisterRequest request) {
         validateUserAndCompany(request);
         
         UserEntity company = new CompanyEntity(request);
         userRepository.save(company);
 
-        logger(LogEnum.INFO, "Registered company: " + company.getId());
+        logger(LogEnum.INFO, "Registered company: " + company.getId(), HttpStatus.OK.value());
         return ResponseEntity.ok().build();
     }
 
@@ -44,7 +45,7 @@ public class CompanyService extends UtilService {
             throw new NoCompaniesRegisteredException("No companies registered");
         }
 
-        logger(LogEnum.INFO, "List companies: " + companies.size() + " companies");
+        logger(LogEnum.INFO, "List companies: " + companies.size() + " companies", HttpStatus.OK.value());
         return ResponseEntity.ok(companies);
     }
 
@@ -52,7 +53,7 @@ public class CompanyService extends UtilService {
         CompanyEntity company = companyRepository.findById(id)
                 .orElseThrow(() -> new NoCompanyFoundException(COMPANY_NOT_FOUND + id));
 
-        logger(LogEnum.INFO, "Company found: " + company.getEmail());
+        logger(LogEnum.INFO, "Company found: " + company.getEmail(), HttpStatus.OK.value());
         return ResponseEntity.ok(company);
     }
 
@@ -65,11 +66,11 @@ public class CompanyService extends UtilService {
 
         companyRepository.deleteById(id);
 
-        logger(LogEnum.INFO, "Company deleted: " + id);
+        logger(LogEnum.INFO, "Company deleted: " + id, HttpStatus.NO_CONTENT.value());
         return ResponseEntity.noContent().build();
     }
 
-    public ResponseEntity<Object> updateCompany(UUID id, RequestRegisterCompany request, Authentication authentication) {
+    public ResponseEntity<Object> updateCompany(UUID id, CompanyRegisterRequest request, Authentication authentication) {
         verifyAuthorization(authentication, id);
 
         CompanyEntity company = companyRepository.findById(id)
@@ -78,11 +79,11 @@ public class CompanyService extends UtilService {
         company.update(request);
         companyRepository.save(company);
 
-        logger(LogEnum.INFO, "Company updated: " + company.getId());
+        logger(LogEnum.INFO, "Company updated: " + company.getId(), HttpStatus.NO_CONTENT.value());
         return ResponseEntity.noContent().build();
     }
 
-    private void validateUserAndCompany(RequestRegisterCompany request) {
+    private void validateUserAndCompany(CompanyRegisterRequest request) {
         if (userExists(request)) {
             throw new EmailAlreadyRegisteredException("Email registration attempt: " + request.getEmail());
         }

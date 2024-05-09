@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 
 import com.lab.estagiou.dto.request.auth.RequestAuthentication;
-import com.lab.estagiou.dto.request.model.RequestRegisterStudent;
+import com.lab.estagiou.dto.request.model.student.StudentRegisterRequest;
 import com.lab.estagiou.service.AuthorizationService;
 import com.lab.estagiou.service.StudentService;
 
@@ -24,11 +24,11 @@ class AuthTests {
     @Autowired
     private StudentService studentService;
 
-    private RequestRegisterStudent request;
+    private StudentRegisterRequest request;
 
     @BeforeEach
     void setup() {
-        request = new RequestRegisterStudent();
+        request = new StudentRegisterRequest();
         request.setEmail("a");
         request.setName("a");
         request.setPassword("a");

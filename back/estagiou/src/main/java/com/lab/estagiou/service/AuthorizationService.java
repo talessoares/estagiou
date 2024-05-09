@@ -2,6 +2,7 @@ package com.lab.estagiou.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -47,7 +48,7 @@ public class AuthorizationService extends UtilService implements UserDetailsServ
         Authentication auth = authenticationManager.authenticate(usernamePassword);
         String token = tokenService.generateToken((UserEntity) auth.getPrincipal());
 
-        logger(LogEnum.INFO, "Login user: " + ((UserEntity) auth.getPrincipal()).getId());
+        logger(LogEnum.INFO, "Login user: " + ((UserEntity) auth.getPrincipal()).getId(), HttpStatus.OK.value());
         return ResponseEntity.ok(new LoginResponse(token));
     }
 

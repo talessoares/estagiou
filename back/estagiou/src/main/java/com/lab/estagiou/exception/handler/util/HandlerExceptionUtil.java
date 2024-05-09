@@ -12,6 +12,8 @@ import com.lab.estagiou.model.log.LogEntity;
 import com.lab.estagiou.model.log.LogEnum;
 import com.lab.estagiou.model.log.LogRepository;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 public abstract class HandlerExceptionUtil {
 
     @Autowired
@@ -25,13 +27,14 @@ public abstract class HandlerExceptionUtil {
 
     public static final Logger logger = LoggerFactory.getLogger(HandlerExceptionUtil.class);
 
-    public void logger(LogEnum level, String message) {
+    public void logger(LogEnum level, String message, int status, HttpServletRequest request) {
         if (!logsShowEnabled && !logsSaveEnabled) {
             return;
         }
 
         if (logsSaveEnabled) {
-            saveLog(level, message);
+            String path = request == null ? null : request.getRequestURI();
+            saveLog(level, status, message, path);
         }
 
         if (logsShowEnabled) {
@@ -39,8 +42,12 @@ public abstract class HandlerExceptionUtil {
         }
     }
 
-    private void saveLog(LogEnum level, String message) {
-        LogEntity log = new LogEntity(null, level, message, Instant.now());
+    public void logger(LogEnum level, String message, int status) {
+        logger(level, message, status, null);
+    }
+
+    private void saveLog(LogEnum level, int status, String message, String path) {
+        LogEntity log = new LogEntity(level, status, message, Instant.now(), path);
         logRepository.save(log);
     }
 

@@ -3,7 +3,7 @@ package com.lab.estagiou.model.company;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lab.estagiou.dto.request.model.RequestRegisterCompany;
+import com.lab.estagiou.dto.request.model.company.CompanyRegisterRequest;
 import com.lab.estagiou.model.address.AddressEntity;
 import com.lab.estagiou.model.company.exception.RegisterCompanyException;
 import com.lab.estagiou.model.jobvacancy.JobVacancyEntity;
@@ -69,7 +69,7 @@ public class CompanyEntity extends UserEntity {
         this.jobVacancies = new ArrayList<>();
     }
 
-    public CompanyEntity(RequestRegisterCompany request) {
+    public CompanyEntity(CompanyRegisterRequest request) {
         this(request.getName(), request.getEmail(), request.getPassword(), request.getCnpj(), request.getAccountableName());
     }
 
@@ -109,7 +109,7 @@ public class CompanyEntity extends UserEntity {
         return this.address.equals(address);
     }
 
-    public void update(RequestRegisterCompany request) {
+    public void update(CompanyRegisterRequest request) {
         if (request.getName() != null && !request.getName().isBlank()) {
             this.name = request.getName();
         }

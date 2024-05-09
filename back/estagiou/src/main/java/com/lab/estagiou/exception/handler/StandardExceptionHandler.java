@@ -19,13 +19,13 @@ public class StandardExceptionHandler extends HandlerExceptionUtil {
 
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<Object> handleException(Exception e, HttpServletRequest request) {
-        logger(LogEnum.ERROR, "Internal error: " + e.getMessage());
+        logger(LogEnum.ERROR, "Internal error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), request);
         return ResponseEntity.internalServerError().body(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Erro interno", request));
     }
 
     @ExceptionHandler(value = IllegalArgumentException.class)
     public ResponseEntity<Object> handleIllegalArgumentException(Exception e, HttpServletRequest request) {
-        logger(LogEnum.ERROR, "Illegal argument: " + e.getMessage());
+        logger(LogEnum.ERROR, "Illegal argument: " + e.getMessage(), HttpStatus.BAD_REQUEST.value(), request);
         return ResponseEntity.badRequest().body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage(), request));
     }
     

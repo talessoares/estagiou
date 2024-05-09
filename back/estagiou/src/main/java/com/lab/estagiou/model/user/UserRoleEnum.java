@@ -2,9 +2,9 @@ package com.lab.estagiou.model.user;
 
 public enum UserRoleEnum {
 
-    ADMIN("admin"),
-    USER("user"),
-    COMPANY("company");
+    ADMIN("ADMIN"),
+    USER("USER"),
+    COMPANY("COMPANY");
 
     private String role;
 

@@ -1,4 +1,4 @@
-package com.lab.estagiou.dto.request.model;
+package com.lab.estagiou.dto.request.model.student;
 
 import com.lab.estagiou.dto.request.model.util.RequestRegister;
 
@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class RequestRegisterStudent extends RequestRegister {
+public class StudentRegisterRequest extends RequestRegister {
 
     private String lastName;
     

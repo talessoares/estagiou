@@ -1,12 +1,13 @@
 package com.lab.estagiou.dto.request.model.util;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-public abstract class RequestRegister {
+@EqualsAndHashCode(callSuper = false)
+public abstract class RequestRegister extends RequestEmail {
     
     private String name;
-    private String email;
     private String password;
 
 }

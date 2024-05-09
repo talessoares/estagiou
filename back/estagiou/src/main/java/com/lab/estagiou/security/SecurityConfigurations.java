@@ -15,15 +15,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.lab.estagiou.model.user.UserRoleEnum;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfigurations {
 
-    private static final String ADMIN = "ADMIN";
+    private static final String ADMIN = UserRoleEnum.ADMIN.getRole();
 
-    private static final String USER = "USER";
+    private static final String USER = UserRoleEnum.USER.getRole();
 
-    private static final String COMPANY = "COMPANY";
+    private static final String COMPANY = UserRoleEnum.COMPANY.getRole();
 
     @Bean 
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, SecurityFilter securityFilter) throws Exception {
@@ -49,6 +51,13 @@ public class SecurityConfigurations {
                 .requestMatchers(HttpMethod.GET,"/v1/company/*/").hasRole(USER)
                 .requestMatchers(HttpMethod.DELETE,"/v1/company/*/").hasRole(COMPANY)
                 .requestMatchers(HttpMethod.PUT,"/v1/company/*/").hasRole(COMPANY)
+
+                /* JOB VACANCY */
+                .requestMatchers(HttpMethod.POST,"/v1/jobvacancy/register").hasRole(COMPANY)
+                .requestMatchers(HttpMethod.GET,"/v1/jobvacancy/list").hasRole(USER)
+                .requestMatchers(HttpMethod.GET,"/v1/jobvacancy/*/").hasRole(USER)
+                .requestMatchers(HttpMethod.DELETE,"/v1/jobvacancy/*/").hasRole(COMPANY)
+                .requestMatchers(HttpMethod.PUT,"/v1/jobvacancy/*/").hasRole(COMPANY)
 
                 /* ADMIN */
                 .requestMatchers(HttpMethod.POST,"/v1/admin/register").hasRole(ADMIN)

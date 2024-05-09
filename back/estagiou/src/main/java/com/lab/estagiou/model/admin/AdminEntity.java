@@ -1,6 +1,6 @@
 package com.lab.estagiou.model.admin;
 
-import com.lab.estagiou.dto.request.model.RequestRegisterAdmin;
+import com.lab.estagiou.dto.request.model.admin.AdminRegisterRequest;
 import com.lab.estagiou.model.user.UserEntity;
 import com.lab.estagiou.model.user.UserRoleEnum;
 
@@ -15,7 +15,7 @@ import lombok.ToString;
 @NoArgsConstructor
 public class AdminEntity extends UserEntity {
 
-    public AdminEntity(RequestRegisterAdmin request) {
+    public AdminEntity(AdminRegisterRequest request) {
         super(null, request.getEmail(), request.getPassword(), UserRoleEnum.ADMIN);
     }
 

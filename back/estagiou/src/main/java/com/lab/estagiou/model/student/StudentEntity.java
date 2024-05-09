@@ -3,7 +3,7 @@ package com.lab.estagiou.model.student;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lab.estagiou.dto.request.model.RequestRegisterStudent;
+import com.lab.estagiou.dto.request.model.student.StudentRegisterRequest;
 import com.lab.estagiou.model.address.AddressEntity;
 import com.lab.estagiou.model.course.CourseEntity;
 import com.lab.estagiou.model.enrollment.EnrollmentEntity;
@@ -70,7 +70,7 @@ public class StudentEntity extends UserEntity {
         this.address = address;
     }
 
-    public StudentEntity(RequestRegisterStudent request) {
+    public StudentEntity(StudentRegisterRequest request) {
         this(request.getName(), request.getLastName(), request.getEmail(), request.getPassword());
     }
 
@@ -114,7 +114,7 @@ public class StudentEntity extends UserEntity {
         return this.address.equals(address);
     }
 
-    public void update(RequestRegisterStudent request) {
+    public void update(StudentRegisterRequest request) {
         if (request.getName() != null && !request.getName().isBlank()) {
             this.name = request.getName();
         }

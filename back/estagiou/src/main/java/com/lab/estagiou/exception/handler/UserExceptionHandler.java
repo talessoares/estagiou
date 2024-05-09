@@ -20,7 +20,7 @@ public class UserExceptionHandler extends HandlerExceptionUtil {
 
     @ExceptionHandler(value = RegisterUserException.class)
     public ResponseEntity<Object> handleRegisterStudentException(Exception e, HttpServletRequest request) {
-        logger(LogEnum.WARN, e.getMessage());
+        logger(LogEnum.WARN, e.getMessage(), HttpStatus.BAD_REQUEST.value(), request);
         return ResponseEntity.badRequest().body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage(), request));
     }
     

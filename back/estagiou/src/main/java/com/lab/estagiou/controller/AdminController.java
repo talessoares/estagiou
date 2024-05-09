@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.lab.estagiou.dto.request.model.RequestRegisterAdmin;
+import com.lab.estagiou.dto.request.model.admin.AdminRegisterRequest;
 import com.lab.estagiou.service.AdminService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,7 +22,7 @@ public class AdminController {
     private AdminService adminService;
 
     @PostMapping("/register")
-    public ResponseEntity<Object> registerAdmin(@RequestBody RequestRegisterAdmin request) {
+    public ResponseEntity<Object> registerAdmin(@RequestBody AdminRegisterRequest request) {
         return adminService.registerAdmin(request);
     }
     

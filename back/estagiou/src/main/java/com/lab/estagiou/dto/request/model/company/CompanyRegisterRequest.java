@@ -1,4 +1,4 @@
-package com.lab.estagiou.dto.request.model;
+package com.lab.estagiou.dto.request.model.company;
 
 import com.lab.estagiou.dto.request.model.util.RequestRegister;
 
@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class RequestRegisterCompany extends RequestRegister {
+public class CompanyRegisterRequest extends RequestRegister {
 
     private String cnpj;
     private String accountableName;

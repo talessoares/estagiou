@@ -30,8 +30,20 @@ public class LogEntity {
     @Enumerated(EnumType.STRING)
     private LogEnum level;
 
+    private int status;
+
     private String message;
 
-    private Instant instant;
+    private Instant timestamp;
+
+    private String path;
+
+    public LogEntity(LogEnum level, int status, String message, Instant timestamp, String path) {
+        this.level = level;
+        this.status = status;
+        this.message = message;
+        this.timestamp = timestamp;
+        this.path = path;
+    }
 
 }
