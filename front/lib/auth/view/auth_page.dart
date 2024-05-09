@@ -1,4 +1,5 @@
 import 'package:estagio_u/auth/view/auth_company.dart';
+import 'package:estagio_u/auth/view/auth_student.dart';
 import 'package:flutter/material.dart';
 
 class AuthPage extends StatefulWidget {
@@ -13,7 +14,16 @@ class _AuthPageState extends State<AuthPage> {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(color: Colors.green[800]),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.bottomCenter,
+          end: Alignment.topCenter,
+          colors: [
+            Colors.green[800]!,
+            Color.fromARGB(255, 48, 46, 46),
+          ],
+        ),
+      ),
       child: Column(
         children: [
           const Spacer(),
@@ -22,7 +32,7 @@ class _AuthPageState extends State<AuthPage> {
           Row(
             children: [
               const SizedBox(
-                width: 8,
+                width: 20,
               ),
               Text(
                 'Acesse como: ',
@@ -33,48 +43,58 @@ class _AuthPageState extends State<AuthPage> {
               ),
             ],
           ),
-          Flexible(
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              margin: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20), color: Colors.white),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Image.asset('assets/student.png', height: 50),
-                  const SizedBox(width: 8),
-                  Flexible(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Estudante',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .copyWith(
-                                  color: Colors.green[800],
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18),
-                        ),
-                        const SizedBox(
-                          height: 4,
-                        ),
-                        Text(
-                          'Visualize as vagas disponíveis para estágio.',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .copyWith(fontSize: 16),
-                        )
-                      ],
-                    ),
-                  )
-                ],
+          const SizedBox(height: 20),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => AuthStudent()));
+            },
+            child: Flexible(
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 1),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.white),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Image.asset('assets/student.png', height: 100),
+                    const SizedBox(width: 2),
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Estudante',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
+                                    color: Color(0xFF1A7924),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18),
+                          ),
+                          const SizedBox(
+                            height: 4,
+                          ),
+                          Text(
+                            'Visualize as vagas disponíveis para estágio',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(fontSize: 16),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
+          const SizedBox(height: 30),
           Flexible(
             child: GestureDetector(
               onTap: () {
@@ -82,16 +102,17 @@ class _AuthPageState extends State<AuthPage> {
                     MaterialPageRoute(builder: (context) => AuthCompany()));
               },
               child: Container(
-                padding: const EdgeInsets.all(8),
-                margin: const EdgeInsets.all(8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 1),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     color: Colors.white),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Image.asset('assets/empresario.png', height: 50),
-                    const SizedBox(width: 8),
+                    Image.asset('assets/empresario.png', height: 100),
+                    const SizedBox(width: 16),
                     Flexible(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -107,11 +128,12 @@ class _AuthPageState extends State<AuthPage> {
                                     fontSize: 18),
                           ),
                           const SizedBox(
-                            height: 4,
+                            height: 2,
                           ),
                           Text(
-                            'Ofereça vagas para estágio na sua empresa.',
-                            maxLines: 2,
+                            'Ofereça vagas para estágio disponíveis na sua empresa',
+                            maxLines: 3,
+                            softWrap: true,
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium!
