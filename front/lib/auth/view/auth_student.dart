@@ -95,8 +95,8 @@ class _AuthStudentState extends State<AuthStudent> {
                             ),
                             contentPadding:
                                 const EdgeInsetsDirectional.fromSTEB(
-                                    24, 24, 12, 16),
-                            border: OutlineInputBorder(
+                                    24, 24, 24, 16),
+                            enabledBorder: OutlineInputBorder(
                               borderSide:
                                   const BorderSide(color: Color(0xFF1A7924)),
                               borderRadius: BorderRadius.circular(50),
@@ -114,42 +114,41 @@ class _AuthStudentState extends State<AuthStudent> {
                         controller: _passwordController,
                         obscureText: _obscureText,
                         decoration: InputDecoration(
-                          labelText: 'Senha',
-                          labelStyle: const TextStyle(
-                            color: Color(0x66323232),
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16,
-                          ),
-                          contentPadding:
+                            labelText: 'Senha',
+                            labelStyle: const TextStyle(
+                              color: Color(0x66323232),
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                            ),
+                            contentPadding:
                                 const EdgeInsetsDirectional.fromSTEB(
                                     24, 24, 12, 16),
-                          border: OutlineInputBorder(
-                            borderSide:
-                                const BorderSide(color: Color(0xFF1A7924)),
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xFF1A7924)),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          suffixIcon: IconButton(
-                            padding: EdgeInsetsDirectional.only(end: 24),
-                            onPressed: () {
-                              setState(() {
-                                _obscureText = !_obscureText;
-                              });
-                            },
-                            icon: Icon(
-                              _obscureText
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                              color: Color(0XFF1A7924),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide:
+                                  const BorderSide(color: Color(0xFF1A7924)),
+                              borderRadius: BorderRadius.circular(50),
                             ),
-                          ),
-                          fillColor: Colors.white,
-                          filled: true
-                        ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Color(0xFF1A7924)),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            suffixIcon: IconButton(
+                              padding: EdgeInsetsDirectional.symmetric(vertical: 0, horizontal: 20),
+                              onPressed: () {
+                                setState(() {
+                                  _obscureText = !_obscureText;
+                                });
+                              },
+                              icon: Icon(
+                                _obscureText
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                color: Color(0XFF1A7924),
+                              ),
+                            ),
+                            fillColor: Colors.white,
+                            filled: true),
                       ),
                       const SizedBox(height: 30),
                       ElevatedButton(
@@ -164,16 +163,15 @@ class _AuthStudentState extends State<AuthStudent> {
                           backgroundColor: Color(0xFF23A331),
                         ),
                         child: const SizedBox(
-                          height: 70,
+                          height: 65,
                           child: Center(
                             child: Text(
                               'LOGIN',
-                              style: TextStyle (
-                                color: Colors.white,
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w600,
-                                fontSize: 16
-                              ),
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16),
                             ),
                           ),
                         ),
