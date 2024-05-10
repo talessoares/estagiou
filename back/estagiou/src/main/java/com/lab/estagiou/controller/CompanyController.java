@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.lab.estagiou.dto.request.model.company.CompanyRegisterRequest;
-import com.lab.estagiou.model.company.CompanyEntity;
+import com.lab.estagiou.dto.response.company.list.ResponseCompanyList;
 import com.lab.estagiou.service.CompanyService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -53,7 +53,7 @@ public class CompanyController {
         @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
     })
     @GetMapping(path = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<CompanyEntity>> listCompanies() {
+    public ResponseEntity<List<ResponseCompanyList>> listCompanies() {
         return companyService.listCompanies();
     }
     
@@ -64,7 +64,7 @@ public class CompanyController {
         @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
     })
     @GetMapping(path = "/{id}")
-    public ResponseEntity<CompanyEntity> searchCompanyById(@PathVariable UUID id) {
+    public ResponseEntity<ResponseCompanyList> searchCompanyById(@PathVariable UUID id) {
         return companyService.searchCompanyById(id);
     }
 
