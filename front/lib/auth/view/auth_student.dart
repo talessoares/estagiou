@@ -1,7 +1,6 @@
 import 'package:estagio_u/auth/view/register_student_google.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'register_student.dart';
 
 class AuthStudent extends StatefulWidget {
   const AuthStudent({Key? key}) : super(key: key);
