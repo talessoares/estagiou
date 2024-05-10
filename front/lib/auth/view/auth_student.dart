@@ -34,32 +34,48 @@ class _AuthStudentState extends State<AuthStudent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+          toolbarHeight: 65,
+          title: const Text('Estudante',
+              style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 20,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600)),
+          flexibleSpace: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: <Color>[Colors.black, Color(0xFF23A331)]),
+            ),
+          )),
       body: Container(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.fromLTRB(28, 10, 28, 0),
+        color: const Color(0xFFFBF6FF),
         child: Column(
           children: [
             const SizedBox(height: 10),
-            Align(
+            const Align(
               alignment: Alignment.centerLeft,
               child: Text(
                 'Login',
                 style: TextStyle(
-                  fontSize: 22,
-                  color: Color(0xFF1A7924),
-                ),
+                    fontSize: 22,
+                    color: Color(0xFF1A7924),
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w500),
               ),
             ),
-            const SizedBox(height: 10),
-            Align(
+            const SizedBox(height: 8),
+            const Align(
               alignment: Alignment.centerLeft,
-              child: Text(
-                'Realize o login na sua conta:',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .copyWith(fontSize: 14),
-              ),
+              child: Text('Realize o login na sua conta:',
+                  style: TextStyle(
+                      fontSize: 16,
+                      color: Color(0xFF585858),
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w400)),
             ),
             const SizedBox(height: 40),
             Row(
@@ -70,23 +86,47 @@ class _AuthStudentState extends State<AuthStudent> {
                       TextField(
                         controller: _emailController,
                         decoration: InputDecoration(
-                          labelText: 'Email',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xFF1A7924)),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
+                            labelText: 'Email',
+                            labelStyle: const TextStyle(
+                              color: Color(0x66323232),
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                            ),
+                            contentPadding:
+                                const EdgeInsetsDirectional.fromSTEB(
+                                    24, 24, 12, 16),
+                            border: OutlineInputBorder(
+                              borderSide:
+                                  const BorderSide(color: Color(0xFF1A7924)),
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide:
+                                  const BorderSide(color: Color(0xFF1A7924)),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            fillColor: Colors.white,
+                            filled: true),
                       ),
-                      const SizedBox(height: 40),
+                      const SizedBox(height: 20),
                       TextField(
                         controller: _passwordController,
                         obscureText: _obscureText,
                         decoration: InputDecoration(
                           labelText: 'Senha',
+                          labelStyle: const TextStyle(
+                            color: Color(0x66323232),
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                          ),
+                          contentPadding:
+                                const EdgeInsetsDirectional.fromSTEB(
+                                    24, 24, 12, 16),
                           border: OutlineInputBorder(
+                            borderSide:
+                                const BorderSide(color: Color(0xFF1A7924)),
                             borderRadius: BorderRadius.circular(50),
                           ),
                           focusedBorder: OutlineInputBorder(
@@ -94,6 +134,7 @@ class _AuthStudentState extends State<AuthStudent> {
                             borderRadius: BorderRadius.circular(20),
                           ),
                           suffixIcon: IconButton(
+                            padding: EdgeInsetsDirectional.only(end: 24),
                             onPressed: () {
                               setState(() {
                                 _obscureText = !_obscureText;
@@ -103,25 +144,18 @@ class _AuthStudentState extends State<AuthStudent> {
                               _obscureText
                                   ? Icons.visibility
                                   : Icons.visibility_off,
-                              color: Colors.grey,
+                              color: Color(0XFF1A7924),
                             ),
                           ),
+                          fillColor: Colors.white,
+                          filled: true
                         ),
                       ),
-                      const SizedBox(height: 50),
+                      const SizedBox(height: 30),
                       ElevatedButton(
                         onPressed: () {
                           // Coloque aqui a lógica de autenticação
                         },
-                        child: SizedBox(
-                          height: 70,
-                          child: Center(
-                            child: Text(
-                              'Login',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ),
-                        ),
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(50),
@@ -129,13 +163,27 @@ class _AuthStudentState extends State<AuthStudent> {
                           minimumSize: Size(double.infinity, 50),
                           backgroundColor: Color(0xFF23A331),
                         ),
+                        child: const SizedBox(
+                          height: 70,
+                          child: Center(
+                            child: Text(
+                              'LOGIN',
+                              style: TextStyle (
+                                color: Colors.white,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 15),
             GestureDetector(
               onTap: () {
                 Navigator.push(
@@ -144,12 +192,13 @@ class _AuthStudentState extends State<AuthStudent> {
                       builder: (context) => RegisterStudentGoogle()),
                 );
               },
-              child: Text(
+              child: const Text(
                 'Não possui conta? Cadastre-se',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .copyWith(fontSize: 14, color: Colors.blue),
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Color(0xFF585858),
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w400),
               ),
             ),
           ],
