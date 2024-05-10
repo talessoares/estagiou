@@ -15,13 +15,13 @@ class _AuthPageState extends State<AuthPage> {
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.bottomCenter,
             end: Alignment.topCenter,
             colors: [
-              Colors.green[800]!,
-              Color.fromARGB(255, 48, 46, 46),
+              Color(0xFF23A331),
+              Color(0xFF0C3611),
             ],
           ),
         ),
@@ -31,17 +31,19 @@ class _AuthPageState extends State<AuthPage> {
             const SizedBox(height: 16),
             Image.asset('assets/logo.png'),
             const SizedBox(height: 16),
-            Row(
+            const Row(
               children: [
-                const SizedBox(
+                SizedBox(
                   width: 20,
                 ),
                 Text(
                   'Acesse como: ',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText1!
-                      .copyWith(fontSize: 20, color: Colors.white),
+                  style: TextStyle(
+                    fontSize: 22,
+                    color: Color.fromARGB(255, 255, 255, 255),
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ],
             ),
@@ -68,14 +70,14 @@ class _AuthPageState extends State<AuthPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Estudante',
+                            'ESTUDANTE',
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyText1!
                                 .copyWith(
                                     color: Color(0xFF1A7924),
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18),
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16),
                           ),
                           const SizedBox(
                             height: 4,
@@ -85,7 +87,7 @@ class _AuthPageState extends State<AuthPage> {
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyText1!
-                                .copyWith(fontSize: 16),
+                                .copyWith(fontSize: 14),
                           )
                         ],
                       ),
@@ -117,14 +119,14 @@ class _AuthPageState extends State<AuthPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Empresa',
+                            'EMPRESA',
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyText1!
                                 .copyWith(
                                     color: Colors.green[800],
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18),
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16),
                           ),
                           const SizedBox(
                             height: 2,
@@ -136,7 +138,7 @@ class _AuthPageState extends State<AuthPage> {
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyText1!
-                                .copyWith(fontFamily: 'Poppins', fontSize: 16),
+                                .copyWith(fontFamily: 'Poppins', fontSize: 14),
                           )
                         ],
                       ),

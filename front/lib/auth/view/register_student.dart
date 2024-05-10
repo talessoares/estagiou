@@ -1,3 +1,4 @@
+import 'package:estagio_u/auth/view/auth_student.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -37,19 +38,38 @@ class _RegisterStudentState extends State<RegisterStudent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        leading: BackButton(
+            onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const AuthStudent()),
+                )),
+        toolbarHeight: 65,
+        title: const Text(
+          'Estudante',
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            fontSize: 20,
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        backgroundColor: const Color(0xFF23A331),
+      ),
       body: Container(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.fromLTRB(28, 10, 28, 0),
+        color: const Color(0xFFFBF6FF),
         child: Column(
           children: [
             const SizedBox(height: 10),
-            Align(
+            const Align(
               alignment: Alignment.centerLeft,
               child: Text(
                 'Cadastro',
                 style: TextStyle(
                   fontSize: 22,
                   color: Color(0xFF1A7924),
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ),
@@ -60,8 +80,8 @@ class _RegisterStudentState extends State<RegisterStudent> {
                 'Realize o cadastro da sua conta:',
                 style: Theme.of(context)
                     .textTheme
-                    .bodyMedium!
-                    .copyWith(fontSize: 14),
+                    .bodyText2!
+                    .copyWith(fontSize: 16),
               ),
             ),
             const SizedBox(height: 40),
@@ -71,44 +91,31 @@ class _RegisterStudentState extends State<RegisterStudent> {
                   child: Column(
                     children: [
                       TextField(
-                        controller: _firstNameController,
-                        decoration: InputDecoration(
-                          labelText: 'Nome',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xFF1A7924)),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      TextField(
-                        controller: _lastNameController,
-                        decoration: InputDecoration(
-                          labelText: 'Sobrenome',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xFF1A7924)),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      TextField(
                         controller: _emailController,
                         decoration: InputDecoration(
                           labelText: 'Email',
-                          border: OutlineInputBorder(
+                          labelStyle: const TextStyle(
+                            color: Color(0x66323232),
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                          ),
+                          contentPadding: const EdgeInsetsDirectional.fromSTEB(
+                              24, 24, 24, 16),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Color(0xFF1A7924),
+                            ),
                             borderRadius: BorderRadius.circular(50),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xFF1A7924)),
+                            borderSide: const BorderSide(
+                              color: Color(0xFF1A7924),
+                            ),
                             borderRadius: BorderRadius.circular(20),
                           ),
+                          fillColor: Colors.white,
+                          filled: true,
                         ),
                       ),
                       const SizedBox(height: 20),
@@ -117,14 +124,29 @@ class _RegisterStudentState extends State<RegisterStudent> {
                         obscureText: _obscureText,
                         decoration: InputDecoration(
                           labelText: 'Senha',
-                          border: OutlineInputBorder(
+                          labelStyle: const TextStyle(
+                            color: Color(0x66323232),
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                          ),
+                          contentPadding: const EdgeInsetsDirectional.fromSTEB(
+                              24, 24, 24, 16),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Color(0xFF1A7924),
+                            ),
                             borderRadius: BorderRadius.circular(50),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xFF1A7924)),
+                            borderSide: const BorderSide(
+                              color: Color(0xFF1A7924),
+                            ),
                             borderRadius: BorderRadius.circular(20),
                           ),
                           suffixIcon: IconButton(
+                            padding: const EdgeInsetsDirectional.symmetric(
+                                vertical: 0, horizontal: 20),
                             onPressed: () {
                               setState(() {
                                 _obscureText = !_obscureText;
@@ -134,31 +156,96 @@ class _RegisterStudentState extends State<RegisterStudent> {
                               _obscureText
                                   ? Icons.visibility
                                   : Icons.visibility_off,
-                              color: Colors.grey,
+                              color: const Color(0XFF1A7924),
                             ),
                           ),
+                          fillColor: Colors.white,
+                          filled: true,
                         ),
                       ),
-                      const SizedBox(height: 50),
+                      const SizedBox(height: 20),
+                      TextField(
+                        controller: _firstNameController,
+                        decoration: InputDecoration(
+                          labelText: 'Nome',
+                          labelStyle: const TextStyle(
+                            color: Color(0x66323232),
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                          ),
+                          contentPadding: const EdgeInsetsDirectional.fromSTEB(
+                              24, 24, 24, 16),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Color(0xFF1A7924),
+                            ),
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Color(0xFF1A7924),
+                            ),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          fillColor: Colors.white,
+                          filled: true,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      TextField(
+                        controller: _lastNameController,
+                        decoration: InputDecoration(
+                          labelText: 'Sobrenome',
+                          labelStyle: const TextStyle(
+                            color: Color(0x66323232),
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                          ),
+                          contentPadding: const EdgeInsetsDirectional.fromSTEB(
+                              24, 24, 24, 16),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Color(0xFF1A7924),
+                            ),
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Color(0xFF1A7924),
+                            ),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          fillColor: Colors.white,
+                          filled: true,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: () {
                           // Coloque aqui a lógica de autenticação
                         },
-                        child: SizedBox(
-                          height: 70,
-                          child: Center(
-                            child: Text(
-                              'Cadastrar',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ),
-                        ),
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(50),
                           ),
-                          minimumSize: Size(double.infinity, 50),
-                          backgroundColor: Color(0xFF23A331),
+                          minimumSize: const Size(double.infinity, 50),
+                          backgroundColor: const Color(0xFF23A331),
+                        ),
+                        child: const SizedBox(
+                          height: 65,
+                          child: Center(
+                            child: Text(
+                              'CADASTRAR',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ],
@@ -167,12 +254,20 @@ class _RegisterStudentState extends State<RegisterStudent> {
               ],
             ),
             const SizedBox(height: 20),
-            Text(
-              'Já possui conta? Faça login',
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium!
-                  .copyWith(fontSize: 14),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const AuthStudent()),
+                );
+              },
+              child: Text(
+                'Já possui conta? Faça login',
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText2!
+                    .copyWith(fontSize: 16, color: const Color(0xFF1A7924)),
+              ),
             ),
           ],
         ),
