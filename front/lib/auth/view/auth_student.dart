@@ -1,3 +1,4 @@
+import 'package:estagio_u/auth/view/register_student_google.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'register_student.dart';
@@ -140,7 +141,8 @@ class _AuthStudentState extends State<AuthStudent> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => RegisterStudent()),
+                  MaterialPageRoute(
+                      builder: (context) => RegisterStudentGoogle()),
                 );
               },
               child: Text(
