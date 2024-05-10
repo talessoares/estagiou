@@ -116,7 +116,7 @@ public class JobVacancyEntity implements Serializable {
 
     public void update(JobVacancyRegisterRequest request) {
         if (request == null) {
-            throw new IllegalArgumentException("Request cannot be null");
+            throw new UpdateJobVacancyException("Request cannot be null");
         }
 
         if (request.getTitle() != null) {

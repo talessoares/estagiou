@@ -115,16 +115,20 @@ public class StudentEntity extends UserEntity {
     }
 
     public void update(StudentRegisterRequest request) {
-        if (request.getName() != null && !request.getName().isBlank()) {
-            this.name = request.getName();
+        if (request == null) {
+            throw new IllegalArgumentException("Request cannot be null");
         }
 
-        if (request.getLastName() != null && !request.getLastName().isBlank()) {
-            this.lastName = request.getLastName();
+        if (request.getName() != null) {
+            this.setName(request.getName());
         }
 
-        if (request.getEmail() != null && !request.getEmail().isBlank()) {
-            super.setEmail(request.getEmail());
+        if (request.getLastName() != null) {
+            this.setLastName(request.getLastName());
+        }
+
+        if (request.getPassword() != null) {
+            this.setPassword(request.getPassword());
         }
     }
 
@@ -147,5 +151,28 @@ public class StudentEntity extends UserEntity {
     public int hashCode() {
         return super.hashCode();
     }
+
+    public void setName(String name) {
+        if (name == null || name.isBlank()) {
+            throw new RegisterStudentException("Nome do aluno não pode ser nulo");
+        }
+        this.name = name;
+    }
+
+    public void setLastName(String lastName) {
+        if (lastName == null || lastName.isBlank()) {
+            throw new RegisterStudentException("Sobrenome do aluno não pode ser nulo");
+        }
+        this.lastName = lastName;
+    }
+
+    @Override
+    public void setPassword(String password) {
+        if (password == null || password.isBlank()) {
+            throw new RegisterStudentException("Senha do aluno não pode ser nula");
+        }
+        super.setPassword(password);
+    }
+
 
 }
