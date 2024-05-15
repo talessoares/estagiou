@@ -1,5 +1,6 @@
-import 'package:estagio_u/auth/view/auth_company.dart';
-import 'package:estagio_u/auth/view/auth_student.dart';
+import 'package:estagio_u/features/auth/view/auth_company.dart';
+import 'package:estagio_u/features/auth/view/auth_student.dart';
+import 'package:estagio_u/theme/palette.dart';
 import 'package:flutter/material.dart';
 
 class AuthPage extends StatefulWidget {
@@ -15,13 +16,13 @@ class _AuthPageState extends State<AuthPage> {
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.all(8),
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.bottomCenter,
             end: Alignment.topCenter,
             colors: [
-              Color(0xFF23A331),
-              Color(0xFF0C3611),
+              Palette.lightGreen,
+              Palette.darkGreen,
             ],
           ),
         ),
