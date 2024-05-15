@@ -70,11 +70,34 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           4.ph,
-          Row(
-            children: [
-              4.pw,
-              const Text('Vagas recomendadas'),
-            ],
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('Vagas recomendadas'),
+                SizedBox(
+                  width: 120,
+                  height: 10,
+                  child: ListView.separated(
+                    separatorBuilder: (context, index) {
+                      return 4.pw;
+                    },
+                    itemCount: 2,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        width: 20,
+                        height: 2,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            color: Palette.darkGreen),
+                      );
+                    },
+                  ),
+                )
+              ],
+            ),
           ),
           SizedBox(
             width: double.infinity,
@@ -93,10 +116,11 @@ class _HomePageState extends State<HomePage> {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(25),
                       color: Palette.whiteColor,
+                      border: Border.all(width: 1, color: Palette.darkGreen),
                       boxShadow: [
                         BoxShadow(
                             color: Palette.darkGreen,
-                            offset: const Offset(0, 2))
+                            offset: const Offset(1, 1))
                       ]),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
