@@ -20,7 +20,7 @@ public class NotFoundExceptionHandler extends HandlerExceptionUtil {
 
     @ExceptionHandler(value = NotFoundException.class)
     public ResponseEntity<Object> handleNotFoundException(Exception e, HttpServletRequest request) {
-        logger(LogEnum.WARN, e.getClass().getSimpleName() + ": " + e.getMessage(), HttpStatus.NO_CONTENT.value(), request);
+        log(LogEnum.WARN, e.getClass().getSimpleName() + ": " + e.getMessage(), HttpStatus.NO_CONTENT.value(), request);
         return ResponseEntity.badRequest().body(new ErrorResponse(HttpStatus.NO_CONTENT.value(), e.getMessage(), request));
     }
     

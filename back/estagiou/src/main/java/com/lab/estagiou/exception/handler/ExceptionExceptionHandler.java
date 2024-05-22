@@ -19,7 +19,7 @@ public class ExceptionExceptionHandler extends HandlerExceptionUtil {
 
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<Object> handleException(Exception e, HttpServletRequest request) {
-        logger(LogEnum.ERROR, "Internal error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), request);
+        log(LogEnum.ERROR, "Internal error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), request);
         return ResponseEntity.internalServerError().body(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Erro interno", request));
     }
     

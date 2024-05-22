@@ -45,7 +45,7 @@ public class StudentService extends UtilService {
         }
 
         student = super.userRepository.save(student);
-        logger(LogEnum.INFO, "Student registered: " + student.getId(), HttpStatus.CREATED.value());
+        log(LogEnum.INFO, "Student registered: " + student.getId(), HttpStatus.CREATED.value());
 
         if (mailInviteEnabled) {
             emailService.createConfirmationEmailAndSend(student);
@@ -61,7 +61,7 @@ public class StudentService extends UtilService {
             throw new NotFoundException("No students registered");
         }
 
-        logger(LogEnum.INFO, "List students: " + students.size() + " students", HttpStatus.OK.value());
+        log(LogEnum.INFO, "List students: " + students.size() + " students", HttpStatus.OK.value());
         return ResponseEntity.ok(students);
     }
 
@@ -71,7 +71,7 @@ public class StudentService extends UtilService {
         StudentEntity student = studentRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(STUDENT_NOT_FOUND + id));
 
-        logger(LogEnum.INFO, "Student found: " + student.getId(), HttpStatus.OK.value());
+        log(LogEnum.INFO, "Student found: " + student.getId(), HttpStatus.OK.value());
         return ResponseEntity.ok(student);
     }
 
@@ -84,7 +84,7 @@ public class StudentService extends UtilService {
 
         studentRepository.deleteById(id);
 
-        logger(LogEnum.INFO, "Student deleted: " + id, HttpStatus.NO_CONTENT.value());
+        log(LogEnum.INFO, "Student deleted: " + id, HttpStatus.NO_CONTENT.value());
         return ResponseEntity.noContent().build();
     }
 
@@ -97,7 +97,7 @@ public class StudentService extends UtilService {
         student.update(request);
         studentRepository.save(student);
 
-        logger(LogEnum.INFO, "Student updated: " + student.getId(), HttpStatus.NO_CONTENT.value());
+        log(LogEnum.INFO, "Student updated: " + student.getId(), HttpStatus.NO_CONTENT.value());
         return ResponseEntity.noContent().build();
     }
     

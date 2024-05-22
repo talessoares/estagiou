@@ -42,7 +42,7 @@ public class JobVacancyService extends UtilService {
         JobVacancyEntity jobVacancy = new JobVacancyEntity(request, company);
         jobVacancyRepository.save(jobVacancy);
 
-        logger(LogEnum.INFO, "Job vacancy registered: " + jobVacancy.getId(), HttpStatus.OK.value());
+        log(LogEnum.INFO, "Job vacancy registered: " + jobVacancy.getId(), HttpStatus.OK.value());
         return ResponseEntity.ok().build();
     }
 
@@ -53,7 +53,7 @@ public class JobVacancyService extends UtilService {
             throw new NotFoundException("No job vacancies registered");
         }
 
-        logger(LogEnum.INFO, "List job vacancies: " + jobVacancies.size() + " job vacancies", HttpStatus.OK.value());
+        log(LogEnum.INFO, "List job vacancies: " + jobVacancies.size() + " job vacancies", HttpStatus.OK.value());
         return ResponseEntity.ok(jobVacancies);
     }
 
@@ -61,7 +61,7 @@ public class JobVacancyService extends UtilService {
         JobVacancyEntity jobVacancy = jobVacancyRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(JOB_VACANCY_NOT_FOUND + id));      
 
-        logger(LogEnum.INFO, "Job Vacancy found: " + jobVacancy.getId(), HttpStatus.OK.value());
+        log(LogEnum.INFO, "Job Vacancy found: " + jobVacancy.getId(), HttpStatus.OK.value());
         return ResponseEntity.ok(jobVacancy);
     }
 
@@ -79,7 +79,7 @@ public class JobVacancyService extends UtilService {
 
         jobVacancyRepository.deleteById(id);
 
-        logger(LogEnum.INFO, "Job Vacancy deleted: " + id, HttpStatus.NO_CONTENT.value());
+        log(LogEnum.INFO, "Job Vacancy deleted: " + id, HttpStatus.NO_CONTENT.value());
         return ResponseEntity.noContent().build();
     }
 
@@ -98,7 +98,7 @@ public class JobVacancyService extends UtilService {
         jobVacancy.update(request);
         jobVacancyRepository.save(jobVacancy);
 
-        logger(LogEnum.INFO, "Job Vacancy updated: " + jobVacancy.getId(), HttpStatus.NO_CONTENT.value());
+        log(LogEnum.INFO, "Job Vacancy updated: " + jobVacancy.getId(), HttpStatus.NO_CONTENT.value());
         return ResponseEntity.noContent().build();
     }
     

@@ -20,7 +20,7 @@ public class UnauthorizedUserHandler extends HandlerExceptionUtil {
 
     @ExceptionHandler(value = UnauthorizedUserException.class)
     public ResponseEntity<Object> handleUnauthorizedUserException(Exception e, HttpServletRequest request) {
-        logger(LogEnum.WARN, e.getMessage(), HttpStatus.FORBIDDEN.value(), request);
+        log(LogEnum.WARN, e.getMessage(), HttpStatus.FORBIDDEN.value(), request);
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(HttpStatus.FORBIDDEN.value(), "Usuário não autorizado", request));
     }
     

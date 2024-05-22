@@ -33,7 +33,7 @@ public class CompanyService extends UtilService {
         UserEntity company = new CompanyEntity(request);
         userRepository.save(company);
 
-        logger(LogEnum.INFO, "Registered company: " + company.getId(), HttpStatus.OK.value());
+        log(LogEnum.INFO, "Registered company: " + company.getId(), HttpStatus.OK.value());
         return ResponseEntity.ok().build();
     }
 
@@ -44,7 +44,7 @@ public class CompanyService extends UtilService {
             throw new NotFoundException("No companies registered");
         }
 
-        logger(LogEnum.INFO, "List companies: " + companies.size() + " companies", HttpStatus.OK.value());
+        log(LogEnum.INFO, "List companies: " + companies.size() + " companies", HttpStatus.OK.value());
         return ResponseEntity.ok(companies);
     }
 
@@ -52,7 +52,7 @@ public class CompanyService extends UtilService {
         CompanyEntity company = companyRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(COMPANY_NOT_FOUND + id));
 
-        logger(LogEnum.INFO, "Company found: " + company.getEmail(), HttpStatus.OK.value());
+        log(LogEnum.INFO, "Company found: " + company.getEmail(), HttpStatus.OK.value());
         return ResponseEntity.ok(company);
     }
 
@@ -65,7 +65,7 @@ public class CompanyService extends UtilService {
 
         companyRepository.deleteById(id);
 
-        logger(LogEnum.INFO, "Company deleted: " + id, HttpStatus.NO_CONTENT.value());
+        log(LogEnum.INFO, "Company deleted: " + id, HttpStatus.NO_CONTENT.value());
         return ResponseEntity.noContent().build();
     }
 
@@ -78,7 +78,7 @@ public class CompanyService extends UtilService {
         company.update(request);
         companyRepository.save(company);
 
-        logger(LogEnum.INFO, "Company updated: " + company.getId(), HttpStatus.NO_CONTENT.value());
+        log(LogEnum.INFO, "Company updated: " + company.getId(), HttpStatus.NO_CONTENT.value());
         return ResponseEntity.noContent().build();
     }
 

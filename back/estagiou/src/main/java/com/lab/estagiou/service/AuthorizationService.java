@@ -48,7 +48,7 @@ public class AuthorizationService extends UtilService implements UserDetailsServ
         Authentication auth = authenticationManager.authenticate(usernamePassword);
         String token = tokenService.generateToken((UserEntity) auth.getPrincipal());
 
-        logger(LogEnum.INFO, "Login user: " + ((UserEntity) auth.getPrincipal()).getId(), HttpStatus.OK.value());
+        log(LogEnum.INFO, "Login user: " + ((UserEntity) auth.getPrincipal()).getId(), HttpStatus.OK.value());
         return ResponseEntity.ok(new LoginResponse(token));
     }
 

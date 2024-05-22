@@ -23,7 +23,7 @@ public class AdminService extends UtilService {
         UserEntity admin = new AdminEntity(request);
         super.userRepository.save(admin);
 
-        logger(LogEnum.INFO, "Admin registered: " + admin.getId(), HttpStatus.OK.value());
+        log(LogEnum.INFO, "Admin registered: " + admin.getId(), HttpStatus.OK.value());
         return ResponseEntity.ok().build();
     }
     
