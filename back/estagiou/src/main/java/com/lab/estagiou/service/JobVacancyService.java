@@ -10,7 +10,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.lab.estagiou.dto.request.model.jobvacancy.JobVacancyRegisterRequest;
-import com.lab.estagiou.dto.response.jobvacancy.list.ResponseJobVacancyList;
 import com.lab.estagiou.exception.generic.UnauthorizedUserException;
 import com.lab.estagiou.model.company.CompanyEntity;
 import com.lab.estagiou.model.jobvacancy.JobVacancyEntity;
@@ -55,22 +54,16 @@ public class JobVacancyService extends UtilService {
             throw new NoJobVacanciesRegisteredException("No job vacancies registered");
         }
 
-        List<ResponseJobVacancyList> responseJobVacancyList = jobVacancies.stream()
-                .map(ResponseJobVacancyList::new)
-                .toList();
-
         logger(LogEnum.INFO, "List job vacancies: " + jobVacancies.size() + " job vacancies", HttpStatus.OK.value());
-        return ResponseEntity.ok(responseJobVacancyList);
+        return ResponseEntity.ok(jobVacancies);
     }
 
     public ResponseEntity<Object> searchJobVacancyById(UUID id) {
         JobVacancyEntity jobVacancy = jobVacancyRepository.findById(id)
-                .orElseThrow(() -> new NoJobVacancyFoundException(JOB_VACANCY_NOT_FOUND + id));
-
-        ResponseJobVacancyList responseJobVacancyList = new ResponseJobVacancyList(jobVacancy);        
+                .orElseThrow(() -> new NoJobVacancyFoundException(JOB_VACANCY_NOT_FOUND + id));      
 
         logger(LogEnum.INFO, "Job Vacancy found: " + jobVacancy.getId(), HttpStatus.OK.value());
-        return ResponseEntity.ok(responseJobVacancyList);
+        return ResponseEntity.ok(jobVacancy);
     }
 
     public ResponseEntity<Object> deleteJobVacancyById(UUID id, Authentication authentication) {

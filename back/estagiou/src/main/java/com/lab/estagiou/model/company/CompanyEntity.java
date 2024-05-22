@@ -3,6 +3,8 @@ package com.lab.estagiou.model.company;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lab.estagiou.dto.request.model.company.CompanyRegisterRequest;
 import com.lab.estagiou.model.address.AddressEntity;
 import com.lab.estagiou.model.company.exception.RegisterCompanyException;
@@ -40,6 +42,7 @@ public class CompanyEntity extends UserEntity {
     private String accountableName;
 
     @OneToMany(mappedBy = "company")
+    @JsonBackReference
     private List<JobVacancyEntity> jobVacancies = new ArrayList<>();
 
     @OneToOne
@@ -49,11 +52,7 @@ public class CompanyEntity extends UserEntity {
     private static final String JOB_VACANY_NULL = "Vaga não pode ser nula";
     
     public CompanyEntity(String name, String email, String password, String cnpj, String accountableName) {
-        super(null, email, password, UserRoleEnum.COMPANY);
-
-        if (name == null || name.isBlank()) {
-            throw new RegisterCompanyException("Nome da empresa não pode ser nulo");
-        }
+        super(null, name, email, password, UserRoleEnum.COMPANY);
 
         if (cnpj == null || cnpj.isBlank()) {
             throw new RegisterCompanyException("CNPJ da empresa não pode ser nulo");
@@ -63,7 +62,6 @@ public class CompanyEntity extends UserEntity {
             throw new RegisterCompanyException("Responsável pela empresa não pode ser nulo");
         }
 
-        this.name = name;
         this.cnpj = cnpj;
         this.accountableName = accountableName;
         this.jobVacancies = new ArrayList<>();
@@ -97,10 +95,12 @@ public class CompanyEntity extends UserEntity {
         return this.jobVacancies.contains(jobVacancy);
     }
 
+    @JsonIgnore
     public boolean isJobVacanciesEmpty() {
         return this.jobVacancies.isEmpty();
     }
 
+    @JsonIgnore
     public int getQuantityJobVacancies() {
         return this.jobVacancies.size();
     }
