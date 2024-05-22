@@ -12,11 +12,10 @@ import org.springframework.stereotype.Service;
 
 import com.lab.estagiou.dto.request.model.student.StudentRegisterRequest;
 import com.lab.estagiou.exception.generic.EmailAlreadyRegisteredException;
+import com.lab.estagiou.exception.generic.NotFoundException;
 import com.lab.estagiou.model.log.LogEnum;
 import com.lab.estagiou.model.student.StudentEntity;
 import com.lab.estagiou.model.student.StudentRepository;
-import com.lab.estagiou.model.student.exception.NoStudentFoundException;
-import com.lab.estagiou.model.student.exception.NoStudentsRegisteredException;
 import com.lab.estagiou.model.user.UserEntity;
 import com.lab.estagiou.service.util.UtilService;
 
@@ -59,7 +58,7 @@ public class StudentService extends UtilService {
         List<StudentEntity> students = studentRepository.findAll();
 
         if (students.isEmpty()) {
-            throw new NoStudentsRegisteredException("No students registered");
+            throw new NotFoundException("No students registered");
         }
 
         logger(LogEnum.INFO, "List students: " + students.size() + " students", HttpStatus.OK.value());
@@ -70,7 +69,7 @@ public class StudentService extends UtilService {
         super.verifyAuthorization(authentication, id);
 
         StudentEntity student = studentRepository.findById(id)
-                .orElseThrow(() -> new NoStudentFoundException(STUDENT_NOT_FOUND + id));
+                .orElseThrow(() -> new NotFoundException(STUDENT_NOT_FOUND + id));
 
         logger(LogEnum.INFO, "Student found: " + student.getId(), HttpStatus.OK.value());
         return ResponseEntity.ok(student);
@@ -80,7 +79,7 @@ public class StudentService extends UtilService {
         super.verifyAuthorization(authentication, id);
 
         if (!studentRepository.existsById(id)) {
-            throw new NoStudentFoundException(STUDENT_NOT_FOUND + id);
+            throw new NotFoundException(STUDENT_NOT_FOUND + id);
         }
 
         studentRepository.deleteById(id);
@@ -93,7 +92,7 @@ public class StudentService extends UtilService {
         super.verifyAuthorization(authentication, id);
 
         StudentEntity student = studentRepository.findById(id)
-                .orElseThrow(() -> new NoStudentFoundException(STUDENT_NOT_FOUND + id));
+                .orElseThrow(() -> new NotFoundException(STUDENT_NOT_FOUND + id));
 
         student.update(request);
         studentRepository.save(student);

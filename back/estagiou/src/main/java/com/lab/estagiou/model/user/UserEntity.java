@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.lab.estagiou.model.user.exception.RegisterUserException;
+import com.lab.estagiou.exception.generic.RegisterException;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -52,19 +52,19 @@ public abstract class UserEntity implements UserDetails {
     protected UserEntity(UUID id, String name, String email, String password, UserRoleEnum role) {
 
         if (name == null || name.isBlank()) {
-            throw new RegisterUserException("Nome não pode ser nulo");
+            throw new RegisterException("Nome não pode ser nulo");
         }
 
         if (email == null || email.isBlank()) {
-            throw new RegisterUserException("Email não pode ser nulo");
+            throw new RegisterException("Email não pode ser nulo");
         }
 
         if (password == null || password.isBlank()) {
-            throw new RegisterUserException("Senha não pode ser nula");
+            throw new RegisterException("Senha não pode ser nula");
         }
 
         if (role == null) {
-            throw new RegisterUserException("Role não pode ser nula");
+            throw new RegisterException("Role não pode ser nula");
         }
 
         this.id = id;

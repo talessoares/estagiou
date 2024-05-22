@@ -10,12 +10,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.lab.estagiou.dto.request.model.jobvacancy.JobVacancyRegisterRequest;
+import com.lab.estagiou.exception.generic.NotFoundException;
 import com.lab.estagiou.exception.generic.UnauthorizedUserException;
 import com.lab.estagiou.model.company.CompanyEntity;
 import com.lab.estagiou.model.jobvacancy.JobVacancyEntity;
 import com.lab.estagiou.model.jobvacancy.JobVacancyRepository;
-import com.lab.estagiou.model.jobvacancy.exception.NoJobVacanciesRegisteredException;
-import com.lab.estagiou.model.jobvacancy.exception.NoJobVacancyFoundException;
 import com.lab.estagiou.model.log.LogEnum;
 import com.lab.estagiou.model.user.UserEntity;
 import com.lab.estagiou.service.util.UtilService;
@@ -30,13 +29,13 @@ public class JobVacancyService extends UtilService {
 
     public ResponseEntity<Object> registerJobVacancy(JobVacancyRegisterRequest request, Authentication authentication) {
         if (authentication == null) {
-            throw new UnauthorizedUserException("Unauthorized access attempt");
+            throw new UnauthorizedUserException(UNAUTHORIZED_ACESS_ATTEMPT);
         }
 
         UserEntity user = (UserEntity) authentication.getPrincipal();
 
         if (!(user instanceof CompanyEntity)) {
-            throw new UnauthorizedUserException("Unauthorized access attempt: " + user.getId());
+            throw new UnauthorizedUserException(UNAUTHORIZED_ACESS_ATTEMPT_DOTS + user.getId());
         }
 
         CompanyEntity company = (CompanyEntity) user;
@@ -51,7 +50,7 @@ public class JobVacancyService extends UtilService {
         List<JobVacancyEntity> jobVacancies = jobVacancyRepository.findAll();
 
         if (jobVacancies.isEmpty()) {
-            throw new NoJobVacanciesRegisteredException("No job vacancies registered");
+            throw new NotFoundException("No job vacancies registered");
         }
 
         logger(LogEnum.INFO, "List job vacancies: " + jobVacancies.size() + " job vacancies", HttpStatus.OK.value());
@@ -60,7 +59,7 @@ public class JobVacancyService extends UtilService {
 
     public ResponseEntity<Object> searchJobVacancyById(UUID id) {
         JobVacancyEntity jobVacancy = jobVacancyRepository.findById(id)
-                .orElseThrow(() -> new NoJobVacancyFoundException(JOB_VACANCY_NOT_FOUND + id));      
+                .orElseThrow(() -> new NotFoundException(JOB_VACANCY_NOT_FOUND + id));      
 
         logger(LogEnum.INFO, "Job Vacancy found: " + jobVacancy.getId(), HttpStatus.OK.value());
         return ResponseEntity.ok(jobVacancy);
@@ -68,14 +67,14 @@ public class JobVacancyService extends UtilService {
 
     public ResponseEntity<Object> deleteJobVacancyById(UUID id, Authentication authentication) {
         if (authentication == null) {
-            throw new UnauthorizedUserException("Unauthorized access attempt");
+            throw new UnauthorizedUserException(UNAUTHORIZED_ACESS_ATTEMPT);
         }
 
         JobVacancyEntity jobVacancy = jobVacancyRepository.findById(id)
-                .orElseThrow(() -> new NoJobVacancyFoundException(JOB_VACANCY_NOT_FOUND + id));
+                .orElseThrow(() -> new NotFoundException(JOB_VACANCY_NOT_FOUND + id));
 
         if (!jobVacancy.equalsCompanyOrAdmin(authentication)) {
-            throw new UnauthorizedUserException("Unauthorized access attempt: " + ((UserEntity) authentication.getPrincipal()).getId());
+            throw new UnauthorizedUserException(UNAUTHORIZED_ACESS_ATTEMPT_DOTS + ((UserEntity) authentication.getPrincipal()).getId());
         }
 
         jobVacancyRepository.deleteById(id);
@@ -86,14 +85,14 @@ public class JobVacancyService extends UtilService {
 
     public ResponseEntity<Object> updateJobVacancy(UUID id, JobVacancyRegisterRequest request, Authentication authentication) {
         if (authentication == null) {
-            throw new UnauthorizedUserException("Unauthorized access attempt");
+            throw new UnauthorizedUserException(UNAUTHORIZED_ACESS_ATTEMPT);
         }
 
         JobVacancyEntity jobVacancy = jobVacancyRepository.findById(id)
-                .orElseThrow(() -> new NoJobVacancyFoundException(JOB_VACANCY_NOT_FOUND + id));
+                .orElseThrow(() -> new NotFoundException(JOB_VACANCY_NOT_FOUND + id));
 
         if (!jobVacancy.equalsCompanyOrAdmin(authentication)) {
-            throw new UnauthorizedUserException("Unauthorized access attempt: " + ((UserEntity) authentication.getPrincipal()).getId());
+            throw new UnauthorizedUserException(UNAUTHORIZED_ACESS_ATTEMPT_DOTS + ((UserEntity) authentication.getPrincipal()).getId());
         }
 
         jobVacancy.update(request);

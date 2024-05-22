@@ -6,8 +6,9 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lab.estagiou.dto.request.model.company.CompanyRegisterRequest;
+import com.lab.estagiou.exception.generic.RegisterException;
+import com.lab.estagiou.exception.generic.UpdateException;
 import com.lab.estagiou.model.address.AddressEntity;
-import com.lab.estagiou.model.company.exception.RegisterCompanyException;
 import com.lab.estagiou.model.jobvacancy.JobVacancyEntity;
 import com.lab.estagiou.model.user.UserEntity;
 import com.lab.estagiou.model.user.UserRoleEnum;
@@ -55,11 +56,11 @@ public class CompanyEntity extends UserEntity {
         super(null, name, email, password, UserRoleEnum.COMPANY);
 
         if (cnpj == null || cnpj.isBlank()) {
-            throw new RegisterCompanyException("CNPJ da empresa não pode ser nulo");
+            throw new RegisterException("CNPJ da empresa não pode ser nulo");
         }
 
         if (accountableName == null || accountableName.isBlank()) {
-            throw new RegisterCompanyException("Responsável pela empresa não pode ser nulo");
+            throw new RegisterException("Responsável pela empresa não pode ser nulo");
         }
 
         this.cnpj = cnpj;
@@ -110,25 +111,30 @@ public class CompanyEntity extends UserEntity {
     }
 
     public void update(CompanyRegisterRequest request) {
-        if (request.getName() != null && !request.getName().isBlank()) {
-            this.name = request.getName();
+        if (request.getName() == null || request.getName().isBlank()) {
+            throw new UpdateException("Name cannot be null or blank");
         }
-
-        if (request.getEmail() != null && !request.getEmail().isBlank()) {
-            super.setEmail(request.getEmail());
+        this.name = request.getName();
+    
+        if (request.getEmail() == null || request.getEmail().isBlank()) {
+            throw new UpdateException("Email cannot be null or blank");
         }
-
-        if (request.getPassword() != null && !request.getPassword().isBlank()) {
-            super.setPassword(request.getPassword());
+        super.setEmail(request.getEmail());
+    
+        if (request.getPassword() == null || request.getPassword().isBlank()) {
+            throw new UpdateException("Password cannot be null or blank");
         }
-
-        if (request.getCnpj() != null && !request.getCnpj().isBlank()) {
-            this.cnpj = request.getCnpj();
+        super.setPassword(request.getPassword());
+    
+        if (request.getCnpj() == null || request.getCnpj().isBlank()) {
+            throw new UpdateException("CNPJ cannot be null or blank");
         }
-
-        if (request.getAccountableName() != null && !request.getAccountableName().isBlank()) {
-            this.accountableName = request.getAccountableName();
+        this.cnpj = request.getCnpj();
+    
+        if (request.getAccountableName() == null || request.getAccountableName().isBlank()) {
+            throw new UpdateException("Accountable name cannot be null or blank");
         }
+        this.accountableName = request.getAccountableName();
     }
 
     @Override

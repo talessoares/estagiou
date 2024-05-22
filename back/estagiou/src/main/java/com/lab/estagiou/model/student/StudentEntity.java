@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.lab.estagiou.dto.request.model.student.StudentRegisterRequest;
+import com.lab.estagiou.exception.generic.RegisterException;
+import com.lab.estagiou.exception.generic.UpdateException;
 import com.lab.estagiou.model.address.AddressEntity;
 import com.lab.estagiou.model.course.CourseEntity;
 import com.lab.estagiou.model.enrollment.EnrollmentEntity;
-import com.lab.estagiou.model.student.exception.RegisterStudentException;
 import com.lab.estagiou.model.user.UserEntity;
 import com.lab.estagiou.model.user.UserRoleEnum;
 
@@ -50,11 +51,11 @@ public class StudentEntity extends UserEntity {
         super(null, name, email, password, UserRoleEnum.USER);
 
         if (name == null || name.isBlank()) {
-            throw new RegisterStudentException("Nome do aluno não pode ser nulo");
+            throw new RegisterException("Nome do aluno não pode ser nulo");
         }
 
         if (lastName == null || lastName.isBlank()) {
-            throw new RegisterStudentException("Sobrenome do aluno não pode ser nulo");
+            throw new RegisterException("Sobrenome do aluno não pode ser nulo");
         }
 
         this.lastName = lastName;
@@ -150,7 +151,7 @@ public class StudentEntity extends UserEntity {
 
     public void setLastName(String lastName) {
         if (lastName == null || lastName.isBlank()) {
-            throw new RegisterStudentException("Sobrenome do aluno não pode ser nulo");
+            throw new UpdateException("Sobrenome do aluno não pode ser nulo");
         }
         this.lastName = lastName;
     }
@@ -158,7 +159,7 @@ public class StudentEntity extends UserEntity {
     @Override
     public void setPassword(String password) {
         if (password == null || password.isBlank()) {
-            throw new RegisterStudentException("Senha do aluno não pode ser nula");
+            throw new UpdateException("Senha do aluno não pode ser nula");
         }
         super.setPassword(password);
     }

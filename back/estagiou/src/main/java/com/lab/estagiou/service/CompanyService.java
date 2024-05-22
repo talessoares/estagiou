@@ -11,11 +11,10 @@ import org.springframework.stereotype.Service;
 
 import com.lab.estagiou.dto.request.model.company.CompanyRegisterRequest;
 import com.lab.estagiou.exception.generic.EmailAlreadyRegisteredException;
+import com.lab.estagiou.exception.generic.NotFoundException;
 import com.lab.estagiou.model.company.CompanyEntity;
 import com.lab.estagiou.model.company.CompanyRepository;
 import com.lab.estagiou.model.company.exception.CnpjAlreadyRegisteredException;
-import com.lab.estagiou.model.company.exception.NoCompaniesRegisteredException;
-import com.lab.estagiou.model.company.exception.NoCompanyFoundException;
 import com.lab.estagiou.model.log.LogEnum;
 import com.lab.estagiou.model.user.UserEntity;
 import com.lab.estagiou.service.util.UtilService;
@@ -42,7 +41,7 @@ public class CompanyService extends UtilService {
         List<CompanyEntity> companies = companyRepository.findAll();
 
         if (companies.isEmpty()) {
-            throw new NoCompaniesRegisteredException("No companies registered");
+            throw new NotFoundException("No companies registered");
         }
 
         logger(LogEnum.INFO, "List companies: " + companies.size() + " companies", HttpStatus.OK.value());
@@ -51,7 +50,7 @@ public class CompanyService extends UtilService {
 
     public ResponseEntity<CompanyEntity> searchCompanyById(UUID id) {
         CompanyEntity company = companyRepository.findById(id)
-                .orElseThrow(() -> new NoCompanyFoundException(COMPANY_NOT_FOUND + id));
+                .orElseThrow(() -> new NotFoundException(COMPANY_NOT_FOUND + id));
 
         logger(LogEnum.INFO, "Company found: " + company.getEmail(), HttpStatus.OK.value());
         return ResponseEntity.ok(company);
@@ -61,7 +60,7 @@ public class CompanyService extends UtilService {
         verifyAuthorization(authentication, id);
 
         if (!companyRepository.existsById(id)) {
-            throw new NoCompanyFoundException(COMPANY_NOT_FOUND + id);
+            throw new NotFoundException(COMPANY_NOT_FOUND + id);
         }
 
         companyRepository.deleteById(id);
@@ -74,7 +73,7 @@ public class CompanyService extends UtilService {
         verifyAuthorization(authentication, id);
 
         CompanyEntity company = companyRepository.findById(id)
-                .orElseThrow(() -> new NoCompanyFoundException(COMPANY_NOT_FOUND + id));
+                .orElseThrow(() -> new NotFoundException(COMPANY_NOT_FOUND + id));
 
         company.update(request);
         companyRepository.save(company);

@@ -17,6 +17,10 @@ public abstract class UtilService extends HandlerExceptionUtil {
     @Autowired
     public UserRepository userRepository;
 
+    public static final String UNAUTHORIZED_ACESS_ATTEMPT = "Unauthorized access attempt";
+
+    public static final String UNAUTHORIZED_ACESS_ATTEMPT_DOTS = "Unauthorized access attempt: ";
+
     public boolean userExists(RequestEmail request) {
         return userRepository.findByEmail(request.getEmail()) != null;
     }
@@ -27,13 +31,13 @@ public abstract class UtilService extends HandlerExceptionUtil {
 
     public void verifyAuthorization(Authentication authentication, UUID id) {
         if (!userIsSameOrAdmin(authentication, id)){
-            throw new UnauthorizedUserException("Unauthorized access attempt: " + ((UserEntity) authentication.getPrincipal()).getId());
+            throw new UnauthorizedUserException(UNAUTHORIZED_ACESS_ATTEMPT_DOTS + ((UserEntity) authentication.getPrincipal()).getId());
         }
     }
 
     private boolean userIsSameOrAdmin(Authentication authentication, UUID id) {
         if (authentication == null) {
-            throw new UnauthorizedUserException("Unauthorized access attempt");
+            throw new UnauthorizedUserException(UNAUTHORIZED_ACESS_ATTEMPT);
         }
 
         UserEntity user = (UserEntity) authentication.getPrincipal();
