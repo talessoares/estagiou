@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lab.estagiou.model.user.exception.RegisterUserException;
 
 import jakarta.persistence.Column;
@@ -34,6 +35,9 @@ public abstract class UserEntity implements UserDetails {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(nullable = false)
+    private String name;
+
     @Column(nullable = false, unique = true)
     private String email;
 
@@ -43,7 +47,14 @@ public abstract class UserEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private UserRoleEnum role;
 
-    protected UserEntity(UUID id, String email, String password, UserRoleEnum role) {
+    private boolean isEnabled;
+
+    protected UserEntity(UUID id, String name, String email, String password, UserRoleEnum role) {
+
+        if (name == null || name.isBlank()) {
+            throw new RegisterUserException("Nome não pode ser nulo");
+        }
+
         if (email == null || email.isBlank()) {
             throw new RegisterUserException("Email não pode ser nulo");
         }
@@ -58,11 +69,14 @@ public abstract class UserEntity implements UserDetails {
 
         this.id = id;
         this.email = email;
+        this.name = name;
         this.password = new BCryptPasswordEncoder().encode(password);
         this.role = role;
+        this.isEnabled = false;
     }
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (role == UserRoleEnum.ADMIN) {
             return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"),
@@ -77,33 +91,39 @@ public abstract class UserEntity implements UserDetails {
     }
 
     @Override
+    @JsonIgnore
     public String getPassword() {
         return password;
     }
 
     @Override
+    @JsonIgnore
     public String getUsername() {
         return email;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isEnabled() {
-        return true;
+        return isEnabled;
     }
 
 }
