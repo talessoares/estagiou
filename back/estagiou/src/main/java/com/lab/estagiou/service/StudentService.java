@@ -1,10 +1,10 @@
 package com.lab.estagiou.service;
 
-import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -26,6 +26,12 @@ public class StudentService extends UtilService {
     @Autowired
     private StudentRepository studentRepository;
 
+    @Autowired
+    private EmailService emailService;
+
+    @Value("${mail.invite.enabled}")
+    private boolean mailInviteEnabled;
+
     private static final String STUDENT_NOT_FOUND = "Student not found: ";
 
     public ResponseEntity<Object> registerStudent(StudentRegisterRequest request) {
@@ -34,12 +40,19 @@ public class StudentService extends UtilService {
         }
 
         UserEntity student = new StudentEntity(request);
-        super.userRepository.save(student);
 
-        URI location = URI.create("/v1/student/" + student.getId()); 
+        if (!mailInviteEnabled) {
+            student.setEnabled(true);
+        }
 
-        logger(LogEnum.INFO, "Student registered: " + student.getId(), HttpStatus.CREATED.value());
-        return ResponseEntity.created(location).build();
+        student = super.userRepository.save(student);
+
+        if (mailInviteEnabled) {
+            logger(LogEnum.INFO, "Student registered: " + student.getId(), HttpStatus.CREATED.value());
+            emailService.createConfirmationEmailAndSend(student);
+        }
+
+        return ResponseEntity.ok().build();
     }
 
     public ResponseEntity<List<StudentEntity>> listStudents() {
