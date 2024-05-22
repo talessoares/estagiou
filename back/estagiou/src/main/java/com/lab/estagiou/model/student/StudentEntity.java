@@ -108,7 +108,6 @@ public class StudentEntity extends UserEntity {
     }
 
     public void update(StudentRegisterRequest request) {
-        
         if (request == null) {
             throw new UpdateException("Requisição de atualização do aluno não pode ser nula");
         }
@@ -132,7 +131,6 @@ public class StudentEntity extends UserEntity {
                 this.address.update(request.getAddress());
             }
         }
-
     }
 
     @Override
