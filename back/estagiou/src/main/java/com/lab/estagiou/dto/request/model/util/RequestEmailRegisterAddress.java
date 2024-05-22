@@ -7,12 +7,6 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public abstract class RequestEmailRegisterAddress extends RequestEmailRegister {
 
-    private String country;
-    private String state;
-    private String city;
-    private String neighborhood;
-    private String street;
-    private String number;
-    private String complement;
+    private RequestAddress address;
     
 }
