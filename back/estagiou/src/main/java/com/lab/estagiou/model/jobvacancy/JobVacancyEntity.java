@@ -8,6 +8,8 @@ import java.util.UUID;
 
 import org.springframework.security.core.Authentication;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.lab.estagiou.dto.request.model.jobvacancy.JobVacancyRegisterRequest;
 import com.lab.estagiou.model.admin.AdminEntity;
 import com.lab.estagiou.model.company.CompanyEntity;
@@ -58,9 +60,11 @@ public class JobVacancyEntity implements Serializable {
     private String modality;
 
     @Column(name = "created_at")
+    @JsonIgnore
     private Instant createdAt;
 
     @Column(name = "updated_at")
+    @JsonIgnore
     private Instant updatedAt;
 
     @OneToMany(mappedBy = "jobVacancy")
@@ -68,6 +72,7 @@ public class JobVacancyEntity implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "company_id")
+    @JsonManagedReference
     private CompanyEntity company;
 
     public JobVacancyEntity(JobVacancyRegisterRequest request, CompanyEntity company) {
