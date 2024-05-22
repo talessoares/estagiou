@@ -12,6 +12,7 @@ import com.lab.estagiou.model.enrollment.EnrollmentEntity;
 import com.lab.estagiou.model.user.UserEntity;
 import com.lab.estagiou.model.user.UserRoleEnum;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -41,7 +42,7 @@ public class StudentEntity extends UserEntity {
     @OneToMany(mappedBy = "student")
     private List<EnrollmentEntity> enrollments;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "address_id", nullable = true)
     private AddressEntity address;
 
@@ -111,26 +112,26 @@ public class StudentEntity extends UserEntity {
         if (request == null) {
             throw new UpdateException("Requisição de atualização do aluno não pode ser nula");
         }
-
-        if (request.getName() == null || request.getName().isBlank()) {
-            throw new UpdateException("Nome do aluno não pode ser nulo");
+    
+        if (request.getName() != null && !request.getName().isBlank()) {
+            super.setName(request.getName());
         }
-        super.setName(request.getName());
-
-        if (request.getLastName() == null || request.getLastName().isBlank()) {
-            throw new UpdateException("Sobrenome do aluno não pode ser nulo");
+    
+        if (request.getLastName() != null && !request.getLastName().isBlank()) {
+            this.lastName = request.getLastName();
         }
-        this.lastName = request.getLastName();
-
-        if (request.getEmail() == null || request.getEmail().isBlank()) {
-            throw new UpdateException("Email do aluno não pode ser nulo");
+    
+        if (request.getPassword() != null && !request.getPassword().isBlank()) {
+            super.setPassword(request.getPassword());
         }
-        super.setEmail(request.getEmail());
-
-        if (request.getPassword() == null || request.getPassword().isBlank()) {
-            throw new UpdateException("Senha do aluno não pode ser nula");
+    
+        if (request.getAddress() != null) {
+            if (this.address == null) {
+                this.address = new AddressEntity(request.getAddress());
+            } else {
+                this.address.update(request.getAddress());
+            }
         }
-        super.setPassword(request.getPassword());
 
     }
 

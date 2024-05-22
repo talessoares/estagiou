@@ -83,5 +83,41 @@ public class AddressEntity implements Serializable {
         this.number = address.getNumber();
         this.complement = address.getComplement();
     }
+
+    public void update(RequestAddress address) {
+
+        if (address == null) {
+            throw new RegisterException("Endereço não pode ser nulo");
+        }
+
+        if (address.getCountry() != null && !address.getCountry().isBlank()) {
+            this.country = address.getCountry();
+        }
+
+        if (address.getState() != null && !address.getState().isBlank()) {
+            this.state = address.getState();
+        }
+
+        if (address.getCity() != null && !address.getCity().isBlank()) {
+            this.city = address.getCity();
+        }
+
+        if (address.getNeighborhood() != null && !address.getNeighborhood().isBlank()) {
+            this.neighborhood = address.getNeighborhood();
+        }
+
+        if (address.getStreet() != null && !address.getStreet().isBlank()) {
+            this.street = address.getStreet();
+        }
+
+        if (address.getNumber() != null && !address.getNumber().isBlank()) {
+            this.number = address.getNumber();
+        }
+
+        if (address.getComplement() != null && !address.getComplement().isBlank()) {
+            this.complement = address.getComplement();
+        }
+
+    }
     
 }
