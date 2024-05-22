@@ -1,0 +1,4 @@
+#Tue Apr 09 21:56:40 BRT 2024
+base.0=C\:\\Meus projetos\\Faculdade\\Estagiou\\estagio_u\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
+path.0=classes.dex
+renamed.0=classes.dex
