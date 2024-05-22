@@ -62,11 +62,6 @@ public class StudentEntity extends UserEntity {
         this.enrollments = new ArrayList<>();
     }
 
-    public StudentEntity(String name, String lastName, String email, String password, AddressEntity address) {
-        this(name, lastName, email, password);
-        this.address = address;
-    }
-
     public StudentEntity(StudentRegisterRequest request) {
         this(request.getName(), request.getLastName(), request.getEmail(), request.getPassword());
     }
@@ -112,21 +107,31 @@ public class StudentEntity extends UserEntity {
     }
 
     public void update(StudentRegisterRequest request) {
+        
         if (request == null) {
-            throw new IllegalArgumentException("Request cannot be null");
+            throw new UpdateException("Requisição de atualização do aluno não pode ser nula");
         }
 
-        if (request.getName() != null) {
-            this.setName(request.getName());
+        if (request.getName() == null || request.getName().isBlank()) {
+            throw new UpdateException("Nome do aluno não pode ser nulo");
         }
+        super.setName(request.getName());
 
-        if (request.getLastName() != null) {
-            this.setLastName(request.getLastName());
+        if (request.getLastName() == null || request.getLastName().isBlank()) {
+            throw new UpdateException("Sobrenome do aluno não pode ser nulo");
         }
+        this.lastName = request.getLastName();
 
-        if (request.getPassword() != null) {
-            this.setPassword(request.getPassword());
+        if (request.getEmail() == null || request.getEmail().isBlank()) {
+            throw new UpdateException("Email do aluno não pode ser nulo");
         }
+        super.setEmail(request.getEmail());
+
+        if (request.getPassword() == null || request.getPassword().isBlank()) {
+            throw new UpdateException("Senha do aluno não pode ser nula");
+        }
+        super.setPassword(request.getPassword());
+
     }
 
     @Override
@@ -147,21 +152,6 @@ public class StudentEntity extends UserEntity {
     @Override
     public int hashCode() {
         return super.hashCode();
-    }
-
-    public void setLastName(String lastName) {
-        if (lastName == null || lastName.isBlank()) {
-            throw new UpdateException("Sobrenome do aluno não pode ser nulo");
-        }
-        this.lastName = lastName;
-    }
-
-    @Override
-    public void setPassword(String password) {
-        if (password == null || password.isBlank()) {
-            throw new UpdateException("Senha do aluno não pode ser nula");
-        }
-        super.setPassword(password);
     }
 
 

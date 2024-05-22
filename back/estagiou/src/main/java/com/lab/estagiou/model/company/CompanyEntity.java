@@ -111,28 +111,32 @@ public class CompanyEntity extends UserEntity {
     }
 
     public void update(CompanyRegisterRequest request) {
+        if (request == null) {
+            throw new UpdateException("Requisição não pode ser nula");
+        }
+
         if (request.getName() == null || request.getName().isBlank()) {
-            throw new UpdateException("Name cannot be null or blank");
+            throw new UpdateException("Nome não pode ser nulo");
         }
         this.name = request.getName();
     
         if (request.getEmail() == null || request.getEmail().isBlank()) {
-            throw new UpdateException("Email cannot be null or blank");
+            throw new UpdateException("Email não pode ser nulo");
         }
         super.setEmail(request.getEmail());
     
         if (request.getPassword() == null || request.getPassword().isBlank()) {
-            throw new UpdateException("Password cannot be null or blank");
+            throw new UpdateException("Senha não pode ser nula");
         }
         super.setPassword(request.getPassword());
     
         if (request.getCnpj() == null || request.getCnpj().isBlank()) {
-            throw new UpdateException("CNPJ cannot be null or blank");
+            throw new UpdateException("CNPJ não pode ser nulo");
         }
         this.cnpj = request.getCnpj();
     
         if (request.getAccountableName() == null || request.getAccountableName().isBlank()) {
-            throw new UpdateException("Accountable name cannot be null or blank");
+            throw new UpdateException("Responsável pela empresa não pode ser nulo");
         }
         this.accountableName = request.getAccountableName();
     }
