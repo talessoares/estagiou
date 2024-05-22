@@ -11,8 +11,8 @@ import org.springframework.security.crypto.keygen.BytesKeyGenerator;
 import org.springframework.security.crypto.keygen.KeyGenerators;
 import org.springframework.stereotype.Service;
 
-import com.lab.estagiou.model.email.EmailConfirmationTokenEntity;
-import com.lab.estagiou.model.email.EmailConfirmationTokenRepository;
+import com.lab.estagiou.model.emailconfirmationtoken.EmailConfirmationTokenEntity;
+import com.lab.estagiou.model.emailconfirmationtoken.EmailConfirmationTokenRepository;
 import com.lab.estagiou.model.user.UserEntity;
 
 import jakarta.mail.MessagingException;

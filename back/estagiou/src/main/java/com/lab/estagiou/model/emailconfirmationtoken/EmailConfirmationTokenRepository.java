@@ -1,4 +1,4 @@
-package com.lab.estagiou.model.email;
+package com.lab.estagiou.model.emailconfirmationtoken;
 
 import java.util.UUID;
 
