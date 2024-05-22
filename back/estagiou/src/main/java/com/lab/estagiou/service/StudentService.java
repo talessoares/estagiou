@@ -46,9 +46,9 @@ public class StudentService extends UtilService {
         }
 
         student = super.userRepository.save(student);
+        logger(LogEnum.INFO, "Student registered: " + student.getId(), HttpStatus.CREATED.value());
 
         if (mailInviteEnabled) {
-            logger(LogEnum.INFO, "Student registered: " + student.getId(), HttpStatus.CREATED.value());
             emailService.createConfirmationEmailAndSend(student);
         }
 
