@@ -31,9 +31,6 @@ import lombok.ToString;
 public class StudentEntity extends UserEntity {
 
     @Column(nullable = false)
-    private String name;
-
-    @Column(nullable = false)
     private String lastName;
 
     @ManyToOne
@@ -50,7 +47,7 @@ public class StudentEntity extends UserEntity {
     private static final String ENROLLMENT_NULL = "Inscrição não pode ser nula";
 
     public StudentEntity(String name, String lastName, String email, String password) {
-        super(null, email, password, UserRoleEnum.USER);
+        super(null, name, email, password, UserRoleEnum.USER);
 
         if (name == null || name.isBlank()) {
             throw new RegisterStudentException("Nome do aluno não pode ser nulo");
@@ -60,7 +57,6 @@ public class StudentEntity extends UserEntity {
             throw new RegisterStudentException("Sobrenome do aluno não pode ser nulo");
         }
 
-        this.name = name;
         this.lastName = lastName;
         this.enrollments = new ArrayList<>();
     }
@@ -144,19 +140,12 @@ public class StudentEntity extends UserEntity {
 
         StudentEntity student = (StudentEntity) obj;
 
-        return super.equals(student) && this.name.equals(student.getName()) && this.lastName.equals(student.getLastName());
+        return super.equals(student) && this.lastName.equals(student.getLastName());
     }
 
     @Override
     public int hashCode() {
         return super.hashCode();
-    }
-
-    public void setName(String name) {
-        if (name == null || name.isBlank()) {
-            throw new RegisterStudentException("Nome do aluno não pode ser nulo");
-        }
-        this.name = name;
     }
 
     public void setLastName(String lastName) {

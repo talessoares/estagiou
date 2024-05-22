@@ -16,7 +16,7 @@ import lombok.ToString;
 public class AdminEntity extends UserEntity {
 
     public AdminEntity(AdminRegisterRequest request) {
-        super(null, request.getEmail(), request.getPassword(), UserRoleEnum.ADMIN);
+        super(null, request.getName(), request.getEmail(), request.getPassword(), UserRoleEnum.ADMIN);
     }
 
 }
