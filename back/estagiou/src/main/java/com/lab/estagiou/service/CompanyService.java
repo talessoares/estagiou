@@ -84,11 +84,11 @@ public class CompanyService extends UtilService {
 
     private void validateUserAndCompany(CompanyRegisterRequest request) {
         if (userExists(request)) {
-            throw new EmailAlreadyRegisteredException("Email registration attempt: " + request.getEmail());
+            throw new EmailAlreadyRegisteredException("Email já cadastrado: " + request.getEmail());
         }
 
         if (companyRepository.existsByCnpj(request.getCnpj())) {
-            throw new CnpjAlreadyRegisteredException("CNPJ registration attempt: " + request.getCnpj());
+            throw new CnpjAlreadyRegisteredException("CNPJ já cadastrado: " + request.getCnpj());
         }
     }
 }

@@ -126,4 +126,8 @@ public abstract class UserEntity implements UserDetails {
         return isEnabled;
     }
 
+    public void setPassword(String password) {
+        this.password = new BCryptPasswordEncoder().encode(password);
+    }
+
 }
