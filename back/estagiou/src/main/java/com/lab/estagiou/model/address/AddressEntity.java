@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import com.lab.estagiou.dto.request.model.util.RequestAddress;
 import com.lab.estagiou.exception.generic.RegisterException;
+import com.lab.estagiou.exception.generic.UpdateException;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -85,9 +86,8 @@ public class AddressEntity implements Serializable {
     }
 
     public void update(RequestAddress address) {
-
         if (address == null) {
-            throw new RegisterException("Endereço não pode ser nulo");
+            throw new UpdateException("Endereço não pode ser nulo");
         }
 
         if (address.getCountry() != null && !address.getCountry().isBlank()) {
@@ -117,7 +117,6 @@ public class AddressEntity implements Serializable {
         if (address.getComplement() != null && !address.getComplement().isBlank()) {
             this.complement = address.getComplement();
         }
-
     }
     
 }
