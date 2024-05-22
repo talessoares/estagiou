@@ -10,7 +10,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.lab.estagiou.dto.request.model.company.CompanyRegisterRequest;
-import com.lab.estagiou.dto.response.company.list.ResponseCompanyList;
 import com.lab.estagiou.exception.generic.EmailAlreadyRegisteredException;
 import com.lab.estagiou.model.company.CompanyEntity;
 import com.lab.estagiou.model.company.CompanyRepository;
@@ -39,27 +38,23 @@ public class CompanyService extends UtilService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<List<ResponseCompanyList>> listCompanies() {
+    public ResponseEntity<List<CompanyEntity>> listCompanies() {
         List<CompanyEntity> companies = companyRepository.findAll();
 
         if (companies.isEmpty()) {
             throw new NoCompaniesRegisteredException("No companies registered");
         }
 
-        List<ResponseCompanyList> response = companies.stream().map(ResponseCompanyList::new).toList();
-
         logger(LogEnum.INFO, "List companies: " + companies.size() + " companies", HttpStatus.OK.value());
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(companies);
     }
 
-    public ResponseEntity<ResponseCompanyList> searchCompanyById(UUID id) {
+    public ResponseEntity<CompanyEntity> searchCompanyById(UUID id) {
         CompanyEntity company = companyRepository.findById(id)
                 .orElseThrow(() -> new NoCompanyFoundException(COMPANY_NOT_FOUND + id));
 
-        ResponseCompanyList response = new ResponseCompanyList(company);
-
         logger(LogEnum.INFO, "Company found: " + company.getEmail(), HttpStatus.OK.value());
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(company);
     }
 
     public ResponseEntity<Object> deleteCompanyById(UUID id, Authentication authentication) {
