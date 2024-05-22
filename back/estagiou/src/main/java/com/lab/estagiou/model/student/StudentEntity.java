@@ -3,6 +3,8 @@ package com.lab.estagiou.model.student;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.validator.routines.EmailValidator;
+
 import com.lab.estagiou.dto.request.model.student.StudentRegisterRequest;
 import com.lab.estagiou.exception.generic.RegisterException;
 import com.lab.estagiou.exception.generic.UpdateException;
@@ -48,6 +50,8 @@ public class StudentEntity extends UserEntity {
 
     private static final String ENROLLMENT_NULL = "Inscrição não pode ser nula";
 
+    private static final String EXPECTED_DOMAIN = "@gmail.com";
+
     public StudentEntity(String name, String lastName, String email, String password) {
         super(null, name, email, password, UserRoleEnum.USER);
 
@@ -59,12 +63,28 @@ public class StudentEntity extends UserEntity {
             throw new RegisterException("Sobrenome do aluno não pode ser nulo");
         }
 
+        validStudentEmail(email);
+
         this.lastName = lastName;
         this.enrollments = new ArrayList<>();
     }
 
     public StudentEntity(StudentRegisterRequest request) {
         this(request.getName(), request.getLastName(), request.getEmail(), request.getPassword());
+    }
+
+    public void validStudentEmail(String email) {
+        if (email == null || email.isBlank()) {
+            throw new RegisterException("Email do aluno não pode ser nulo");
+        }
+
+        if (!EmailValidator.getInstance().isValid(email)) {
+            throw new RegisterException("Email inválido");
+        }
+
+        if (!email.contains(EXPECTED_DOMAIN)) {
+            throw new RegisterException("Email inválido, o domínio esperado é " + EXPECTED_DOMAIN);
+        }
     }
 
     public boolean addEnrollment(EnrollmentEntity enrollment) {
