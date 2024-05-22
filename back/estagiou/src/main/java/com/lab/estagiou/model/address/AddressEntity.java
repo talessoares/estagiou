@@ -3,6 +3,9 @@ package com.lab.estagiou.model.address;
 import java.io.Serializable;
 import java.util.UUID;
 
+import com.lab.estagiou.dto.request.model.util.RequestAddress;
+import com.lab.estagiou.exception.generic.RegisterException;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -42,41 +45,43 @@ public class AddressEntity implements Serializable {
 
     private String complement;
 
-    public AddressEntity(String country, String state, String city, String neighborhood, String street, String number,
-            String complement) {
-
-        if (country == null || country.isBlank()) {
-            throw new IllegalArgumentException("País não pode ser nulo ou vazio");
+    public AddressEntity(RequestAddress address) {
+        if (address == null) {
+            throw new RegisterException("Endereço não pode ser nulo");
         }
 
-        if (state == null || state.isBlank()) {
-            throw new IllegalArgumentException("UF não pode ser nulo ou vazio");
+        if (address.getCountry() == null || address.getCountry().isBlank()) {
+            throw new RegisterException("País não pode ser nulo");
         }
 
-        if (city == null || city.isBlank()) {
-            throw new IllegalArgumentException("Município não pode ser nulo ou vazio");
+        if (address.getState() == null || address.getState().isBlank()) {
+            throw new RegisterException("Estado não pode ser nulo");
         }
 
-        if (neighborhood == null || neighborhood.isBlank()) {
-            throw new IllegalArgumentException("Bairro não pode ser nulo ou vazio");
+        if (address.getCity() == null || address.getCity().isBlank()) {
+            throw new RegisterException("Cidade não pode ser nula");
         }
 
-        if (street == null || street.isBlank()) {
-            throw new IllegalArgumentException("Logradouro não pode ser nulo ou vazio");
+        if (address.getNeighborhood() == null || address.getNeighborhood().isBlank()) {
+            throw new RegisterException("Bairro não pode ser nulo");
         }
 
-        if (number == null || number.isBlank()) {
-            throw new IllegalArgumentException("Número não pode ser nulo ou vazio");
+        if (address.getStreet() == null || address.getStreet().isBlank()) {
+            throw new RegisterException("Rua não pode ser nula");
+        }
+
+        if (address.getNumber() == null || address.getNumber().isBlank()) {
+            throw new RegisterException("Número não pode ser nulo");
         }
 
         this.id = null;
-        this.country = country;
-        this.state = state;
-        this.city = city;
-        this.neighborhood = neighborhood;
-        this.street = street;
-        this.number = number;
-        this.complement = complement;
+        this.country = address.getCountry();
+        this.state = address.getState();
+        this.city = address.getCity();
+        this.neighborhood = address.getNeighborhood();
+        this.street = address.getStreet();
+        this.number = address.getNumber();
+        this.complement = address.getComplement();
     }
     
 }
