@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lab.estagiou.dto.response.error.ErrorResponse;
 import com.lab.estagiou.model.user.UserRepository;
 
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,7 +26,7 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
 
-    @Autowired 
+    @Autowired
     private TokenService tokenService;
 
     @Autowired
@@ -33,17 +35,31 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = this.recoverToken(request);
-    
+
         if (token != null) {
             String email = tokenService.validateToken(token);
             UserDetails user = userRepository.findByEmail(email);
-    
-            if (user != null) {
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            if (user == null) {
+                sendAuthenticationExpiredResponse(response, request);
+                return;
             }
+
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request, response);
+    }
+
+    private void sendAuthenticationExpiredResponse(HttpServletResponse response, HttpServletRequest request) throws IOException {
+        response.setContentType("application/json");
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+
+        ErrorResponse errorResponse = new ErrorResponse(HttpServletResponse.SC_UNAUTHORIZED, "Autenticação expirou", request);
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        response.getWriter().write(mapper.writeValueAsString(errorResponse));
     }
 
     private String recoverToken(HttpServletRequest request) {
