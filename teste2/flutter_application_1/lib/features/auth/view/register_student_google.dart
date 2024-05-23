@@ -77,7 +77,7 @@ class RegisterStudentGoogleState extends State<RegisterStudentGoogle> {
                     child: InkWell(
                       onTap: () => _googleSignIn.signIn(),
                       borderRadius: BorderRadius.circular(50),
-                      splashColor: Color(0xFF23A331).withOpacity(1),
+                      splashColor: const Color(0xFF23A331).withOpacity(1),
                       child: SizedBox(
                           width: 300,
                           child: Image.asset(

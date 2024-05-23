@@ -266,7 +266,7 @@ class _RegisterStudentState extends State<RegisterStudent> {
                 'Já possui conta? Faça login',
                 style: Theme.of(context)
                     .textTheme
-                    .bodyText2!
+                    .bodyMedium!
                     .copyWith(fontSize: 16, color: const Color(0xFF1A7924)),
               ),
             ),

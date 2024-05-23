@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(25),
                   shape: BoxShape.rectangle,
-                  gradient: LinearGradient(
+                  gradient: const LinearGradient(
                       colors: [Palette.darkGreen, Palette.lightGreen])),
               child: Stack(
                 children: [
@@ -117,10 +117,9 @@ class _HomePageState extends State<HomePage> {
                       borderRadius: BorderRadius.circular(25),
                       color: Palette.whiteColor,
                       border: Border.all(width: 1, color: Palette.darkGreen),
-                      boxShadow: [
+                      boxShadow: const [
                         BoxShadow(
-                            color: Palette.darkGreen,
-                            offset: const Offset(1, 1))
+                            color: Palette.darkGreen, offset: Offset(1, 1))
                       ]),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,

@@ -1,8 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_application_1/features/auth/view/auth_company.dart';
 import 'package:flutter_application_1/features/auth/view/auth_student.dart';
 import 'package:flutter_application_1/theme/palette.dart';
-
-import 'package:flutter/material.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({Key? key}) : super(key: key);
@@ -17,7 +16,7 @@ class _AuthPageState extends State<AuthPage> {
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.bottomCenter,
             end: Alignment.topCenter,
@@ -52,8 +51,10 @@ class _AuthPageState extends State<AuthPage> {
             const SizedBox(height: 16),
             GestureDetector(
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AuthStudent()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AuthStudent()));
               },
               child: Container(
                 padding:
@@ -75,9 +76,9 @@ class _AuthPageState extends State<AuthPage> {
                             'ESTUDANTE',
                             style: Theme.of(context)
                                 .textTheme
-                                .bodyText1!
+                                .bodyLarge!
                                 .copyWith(
-                                    color: Color(0xFF1A7924),
+                                    color: const Color(0xFF1A7924),
                                     fontWeight: FontWeight.w600,
                                     fontSize: 16),
                           ),
@@ -88,7 +89,7 @@ class _AuthPageState extends State<AuthPage> {
                             'Visualize as vagas disponíveis para estágio',
                             style: Theme.of(context)
                                 .textTheme
-                                .bodyText1!
+                                .bodyLarge!
                                 .copyWith(fontSize: 14),
                           )
                         ],
@@ -101,8 +102,10 @@ class _AuthPageState extends State<AuthPage> {
             const SizedBox(height: 16),
             GestureDetector(
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AuthCompany()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AuthCompany()));
               },
               child: Container(
                 padding:
@@ -124,7 +127,7 @@ class _AuthPageState extends State<AuthPage> {
                             'EMPRESA',
                             style: Theme.of(context)
                                 .textTheme
-                                .bodyText1!
+                                .bodyLarge!
                                 .copyWith(
                                     color: Colors.green[800],
                                     fontWeight: FontWeight.w600,
@@ -139,7 +142,7 @@ class _AuthPageState extends State<AuthPage> {
                             softWrap: true,
                             style: Theme.of(context)
                                 .textTheme
-                                .bodyText1!
+                                .bodyLarge!
                                 .copyWith(fontFamily: 'Poppins', fontSize: 14),
                           )
                         ],

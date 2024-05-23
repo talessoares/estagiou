@@ -54,7 +54,7 @@ class _AuthStudentState extends State<AuthStudent> {
         child: Column(
           children: [
             const SizedBox(height: 10),
-            Align(
+            const Align(
               alignment: Alignment.centerLeft,
               child: Text(
                 'Login',
@@ -67,7 +67,7 @@ class _AuthStudentState extends State<AuthStudent> {
               ),
             ),
             const SizedBox(height: 8),
-            Align(
+            const Align(
               alignment: Alignment.centerLeft,
               child: Text(
                 'Realize o login na sua conta:',
