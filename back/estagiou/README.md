@@ -1,26 +1,30 @@
 # Passo a Passo para Configuração Inicial
 
-* Abra a pasta <strong>back</strong> na sua IDE de desenvolvimento
+## Requisitos
 
-* Crie o arquivo application.properties
+* Java 21
+
+* Maven
+
+## Passo a Passo
+
+1. Abra a pasta <strong>back</strong> na sua IDE de desenvolvimento
+
+2. Crie o arquivo application.yml
 
 ```sh
-cp estagiou/src/main/resources/application-template.properties estagiou/src/main/resources/application.properties
+cp estagiou/src/main/resources/application-template.yml estagiou/src/main/resources/application.yml
 ```
 
-* Altere o usuário e a senha no arquivo criado
+Ou caso tenha aberto a pasta <strong>estagiou</strong>
 
 ```sh
-# Adicione o usuário do banco de dados
-spring.datasource.username=
-
-# Adicione a senha do banco de dados
-spring.datasource.password=
-
-# Adicione o segredo jwt (Você pode adicionar qualquer coisa)
-jwt.secret=
+cp back/estagiou/src/main/resources/application-template.yml back/estagiou/src/main/resources/application.yml
 ```
 
-* Crie o banco de dados com nome de <strong>estagiou</strong> através do pgAdmin ou qualquer outro método disponível
+3. Adicione as informações ausentes indicadas no arquivo criado
 
-* Rode a aplicação
+4. Crie o banco de dados com nome de <strong>estagiou</strong> através do pgAdmin ou qualquer outro método disponível
+
+5. Rode a aplicação
+
