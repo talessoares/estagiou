@@ -33,10 +33,7 @@ public class SecurityConfigurations {
         return httpSecurity
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(authorize -> 
-                configureRequests(authorize)
-                .anyRequest().permitAll()
-            )
+            .authorizeHttpRequests(this::configureRequests)
         .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
         .build();
     }
