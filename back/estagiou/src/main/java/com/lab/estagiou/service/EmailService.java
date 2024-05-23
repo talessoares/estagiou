@@ -20,9 +20,8 @@ public class EmailService {
     @Async
     public void sendEmailAsync(EmailConfirmationTokenEntity emailConfirmationToken) {
         MimeMessage message = sender.createMimeMessage();
-        MimeMessageHelper helper;
         try {
-            helper = new MimeMessageHelper(message, true);
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
             helper.setTo(emailConfirmationToken.getUser().getEmail());
             helper.setSubject("Confirme seu email - Estagiou");
             helper.setText("<html>" +
