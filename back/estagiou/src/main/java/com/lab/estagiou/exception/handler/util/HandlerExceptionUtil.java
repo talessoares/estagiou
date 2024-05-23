@@ -27,7 +27,7 @@ public abstract class HandlerExceptionUtil {
 
     public static final Logger logger = LoggerFactory.getLogger(HandlerExceptionUtil.class);
 
-    public void logger(LogEnum level, String message, int status, HttpServletRequest request) {
+    public void log(LogEnum level, String message, int status, HttpServletRequest request) {
         if (!logsShowEnabled && !logsSaveEnabled) {
             return;
         }
@@ -42,8 +42,8 @@ public abstract class HandlerExceptionUtil {
         }
     }
 
-    public void logger(LogEnum level, String message, int status) {
-        logger(level, message, status, null);
+    public void log(LogEnum level, String message, int status) {
+        log(level, message, status, null);
     }
 
     private void saveLog(LogEnum level, int status, String message, String path) {

@@ -8,12 +8,14 @@ import java.util.UUID;
 
 import org.springframework.security.core.Authentication;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.lab.estagiou.dto.request.model.jobvacancy.JobVacancyRegisterRequest;
+import com.lab.estagiou.exception.generic.RegisterException;
+import com.lab.estagiou.exception.generic.UpdateException;
 import com.lab.estagiou.model.admin.AdminEntity;
 import com.lab.estagiou.model.company.CompanyEntity;
 import com.lab.estagiou.model.enrollment.EnrollmentEntity;
-import com.lab.estagiou.model.jobvacancy.exception.RegisterJobVacancyException;
-import com.lab.estagiou.model.jobvacancy.exception.UpdateJobVacancyException;
 import com.lab.estagiou.model.user.UserEntity;
 
 import jakarta.persistence.Column;
@@ -58,9 +60,11 @@ public class JobVacancyEntity implements Serializable {
     private String modality;
 
     @Column(name = "created_at")
+    @JsonIgnore
     private Instant createdAt;
 
     @Column(name = "updated_at")
+    @JsonIgnore
     private Instant updatedAt;
 
     @OneToMany(mappedBy = "jobVacancy")
@@ -68,39 +72,40 @@ public class JobVacancyEntity implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "company_id")
+    @JsonManagedReference
     private CompanyEntity company;
 
     public JobVacancyEntity(JobVacancyRegisterRequest request, CompanyEntity company) {
         if (request == null) {
-            throw new RegisterJobVacancyException("Request cannot be null");
+            throw new RegisterException("Request cannot be null");
         }
 
         if (company == null) {
-            throw new RegisterJobVacancyException("Company cannot be null");
+            throw new RegisterException("Company cannot be null");
         }
 
         if (request.getTitle() == null || request.getTitle().isEmpty()) {
-            throw new RegisterJobVacancyException("Título não pode ser vazio");
+            throw new RegisterException("Título não pode ser vazio");
         }
 
         if (request.getRole() == null || request.getRole().isEmpty()) {
-            throw new RegisterJobVacancyException("Cargo não pode ser vazio");
+            throw new RegisterException("Cargo não pode ser vazio");
         }
 
         if (request.getDescription() == null || request.getDescription().isEmpty()) {
-            throw new RegisterJobVacancyException("Descrição não pode ser vazia");
+            throw new RegisterException("Descrição não pode ser vazia");
         }
 
         if (request.getSalary() == null || request.getSalary().isEmpty()) {
-            throw new RegisterJobVacancyException("Salário não pode ser vazio");
+            throw new RegisterException("Salário não pode ser vazio");
         }
 
         if (request.getHours() == null || request.getHours().isEmpty()) {
-            throw new RegisterJobVacancyException("Horas não podem ser vazias");
+            throw new RegisterException("Horas não podem ser vazias");
         }
 
         if (request.getModality() == null || request.getModality().isEmpty()) {
-            throw new RegisterJobVacancyException("Modalidade não pode ser vazia");
+            throw new RegisterException("Modalidade não pode ser vazia");
         }
 
         this.title = request.getTitle();
@@ -116,7 +121,7 @@ public class JobVacancyEntity implements Serializable {
 
     public void update(JobVacancyRegisterRequest request) {
         if (request == null) {
-            throw new UpdateJobVacancyException("Request cannot be null");
+            throw new UpdateException("Request cannot be null");
         }
 
         if (request.getTitle() != null) {
@@ -170,42 +175,42 @@ public class JobVacancyEntity implements Serializable {
 
     public void setTitle(String title) {
         if (title == null || title.isBlank()) {
-            throw new UpdateJobVacancyException("Título não pode ser vazio");
+            throw new UpdateException("Título não pode ser vazio");
         }
         this.title = title;
     }
 
     public void setRole(String role) {
         if (role == null || role.isBlank()) {
-            throw new UpdateJobVacancyException("Cargo não pode ser vazio");
+            throw new UpdateException("Cargo não pode ser vazio");
         }
         this.role = role;
     }
 
     public void setDescription(String description) {
         if (description == null || description.isBlank()) {
-            throw new UpdateJobVacancyException("Descrição não pode ser vazia");
+            throw new UpdateException("Descrição não pode ser vazia");
         }
         this.description = description;
     }
 
     public void setSalary(String salary) {
         if (salary == null || salary.isBlank()) {
-            throw new UpdateJobVacancyException("Salário não pode ser vazio");
+            throw new UpdateException("Salário não pode ser vazio");
         }
         this.salary = salary;
     }
 
     public void setHours(String hours) {
         if (hours == null || hours.isBlank()) {
-            throw new UpdateJobVacancyException("Horas não podem ser vazias");
+            throw new UpdateException("Horas não podem ser vazias");
         }
         this.hours = hours;
     }
 
     public void setModality(String modality) {
         if (modality == null || modality.isBlank()) {
-            throw new UpdateJobVacancyException("Modalidade não pode ser vazia");
+            throw new UpdateException("Modalidade não pode ser vazia");
         }
         this.modality = modality;
     }

@@ -10,13 +10,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.lab.estagiou.dto.request.model.company.CompanyRegisterRequest;
-import com.lab.estagiou.dto.response.company.list.ResponseCompanyList;
 import com.lab.estagiou.exception.generic.EmailAlreadyRegisteredException;
+import com.lab.estagiou.exception.generic.NotFoundException;
 import com.lab.estagiou.model.company.CompanyEntity;
 import com.lab.estagiou.model.company.CompanyRepository;
 import com.lab.estagiou.model.company.exception.CnpjAlreadyRegisteredException;
-import com.lab.estagiou.model.company.exception.NoCompaniesRegisteredException;
-import com.lab.estagiou.model.company.exception.NoCompanyFoundException;
 import com.lab.estagiou.model.log.LogEnum;
 import com.lab.estagiou.model.user.UserEntity;
 import com.lab.estagiou.service.util.UtilService;
@@ -35,43 +33,39 @@ public class CompanyService extends UtilService {
         UserEntity company = new CompanyEntity(request);
         userRepository.save(company);
 
-        logger(LogEnum.INFO, "Registered company: " + company.getId(), HttpStatus.OK.value());
+        log(LogEnum.INFO, "Registered company: " + company.getId(), HttpStatus.OK.value());
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<List<ResponseCompanyList>> listCompanies() {
+    public ResponseEntity<List<CompanyEntity>> listCompanies() {
         List<CompanyEntity> companies = companyRepository.findAll();
 
         if (companies.isEmpty()) {
-            throw new NoCompaniesRegisteredException("No companies registered");
+            throw new NotFoundException("No companies registered");
         }
 
-        List<ResponseCompanyList> response = companies.stream().map(ResponseCompanyList::new).toList();
-
-        logger(LogEnum.INFO, "List companies: " + companies.size() + " companies", HttpStatus.OK.value());
-        return ResponseEntity.ok(response);
+        log(LogEnum.INFO, "List companies: " + companies.size() + " companies", HttpStatus.OK.value());
+        return ResponseEntity.ok(companies);
     }
 
-    public ResponseEntity<ResponseCompanyList> searchCompanyById(UUID id) {
+    public ResponseEntity<CompanyEntity> searchCompanyById(UUID id) {
         CompanyEntity company = companyRepository.findById(id)
-                .orElseThrow(() -> new NoCompanyFoundException(COMPANY_NOT_FOUND + id));
+                .orElseThrow(() -> new NotFoundException(COMPANY_NOT_FOUND + id));
 
-        ResponseCompanyList response = new ResponseCompanyList(company);
-
-        logger(LogEnum.INFO, "Company found: " + company.getEmail(), HttpStatus.OK.value());
-        return ResponseEntity.ok(response);
+        log(LogEnum.INFO, "Company found: " + company.getEmail(), HttpStatus.OK.value());
+        return ResponseEntity.ok(company);
     }
 
     public ResponseEntity<Object> deleteCompanyById(UUID id, Authentication authentication) {
         verifyAuthorization(authentication, id);
 
         if (!companyRepository.existsById(id)) {
-            throw new NoCompanyFoundException(COMPANY_NOT_FOUND + id);
+            throw new NotFoundException(COMPANY_NOT_FOUND + id);
         }
 
         companyRepository.deleteById(id);
 
-        logger(LogEnum.INFO, "Company deleted: " + id, HttpStatus.NO_CONTENT.value());
+        log(LogEnum.INFO, "Company deleted: " + id, HttpStatus.NO_CONTENT.value());
         return ResponseEntity.noContent().build();
     }
 
@@ -79,22 +73,22 @@ public class CompanyService extends UtilService {
         verifyAuthorization(authentication, id);
 
         CompanyEntity company = companyRepository.findById(id)
-                .orElseThrow(() -> new NoCompanyFoundException(COMPANY_NOT_FOUND + id));
+                .orElseThrow(() -> new NotFoundException(COMPANY_NOT_FOUND + id));
 
         company.update(request);
         companyRepository.save(company);
 
-        logger(LogEnum.INFO, "Company updated: " + company.getId(), HttpStatus.NO_CONTENT.value());
+        log(LogEnum.INFO, "Company updated: " + company.getId(), HttpStatus.NO_CONTENT.value());
         return ResponseEntity.noContent().build();
     }
 
     private void validateUserAndCompany(CompanyRegisterRequest request) {
         if (userExists(request)) {
-            throw new EmailAlreadyRegisteredException("Email registration attempt: " + request.getEmail());
+            throw new EmailAlreadyRegisteredException("Email já cadastrado: " + request.getEmail());
         }
 
         if (companyRepository.existsByCnpj(request.getCnpj())) {
-            throw new CnpjAlreadyRegisteredException("CNPJ registration attempt: " + request.getCnpj());
+            throw new CnpjAlreadyRegisteredException("CNPJ já cadastrado: " + request.getCnpj());
         }
     }
 }

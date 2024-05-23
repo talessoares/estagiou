@@ -3,14 +3,18 @@ package com.lab.estagiou.model.student;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.validator.routines.EmailValidator;
+
 import com.lab.estagiou.dto.request.model.student.StudentRegisterRequest;
+import com.lab.estagiou.exception.generic.RegisterException;
+import com.lab.estagiou.exception.generic.UpdateException;
 import com.lab.estagiou.model.address.AddressEntity;
 import com.lab.estagiou.model.course.CourseEntity;
 import com.lab.estagiou.model.enrollment.EnrollmentEntity;
-import com.lab.estagiou.model.student.exception.RegisterStudentException;
 import com.lab.estagiou.model.user.UserEntity;
 import com.lab.estagiou.model.user.UserRoleEnum;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -31,9 +35,6 @@ import lombok.ToString;
 public class StudentEntity extends UserEntity {
 
     @Column(nullable = false)
-    private String name;
-
-    @Column(nullable = false)
     private String lastName;
 
     @ManyToOne
@@ -43,35 +44,47 @@ public class StudentEntity extends UserEntity {
     @OneToMany(mappedBy = "student")
     private List<EnrollmentEntity> enrollments;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "address_id", nullable = true)
     private AddressEntity address;
 
     private static final String ENROLLMENT_NULL = "Inscrição não pode ser nula";
 
+    private static final String EXPECTED_DOMAIN = "@gmail.com";
+
     public StudentEntity(String name, String lastName, String email, String password) {
-        super(null, email, password, UserRoleEnum.USER);
+        super(null, name, email, password, UserRoleEnum.USER);
 
         if (name == null || name.isBlank()) {
-            throw new RegisterStudentException("Nome do aluno não pode ser nulo");
+            throw new RegisterException("Nome do aluno não pode ser nulo");
         }
 
         if (lastName == null || lastName.isBlank()) {
-            throw new RegisterStudentException("Sobrenome do aluno não pode ser nulo");
+            throw new RegisterException("Sobrenome do aluno não pode ser nulo");
         }
 
-        this.name = name;
+        validStudentEmail(email);
+
         this.lastName = lastName;
         this.enrollments = new ArrayList<>();
     }
 
-    public StudentEntity(String name, String lastName, String email, String password, AddressEntity address) {
-        this(name, lastName, email, password);
-        this.address = address;
-    }
-
     public StudentEntity(StudentRegisterRequest request) {
         this(request.getName(), request.getLastName(), request.getEmail(), request.getPassword());
+    }
+
+    public void validStudentEmail(String email) {
+        if (email == null || email.isBlank()) {
+            throw new RegisterException("Email do aluno não pode ser nulo");
+        }
+
+        if (!EmailValidator.getInstance().isValid(email)) {
+            throw new RegisterException("Email inválido");
+        }
+
+        if (!email.contains(EXPECTED_DOMAIN)) {
+            throw new RegisterException("Email inválido, o domínio esperado é " + EXPECTED_DOMAIN);
+        }
     }
 
     public boolean addEnrollment(EnrollmentEntity enrollment) {
@@ -116,19 +129,27 @@ public class StudentEntity extends UserEntity {
 
     public void update(StudentRegisterRequest request) {
         if (request == null) {
-            throw new IllegalArgumentException("Request cannot be null");
+            throw new UpdateException("Requisição de atualização do aluno não pode ser nula");
         }
-
-        if (request.getName() != null) {
-            this.setName(request.getName());
+    
+        if (request.getName() != null && !request.getName().isBlank()) {
+            super.setName(request.getName());
         }
-
-        if (request.getLastName() != null) {
-            this.setLastName(request.getLastName());
+    
+        if (request.getLastName() != null && !request.getLastName().isBlank()) {
+            this.lastName = request.getLastName();
         }
-
-        if (request.getPassword() != null) {
-            this.setPassword(request.getPassword());
+    
+        if (request.getPassword() != null && !request.getPassword().isBlank()) {
+            super.setPassword(request.getPassword());
+        }
+    
+        if (request.getAddress() != null) {
+            if (this.address == null) {
+                this.address = new AddressEntity(request.getAddress());
+            } else {
+                this.address.update(request.getAddress());
+            }
         }
     }
 
@@ -144,34 +165,12 @@ public class StudentEntity extends UserEntity {
 
         StudentEntity student = (StudentEntity) obj;
 
-        return super.equals(student) && this.name.equals(student.getName()) && this.lastName.equals(student.getLastName());
+        return super.equals(student) && this.lastName.equals(student.getLastName());
     }
 
     @Override
     public int hashCode() {
         return super.hashCode();
-    }
-
-    public void setName(String name) {
-        if (name == null || name.isBlank()) {
-            throw new RegisterStudentException("Nome do aluno não pode ser nulo");
-        }
-        this.name = name;
-    }
-
-    public void setLastName(String lastName) {
-        if (lastName == null || lastName.isBlank()) {
-            throw new RegisterStudentException("Sobrenome do aluno não pode ser nulo");
-        }
-        this.lastName = lastName;
-    }
-
-    @Override
-    public void setPassword(String password) {
-        if (password == null || password.isBlank()) {
-            throw new RegisterStudentException("Senha do aluno não pode ser nula");
-        }
-        super.setPassword(password);
     }
 
 

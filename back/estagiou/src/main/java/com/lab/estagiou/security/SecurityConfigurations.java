@@ -47,8 +47,8 @@ public class SecurityConfigurations {
 
                 /* COMPANY */
                 .requestMatchers(HttpMethod.POST,"/v1/company/register").hasRole(ADMIN)
-                .requestMatchers(HttpMethod.GET,"/v1/company/list").hasRole(ADMIN)
-                .requestMatchers(HttpMethod.GET,"/v1/company/*/").hasRole(USER)
+                .requestMatchers(HttpMethod.GET,"/v1/company/list").authenticated()
+                .requestMatchers(HttpMethod.GET,"/v1/company/*/").authenticated()
                 .requestMatchers(HttpMethod.DELETE,"/v1/company/*/").hasRole(COMPANY)
                 .requestMatchers(HttpMethod.PUT,"/v1/company/*/").hasRole(COMPANY)
 
@@ -77,4 +77,5 @@ public class SecurityConfigurations {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+    
 }

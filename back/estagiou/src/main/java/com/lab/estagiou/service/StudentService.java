@@ -1,10 +1,10 @@
 package com.lab.estagiou.service;
 
-import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -12,11 +12,10 @@ import org.springframework.stereotype.Service;
 
 import com.lab.estagiou.dto.request.model.student.StudentRegisterRequest;
 import com.lab.estagiou.exception.generic.EmailAlreadyRegisteredException;
+import com.lab.estagiou.exception.generic.NotFoundException;
 import com.lab.estagiou.model.log.LogEnum;
 import com.lab.estagiou.model.student.StudentEntity;
 import com.lab.estagiou.model.student.StudentRepository;
-import com.lab.estagiou.model.student.exception.NoStudentFoundException;
-import com.lab.estagiou.model.student.exception.NoStudentsRegisteredException;
 import com.lab.estagiou.model.user.UserEntity;
 import com.lab.estagiou.service.util.UtilService;
 
@@ -26,6 +25,12 @@ public class StudentService extends UtilService {
     @Autowired
     private StudentRepository studentRepository;
 
+    @Autowired
+    private EmailService emailService;
+
+    @Value("${mail.invite.enabled}")
+    private boolean mailInviteEnabled;
+
     private static final String STUDENT_NOT_FOUND = "Student not found: ";
 
     public ResponseEntity<Object> registerStudent(StudentRegisterRequest request) {
@@ -34,22 +39,29 @@ public class StudentService extends UtilService {
         }
 
         UserEntity student = new StudentEntity(request);
-        super.userRepository.save(student);
 
-        URI location = URI.create("/v1/student/" + student.getId()); 
+        if (!mailInviteEnabled) {
+            student.setEnabled(true);
+        }
 
-        logger(LogEnum.INFO, "Student registered: " + student.getId(), HttpStatus.CREATED.value());
-        return ResponseEntity.created(location).build();
+        student = super.userRepository.save(student);
+        log(LogEnum.INFO, "Student registered: " + student.getId(), HttpStatus.CREATED.value());
+
+        if (mailInviteEnabled) {
+            emailService.createConfirmationEmailAndSend(student);
+        }
+
+        return ResponseEntity.ok().build();
     }
 
     public ResponseEntity<List<StudentEntity>> listStudents() {
         List<StudentEntity> students = studentRepository.findAll();
 
         if (students.isEmpty()) {
-            throw new NoStudentsRegisteredException("No students registered");
+            throw new NotFoundException("No students registered");
         }
 
-        logger(LogEnum.INFO, "List students: " + students.size() + " students", HttpStatus.OK.value());
+        log(LogEnum.INFO, "List students: " + students.size() + " students", HttpStatus.OK.value());
         return ResponseEntity.ok(students);
     }
 
@@ -57,9 +69,9 @@ public class StudentService extends UtilService {
         super.verifyAuthorization(authentication, id);
 
         StudentEntity student = studentRepository.findById(id)
-                .orElseThrow(() -> new NoStudentFoundException(STUDENT_NOT_FOUND + id));
+                .orElseThrow(() -> new NotFoundException(STUDENT_NOT_FOUND + id));
 
-        logger(LogEnum.INFO, "Student found: " + student.getId(), HttpStatus.OK.value());
+        log(LogEnum.INFO, "Student found: " + student.getId(), HttpStatus.OK.value());
         return ResponseEntity.ok(student);
     }
 
@@ -67,12 +79,12 @@ public class StudentService extends UtilService {
         super.verifyAuthorization(authentication, id);
 
         if (!studentRepository.existsById(id)) {
-            throw new NoStudentFoundException(STUDENT_NOT_FOUND + id);
+            throw new NotFoundException(STUDENT_NOT_FOUND + id);
         }
 
         studentRepository.deleteById(id);
 
-        logger(LogEnum.INFO, "Student deleted: " + id, HttpStatus.NO_CONTENT.value());
+        log(LogEnum.INFO, "Student deleted: " + id, HttpStatus.NO_CONTENT.value());
         return ResponseEntity.noContent().build();
     }
 
@@ -80,12 +92,12 @@ public class StudentService extends UtilService {
         super.verifyAuthorization(authentication, id);
 
         StudentEntity student = studentRepository.findById(id)
-                .orElseThrow(() -> new NoStudentFoundException(STUDENT_NOT_FOUND + id));
+                .orElseThrow(() -> new NotFoundException(STUDENT_NOT_FOUND + id));
 
         student.update(request);
         studentRepository.save(student);
 
-        logger(LogEnum.INFO, "Student updated: " + student.getId(), HttpStatus.NO_CONTENT.value());
+        log(LogEnum.INFO, "Student updated: " + student.getId(), HttpStatus.NO_CONTENT.value());
         return ResponseEntity.noContent().build();
     }
     

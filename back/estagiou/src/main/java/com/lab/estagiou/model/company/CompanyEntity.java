@@ -3,13 +3,18 @@ package com.lab.estagiou.model.company;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lab.estagiou.dto.request.model.company.CompanyRegisterRequest;
+import com.lab.estagiou.dto.request.model.util.RequestAddress;
+import com.lab.estagiou.exception.generic.RegisterException;
+import com.lab.estagiou.exception.generic.UpdateException;
 import com.lab.estagiou.model.address.AddressEntity;
-import com.lab.estagiou.model.company.exception.RegisterCompanyException;
 import com.lab.estagiou.model.jobvacancy.JobVacancyEntity;
 import com.lab.estagiou.model.user.UserEntity;
 import com.lab.estagiou.model.user.UserRoleEnum;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -30,47 +35,41 @@ import lombok.ToString;
 @ToString
 public class CompanyEntity extends UserEntity {
 
-    @Column(nullable = false)
-    private String name;
-
     @Column(unique = true, nullable = false)
     private String cnpj;
 
     @Column(name = "accountable_name", nullable = false)
     private String accountableName;
 
-    @OneToMany(mappedBy = "company")
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference
     private List<JobVacancyEntity> jobVacancies = new ArrayList<>();
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "address_id", nullable = true)
     private AddressEntity address;
 
     private static final String JOB_VACANY_NULL = "Vaga não pode ser nula";
     
-    public CompanyEntity(String name, String email, String password, String cnpj, String accountableName) {
-        super(null, email, password, UserRoleEnum.COMPANY);
-
-        if (name == null || name.isBlank()) {
-            throw new RegisterCompanyException("Nome da empresa não pode ser nulo");
-        }
+    public CompanyEntity(String name, String email, String password, String cnpj, String accountableName, RequestAddress address) {
+        super(null, name, email, password, UserRoleEnum.COMPANY);
 
         if (cnpj == null || cnpj.isBlank()) {
-            throw new RegisterCompanyException("CNPJ da empresa não pode ser nulo");
+            throw new RegisterException("CNPJ da empresa não pode ser nulo");
         }
 
         if (accountableName == null || accountableName.isBlank()) {
-            throw new RegisterCompanyException("Responsável pela empresa não pode ser nulo");
+            throw new RegisterException("Responsável pela empresa não pode ser nulo");
         }
 
-        this.name = name;
         this.cnpj = cnpj;
         this.accountableName = accountableName;
         this.jobVacancies = new ArrayList<>();
+        this.address = new AddressEntity(address);
     }
 
     public CompanyEntity(CompanyRegisterRequest request) {
-        this(request.getName(), request.getEmail(), request.getPassword(), request.getCnpj(), request.getAccountableName());
+        this(request.getName(), request.getEmail(), request.getPassword(), request.getCnpj(), request.getAccountableName(), request.getAddress());
     }
 
     public boolean addJobVacancy(JobVacancyEntity jobVacancy) {
@@ -97,10 +96,12 @@ public class CompanyEntity extends UserEntity {
         return this.jobVacancies.contains(jobVacancy);
     }
 
+    @JsonIgnore
     public boolean isJobVacanciesEmpty() {
         return this.jobVacancies.isEmpty();
     }
 
+    @JsonIgnore
     public int getQuantityJobVacancies() {
         return this.jobVacancies.size();
     }
@@ -110,16 +111,16 @@ public class CompanyEntity extends UserEntity {
     }
 
     public void update(CompanyRegisterRequest request) {
+        if (request == null) {
+            throw new UpdateException("Requisição não pode ser nula");
+        }
+
         if (request.getName() != null && !request.getName().isBlank()) {
-            this.name = request.getName();
+            this.setName(request.getName());
         }
 
         if (request.getEmail() != null && !request.getEmail().isBlank()) {
-            super.setEmail(request.getEmail());
-        }
-
-        if (request.getPassword() != null && !request.getPassword().isBlank()) {
-            super.setPassword(request.getPassword());
+            this.setEmail(request.getEmail());
         }
 
         if (request.getCnpj() != null && !request.getCnpj().isBlank()) {
@@ -128,6 +129,18 @@ public class CompanyEntity extends UserEntity {
 
         if (request.getAccountableName() != null && !request.getAccountableName().isBlank()) {
             this.accountableName = request.getAccountableName();
+        }
+
+        if (request.getPassword() != null && !request.getPassword().isBlank()) {
+            this.setPassword(request.getPassword());
+        }
+
+        if (request.getAddress() != null) {
+            if (this.address == null) {
+                this.address = new AddressEntity(request.getAddress());
+            } else {
+                this.address.update(request.getAddress());
+            }
         }
     }
 
