@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.lab.estagiou.dto.response.error.ErrorResponse;
 import com.lab.estagiou.model.user.UserRepository;
 
@@ -55,9 +56,11 @@ public class SecurityFilter extends OncePerRequestFilter {
         response.setContentType("application/json");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
+        JavaTimeModule javaTimeModule = new JavaTimeModule();
         ErrorResponse errorResponse = new ErrorResponse(HttpServletResponse.SC_UNAUTHORIZED, "Autenticação expirou", request);
 
         ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(javaTimeModule);
 
         response.getWriter().write(mapper.writeValueAsString(errorResponse));
     }
