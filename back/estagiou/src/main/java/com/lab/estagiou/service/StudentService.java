@@ -37,7 +37,7 @@ public class StudentService extends UtilService {
     @Autowired
     private EmailConfirmationTokenRepository emailConfirmationTokenRepository;
 
-    @Value("${spring.mail.enabled}")
+    @Value("${spring.mail.enable}")
     private boolean mailInviteEnabled;
 
     private static final String STUDENT_NOT_FOUND = "Student not found: ";
