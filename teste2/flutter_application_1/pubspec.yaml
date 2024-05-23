@@ -8,7 +8,9 @@ environment:
 
 dependencies:
   flutter:
+    
     sdk: flutter
+  google_sign_in: ^6.1.6
 
 dev_dependencies:
   flutter_test:
@@ -16,4 +18,15 @@ dev_dependencies:
   flutter_lints: ^2.0.0
 
 flutter:
+  assets:
+    - assets/
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: lib/fonts/Poppins-Regular.ttf
+        - asset: lib/fonts/Poppins-Medium.ttf
+        - asset: lib/fonts/Poppins-SemiBold.ttf
+        - asset: lib/fonts/Poppins-Bold.ttf
+        
   uses-material-design: true
+
