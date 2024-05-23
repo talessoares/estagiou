@@ -13,12 +13,13 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.lab.estagiou.model.user.UserEntity;
 
-
 @Service
 public class TokenService {
 
     @Value("${jwt.secret}")
     private String secret;
+
+    private static final long EXPIRATION_SECONDS_TIME = 3600;
 
     public String generateToken(UserEntity usuario) {
         try {
@@ -51,6 +52,6 @@ public class TokenService {
     }
 
     private Instant getExpirationDate() {
-        return LocalDateTime.now().plusHours(1).toInstant(ZoneOffset.of("-03:00"));
+        return LocalDateTime.now().plusSeconds(EXPIRATION_SECONDS_TIME).toInstant(ZoneOffset.of("-03:00"));
     }
 }
