@@ -41,7 +41,7 @@ public class CompanyController {
     @Operation(summary = "Register company", description = "Register a company")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Company registered successfully", content = @Content),
-        @ApiResponse(responseCode = "400", description = "Email or CNPJ already registered", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "400", description = "Email or CNPJ already registered or incorrects atributtes", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "401", description = "Authentication expired", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "403", description = "User not authorized", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
