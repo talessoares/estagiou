@@ -131,18 +131,11 @@ public class StudentEntity extends UserEntity {
         if (request == null) {
             throw new UpdateException("Requisição de atualização do aluno não pode ser nula");
         }
-    
-        if (request.getName() != null && !request.getName().isBlank()) {
-            super.setName(request.getName());
-        }
-    
-        if (request.getLastName() != null && !request.getLastName().isBlank()) {
-            this.lastName = request.getLastName();
-        }
-    
-        if (request.getPassword() != null && !request.getPassword().isBlank()) {
-            super.setPassword(request.getPassword());
-        }
+
+        this.setName(validateAndAssign(super.getName(), request.getName(), "Nome do aluno não pode ser nulo"));
+        this.setLastName(validateAndAssign(this.lastName, request.getLastName(), "Sobrenome do aluno não pode ser nulo"));
+        this.setEmail(validateAndAssign(super.getEmail(), request.getEmail(), "Email do aluno não pode ser nulo"));
+        this.setPassword(validateAndAssign(super.getPassword(), request.getPassword(), "Senha do aluno não pode ser nula"));
     
         if (request.getAddress() != null) {
             if (this.address == null) {
@@ -151,6 +144,18 @@ public class StudentEntity extends UserEntity {
                 this.address.update(request.getAddress());
             }
         }
+    }
+
+    private String validateAndAssign(String originalValue, String value, String errorMessage) {
+        if (value == null) {
+            return originalValue;
+        }
+
+        if (value.isBlank()) {
+            throw new UpdateException(errorMessage);
+        }
+
+        return value;
     }
 
     @Override
