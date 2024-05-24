@@ -19,10 +19,10 @@ public abstract class HandlerExceptionUtil {
     @Autowired
     private LogRepository logRepository;
 
-    @Value("${logs.show.enabled}")
+    @Value("${logs.show.enable}")
     private boolean logsShowEnabled;
 
-    @Value("${logs.save.enabled}")
+    @Value("${logs.save.enable}")
     private boolean logsSaveEnabled;
 
     public static final Logger logger = LoggerFactory.getLogger(HandlerExceptionUtil.class);

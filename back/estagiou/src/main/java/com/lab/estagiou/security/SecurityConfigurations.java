@@ -9,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,38 +33,7 @@ public class SecurityConfigurations {
         return httpSecurity
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(authorize -> authorize
-
-                /* AUTH */
-                .requestMatchers(HttpMethod.POST,"/v1/auth/login").permitAll()
-                .requestMatchers(HttpMethod.POST,"/v1/auth/logout").permitAll()
-
-                /* STUDENT */
-                .requestMatchers(HttpMethod.POST,"/v1/student/register").permitAll()
-                .requestMatchers(HttpMethod.GET, "/v1/student/list").hasRole(ADMIN)
-                .requestMatchers(HttpMethod.GET, "/v1/student/*/").hasRole(USER)
-                .requestMatchers(HttpMethod.DELETE, "/v1/student/*/").hasRole(USER)
-                .requestMatchers(HttpMethod.PUT, "/v1/student/*/").hasRole(USER)
-
-                /* COMPANY */
-                .requestMatchers(HttpMethod.POST,"/v1/company/register").hasRole(ADMIN)
-                .requestMatchers(HttpMethod.GET,"/v1/company/list").authenticated()
-                .requestMatchers(HttpMethod.GET,"/v1/company/*/").authenticated()
-                .requestMatchers(HttpMethod.DELETE,"/v1/company/*/").hasRole(COMPANY)
-                .requestMatchers(HttpMethod.PUT,"/v1/company/*/").hasRole(COMPANY)
-
-                /* JOB VACANCY */
-                .requestMatchers(HttpMethod.POST,"/v1/jobvacancy/register").hasRole(COMPANY)
-                .requestMatchers(HttpMethod.GET,"/v1/jobvacancy/list").hasRole(USER)
-                .requestMatchers(HttpMethod.GET,"/v1/jobvacancy/*/").hasRole(USER)
-                .requestMatchers(HttpMethod.DELETE,"/v1/jobvacancy/*/").hasRole(COMPANY)
-                .requestMatchers(HttpMethod.PUT,"/v1/jobvacancy/*/").hasRole(COMPANY)
-
-                /* ADMIN */
-                .requestMatchers(HttpMethod.POST,"/v1/admin/register").hasRole(ADMIN)
-
-                .anyRequest().permitAll()
-            )
+            .authorizeHttpRequests(this::configureRequests)
         .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
         .build();
     }
@@ -76,6 +46,48 @@ public class SecurityConfigurations {
     @Bean 
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    private AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry configureRequests(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authorize) {
+        authRequests(authorize);
+        studentRequests(authorize);
+        companyRequests(authorize);
+        jobVacancyRequests(authorize);
+        adminRequests(authorize);
+        return authorize;
+    }
+    
+    private void authRequests(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authorize) {
+        authorize.requestMatchers(HttpMethod.POST,"/v1/auth/login").permitAll();
+        authorize.requestMatchers(HttpMethod.POST,"/v1/auth/register").permitAll();
+    }
+    
+    private void studentRequests(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authorize) {
+        authorize.requestMatchers(HttpMethod.POST,"/v1/student/register").permitAll();
+        authorize.requestMatchers(HttpMethod.GET, "/v1/student/list").hasRole(ADMIN);
+        authorize.requestMatchers(HttpMethod.GET, "/v1/student/*/").hasRole(USER);
+        authorize.requestMatchers(HttpMethod.DELETE, "/v1/student/*/").hasRole(USER);
+        authorize.requestMatchers(HttpMethod.PUT, "/v1/student/*/").hasRole(USER);
+    }
+
+    private void companyRequests(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authorize) {
+        authorize.requestMatchers(HttpMethod.POST,"/v1/company/register").hasRole(ADMIN);
+        authorize.requestMatchers(HttpMethod.GET,"/v1/company/list").authenticated();
+        authorize.requestMatchers(HttpMethod.GET,"/v1/company/*/").authenticated();
+        authorize.requestMatchers(HttpMethod.DELETE,"/v1/company/*/").hasRole(COMPANY);
+        authorize.requestMatchers(HttpMethod.PUT,"/v1/company/*/").hasRole(COMPANY);
+    }
+
+    private void jobVacancyRequests(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authorize) {
+        authorize.requestMatchers(HttpMethod.POST,"/v1/jobvacancy/register").hasRole(COMPANY);
+        authorize.requestMatchers(HttpMethod.GET,"/v1/jobvacancy/list").hasRole(USER);
+        authorize.requestMatchers(HttpMethod.GET,"/v1/jobvacancy/*/").hasRole(USER);
+        authorize.requestMatchers(HttpMethod.DELETE,"/v1/jobvacancy/*/").hasRole(COMPANY);
+        authorize.requestMatchers(HttpMethod.PUT,"/v1/jobvacancy/*/").hasRole(COMPANY);
+    }
+
+    private void adminRequests(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authorize) {
+        authorize.requestMatchers(HttpMethod.POST,"/v1/admin/register").hasRole(ADMIN);
     }
     
 }
