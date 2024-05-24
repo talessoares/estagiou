@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.lab.estagiou.dto.request.model.student.StudentRegisterRequest;
 import com.lab.estagiou.exception.generic.EmailAlreadyRegisteredException;
+import com.lab.estagiou.exception.generic.NoContentException;
 import com.lab.estagiou.exception.generic.NotFoundException;
 import com.lab.estagiou.model.emailconfirmationtoken.EmailConfirmationTokenEntity;
 import com.lab.estagiou.model.emailconfirmationtoken.EmailConfirmationTokenRepository;
@@ -69,7 +70,7 @@ public class StudentService extends UtilService {
         List<StudentEntity> students = studentRepository.findAll();
 
         if (students.isEmpty()) {
-            throw new NotFoundException("No students registered");
+            throw new NoContentException("No students registered");
         }
 
         log(LogEnum.INFO, "List students: " + students.size() + " students", HttpStatus.OK.value());
