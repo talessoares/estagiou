@@ -28,6 +28,8 @@ public class SecurityConfigurations {
 
     private static final String COMPANY = UserRoleEnum.COMPANY.getRole();
 
+    private static final String API_VERSION = "/v1";
+
     @Bean 
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, SecurityFilter securityFilter) throws Exception {
         return httpSecurity
@@ -54,40 +56,46 @@ public class SecurityConfigurations {
         companyRequests(authorize);
         jobVacancyRequests(authorize);
         adminRequests(authorize);
-        return authorize;
+        return authorize.anyRequest().permitAll();
     }
     
     private void authRequests(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authorize) {
-        authorize.requestMatchers(HttpMethod.POST,"/v1/auth/login").permitAll();
-        authorize.requestMatchers(HttpMethod.POST,"/v1/auth/register").permitAll();
+        authorize.requestMatchers(HttpMethod.POST, API_VERSION + "/auth/login").permitAll();
+        authorize.requestMatchers(HttpMethod.POST, API_VERSION + "/auth/register").permitAll();
     }
     
     private void studentRequests(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authorize) {
-        authorize.requestMatchers(HttpMethod.POST,"/v1/student/register").permitAll();
-        authorize.requestMatchers(HttpMethod.GET, "/v1/student/list").hasRole(ADMIN);
-        authorize.requestMatchers(HttpMethod.GET, "/v1/student/*/").hasRole(USER);
-        authorize.requestMatchers(HttpMethod.DELETE, "/v1/student/*/").hasRole(USER);
-        authorize.requestMatchers(HttpMethod.PUT, "/v1/student/*/").hasRole(USER);
+        final String STUDENT_BY_ID = "/student/*/";
+
+        authorize.requestMatchers(HttpMethod.POST, API_VERSION + "/student/register").permitAll();
+        authorize.requestMatchers(HttpMethod.GET, API_VERSION + "/student/list").hasRole(ADMIN);
+        authorize.requestMatchers(HttpMethod.GET, API_VERSION + STUDENT_BY_ID).hasRole(USER);
+        authorize.requestMatchers(HttpMethod.DELETE, API_VERSION + STUDENT_BY_ID).hasRole(USER);
+        authorize.requestMatchers(HttpMethod.PUT, API_VERSION + STUDENT_BY_ID).hasRole(USER);
     }
 
     private void companyRequests(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authorize) {
-        authorize.requestMatchers(HttpMethod.POST,"/v1/company/register").hasRole(ADMIN);
-        authorize.requestMatchers(HttpMethod.GET,"/v1/company/list").authenticated();
-        authorize.requestMatchers(HttpMethod.GET,"/v1/company/*/").authenticated();
-        authorize.requestMatchers(HttpMethod.DELETE,"/v1/company/*/").hasRole(COMPANY);
-        authorize.requestMatchers(HttpMethod.PUT,"/v1/company/*/").hasRole(COMPANY);
+        final String COMPANY_BY_ID = "/company/*/";
+
+        authorize.requestMatchers(HttpMethod.POST, API_VERSION + "/company/register").hasRole(ADMIN);
+        authorize.requestMatchers(HttpMethod.GET, API_VERSION + "/company/list").authenticated();
+        authorize.requestMatchers(HttpMethod.GET, API_VERSION + COMPANY_BY_ID).authenticated();
+        authorize.requestMatchers(HttpMethod.DELETE, API_VERSION + COMPANY_BY_ID).hasRole(COMPANY);
+        authorize.requestMatchers(HttpMethod.PUT, API_VERSION + COMPANY_BY_ID).hasRole(COMPANY);
     }
 
     private void jobVacancyRequests(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authorize) {
-        authorize.requestMatchers(HttpMethod.POST,"/v1/jobvacancy/register").hasRole(COMPANY);
-        authorize.requestMatchers(HttpMethod.GET,"/v1/jobvacancy/list").hasRole(USER);
-        authorize.requestMatchers(HttpMethod.GET,"/v1/jobvacancy/*/").hasRole(USER);
-        authorize.requestMatchers(HttpMethod.DELETE,"/v1/jobvacancy/*/").hasRole(COMPANY);
-        authorize.requestMatchers(HttpMethod.PUT,"/v1/jobvacancy/*/").hasRole(COMPANY);
+        final String JOB_VACANCY_BY_ID = "/jobvacancy/*/";
+
+        authorize.requestMatchers(HttpMethod.POST, API_VERSION + "/jobvacancy/register").hasRole(COMPANY);
+        authorize.requestMatchers(HttpMethod.GET, API_VERSION + "/jobvacancy/list").hasRole(USER);
+        authorize.requestMatchers(HttpMethod.GET, API_VERSION + JOB_VACANCY_BY_ID).hasRole(USER);
+        authorize.requestMatchers(HttpMethod.DELETE, API_VERSION +  JOB_VACANCY_BY_ID).hasRole(COMPANY);
+        authorize.requestMatchers(HttpMethod.PUT, API_VERSION + JOB_VACANCY_BY_ID).hasRole(COMPANY);
     }
 
     private void adminRequests(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authorize) {
-        authorize.requestMatchers(HttpMethod.POST,"/v1/admin/register").hasRole(ADMIN);
+        authorize.requestMatchers(HttpMethod.POST, API_VERSION + "/admin/register").hasRole(ADMIN);
     }
     
 }
