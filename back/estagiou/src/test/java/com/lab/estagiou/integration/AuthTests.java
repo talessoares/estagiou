@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 
 import com.lab.estagiou.dto.request.auth.RequestAuthentication;
 import com.lab.estagiou.dto.request.model.student.StudentRegisterRequest;
+import com.lab.estagiou.dto.response.auth.LoginResponse;
 import com.lab.estagiou.service.AuthorizationService;
 import com.lab.estagiou.service.StudentService;
 
@@ -44,7 +45,7 @@ class AuthTests {
         requestLogin.setEmail(request.getEmail());
         requestLogin.setPassword(request.getPassword());
 
-        ResponseEntity<Object> response = authorizationService.login(requestLogin);
+        ResponseEntity<LoginResponse> response = authorizationService.login(requestLogin);
 
         if (response.getStatusCode().is2xxSuccessful()) {
             String token = response.getBody().toString();
