@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.lab.estagiou.dto.request.model.company.CompanyRegisterRequest;
 import com.lab.estagiou.exception.generic.EmailAlreadyRegisteredException;
+import com.lab.estagiou.exception.generic.NoContentException;
 import com.lab.estagiou.exception.generic.NotFoundException;
 import com.lab.estagiou.model.company.CompanyEntity;
 import com.lab.estagiou.model.company.CompanyRepository;
@@ -41,7 +42,7 @@ public class CompanyService extends UtilService {
         List<CompanyEntity> companies = companyRepository.findAll();
 
         if (companies.isEmpty()) {
-            throw new NotFoundException("No companies registered");
+            throw new NoContentException("No companies registered");
         }
 
         log(LogEnum.INFO, "List companies: " + companies.size() + " companies", HttpStatus.OK.value());

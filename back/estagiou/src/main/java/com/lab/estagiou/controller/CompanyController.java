@@ -19,11 +19,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.lab.estagiou.controller.util.UtilController;
 import com.lab.estagiou.dto.request.model.company.CompanyRegisterRequest;
+import com.lab.estagiou.dto.response.error.ErrorResponse;
 import com.lab.estagiou.model.company.CompanyEntity;
 import com.lab.estagiou.service.CompanyService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -39,8 +41,10 @@ public class CompanyController {
     @Operation(summary = "Register company", description = "Register a company")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Company registered successfully", content = @Content),
-        @ApiResponse(responseCode = "400", description = "Email or CNPJ already registered", content = @Content),
-        @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
+        @ApiResponse(responseCode = "400", description = "Email or CNPJ already registered", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "401", description = "Authentication expired", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "403", description = "User not authorized", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping("/register")
     public ResponseEntity<Object> registerCompany(@RequestBody CompanyRegisterRequest request) {
@@ -51,7 +55,9 @@ public class CompanyController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Companies listed successfully"),
         @ApiResponse(responseCode = "204", description = "No companies found", content = @Content),
-        @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
+        @ApiResponse(responseCode = "401", description = "Authentication expired", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "403", description = "User not authorized", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping(path = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<CompanyEntity>> listCompanies() {
@@ -61,8 +67,10 @@ public class CompanyController {
     @Operation(summary = "Search company by ID", description = "Search a company by ID")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Company found successfully"),
-        @ApiResponse(responseCode = "404", description = "Company not found", content = @Content),
-        @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
+        @ApiResponse(responseCode = "401", description = "Authentication expired", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "403", description = "User not authorized", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "404", description = "Company not found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping(path = "/{id}")
     public ResponseEntity<CompanyEntity> searchCompanyById(@PathVariable UUID id) {
@@ -72,8 +80,10 @@ public class CompanyController {
     @Operation(summary = "Delete company by ID", description = "Delete a company by ID")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "204", description = "Company deleted successfully", content = @Content),
-        @ApiResponse(responseCode = "404", description = "Company not found", content = @Content),
-        @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
+        @ApiResponse(responseCode = "401", description = "Authentication expired", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "403", description = "User not authorized", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "404", description = "Company not found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteCompanyById(@PathVariable UUID id, Authentication authentication) {
@@ -83,8 +93,10 @@ public class CompanyController {
     @Operation(summary = "Update company", description = "Update a company")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "204", description = "Company updated successfully", content = @Content),
-        @ApiResponse(responseCode = "404", description = "Company not found", content = @Content),
-        @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
+        @ApiResponse(responseCode = "401", description = "Authentication expired", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "403", description = "User not authorized", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "404", description = "Company not found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateCompany(@PathVariable UUID id, @RequestBody CompanyRegisterRequest request, Authentication authentication) {
