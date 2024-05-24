@@ -115,25 +115,11 @@ public class CompanyEntity extends UserEntity {
             throw new UpdateException("Requisição não pode ser nula");
         }
 
-        if (request.getName() != null && !request.getName().isBlank()) {
-            this.setName(request.getName());
-        }
-
-        if (request.getEmail() != null && !request.getEmail().isBlank()) {
-            this.setEmail(request.getEmail());
-        }
-
-        if (request.getCnpj() != null && !request.getCnpj().isBlank()) {
-            this.cnpj = request.getCnpj();
-        }
-
-        if (request.getAccountableName() != null && !request.getAccountableName().isBlank()) {
-            this.accountableName = request.getAccountableName();
-        }
-
-        if (request.getPassword() != null && !request.getPassword().isBlank()) {
-            this.setPassword(request.getPassword());
-        }
+        this.setName(validateAndAssign(this.getName(), request.getName(), "Nome da empresa não pode ser nulo"));
+        this.setEmail(validateAndAssign(this.getEmail(), request.getEmail(), "Email da empresa não pode ser nulo"));
+        this.cnpj = validateAndAssign(this.cnpj, request.getCnpj(), "CNPJ da empresa não pode ser nulo");
+        this.accountableName = validateAndAssign(this.accountableName, request.getAccountableName(), "Responsável pela empresa não pode ser nulo");
+        this.setPassword(validateAndAssign(this.getPassword(), request.getPassword(), "Senha da empresa não pode ser nula"));
 
         if (request.getAddress() != null) {
             if (this.address == null) {
@@ -142,6 +128,18 @@ public class CompanyEntity extends UserEntity {
                 this.address.update(request.getAddress());
             }
         }
+    }
+
+    private String validateAndAssign(String originalValue, String value, String errorMessage) {
+        if (value == null) {
+            return originalValue;
+        }
+
+        if (value.isBlank()) {
+            throw new UpdateException(errorMessage);
+        }
+
+        return value;
     }
 
     @Override
