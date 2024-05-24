@@ -40,7 +40,7 @@ public class AuthorizationService extends UtilService implements UserDetailsServ
         return usuarioRepository.findByEmail(email);
     }
 
-    public ResponseEntity<Object> login(@RequestBody @Valid RequestAuthentication data) {
+    public ResponseEntity<LoginResponse> login(@RequestBody @Valid RequestAuthentication data) {
         AuthenticationManager authenticationManager = context.getBean(AuthenticationManager.class);
 
         UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(data.getEmail(),

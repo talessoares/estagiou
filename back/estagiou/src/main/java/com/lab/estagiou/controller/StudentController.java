@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.lab.estagiou.controller.util.UtilController;
 import com.lab.estagiou.dto.request.model.student.StudentRegisterRequest;
 import com.lab.estagiou.dto.response.error.ErrorResponse;
 import com.lab.estagiou.model.student.StudentEntity;
@@ -30,7 +31,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Controller
-@RequestMapping(value = "/v1/student", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = UtilController.API_VERSION + "/student", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Student", description = "API for management of students")
 public class StudentController {
 

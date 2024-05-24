@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.lab.estagiou.controller.util.UtilController;
 import com.lab.estagiou.dto.request.model.company.CompanyRegisterRequest;
 import com.lab.estagiou.model.company.CompanyEntity;
 import com.lab.estagiou.service.CompanyService;
@@ -28,7 +29,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Controller
-@RequestMapping(value = "/v1/company", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = UtilController.API_VERSION + "/company", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Company", description = "API for management of companies")
 public class CompanyController {
 
