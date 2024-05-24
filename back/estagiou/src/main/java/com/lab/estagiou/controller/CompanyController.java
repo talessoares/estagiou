@@ -93,6 +93,7 @@ public class CompanyController {
     @Operation(summary = "Update company", description = "Update a company")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "204", description = "Company updated successfully", content = @Content),
+        @ApiResponse(responseCode = "400", description = "Incorrects atributtes", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "401", description = "Authentication expired", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "403", description = "User not authorized", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "404", description = "Company not found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
