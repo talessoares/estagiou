@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/extensions/custom_padding.dart';
+import 'package:flutter_application_1/services/listar_alunos.dart';
 import 'package:flutter_application_1/theme/palette.dart';
 
 class HomePage extends StatefulWidget {
@@ -10,12 +11,20 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  ListarAlunosService service = ListarAlunosService();
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Palette.lightGreen,
+        leading: IconButton(
+          icon: const Icon(Icons.menu),
+          onPressed: () {
+            service.getAllAlunos();
+          },
+        ),
       ),
       body: ListView(
         children: [
