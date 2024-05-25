@@ -1,0 +1,46 @@
+spring:
+    application:
+        name: estagiou
+
+    profiles:
+        # Active profile (development, produce, test. Default: development)
+        active: development
+
+    datasource:
+        url: jdbc:postgresql://localhost:5433/estagiou
+        # Add username datasource (Default: postgres)
+        username: postgres 
+        # Add password datasource
+        password: admin
+
+    mail:
+        enable: false
+        host: smtp.gmail.com
+        port: 587
+        # Add email username
+        username: estagiouunipampa@gmail.com
+        # Add email password
+        password: ltab pelh glyg qzvv
+        properties:
+            mail:
+                smtp:
+                    auth: true
+                    starttls:
+                        enable: true
+    jpa:
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
+        
+jwt:
+    secret:
+
+logs:
+    show:
+        enable: true
+    save:
+        enable: true
+
+springdoc:
+    swagger-ui:
+        path: /swagger-ui.html
+    api-docs:
+        path: /api-docs
