@@ -64,7 +64,7 @@ public class SecurityConfigurations {
     
     private void studentRequests(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authorize) {
         authorize.requestMatchers(HttpMethod.POST,"/v1/student/register").permitAll();
-        authorize.requestMatchers(HttpMethod.GET, "/v1/student/list").hasRole(ADMIN);
+        authorize.requestMatchers(HttpMethod.GET, "/v1/student/list").permitAll();
         authorize.requestMatchers(HttpMethod.GET, "/v1/student/*/").hasRole(USER);
         authorize.requestMatchers(HttpMethod.DELETE, "/v1/student/*/").hasRole(USER);
         authorize.requestMatchers(HttpMethod.PUT, "/v1/student/*/").hasRole(USER);
