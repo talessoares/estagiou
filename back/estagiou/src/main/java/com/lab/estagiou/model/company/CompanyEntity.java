@@ -3,6 +3,8 @@ package com.lab.estagiou.model.company;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lab.estagiou.dto.request.model.company.CompanyRegisterRequest;
@@ -119,7 +121,10 @@ public class CompanyEntity extends UserEntity {
         this.setEmail(validateAndAssign(this.getEmail(), request.getEmail(), "Email da empresa não pode ser nulo"));
         this.cnpj = validateAndAssign(this.cnpj, request.getCnpj(), "CNPJ da empresa não pode ser nulo");
         this.accountableName = validateAndAssign(this.accountableName, request.getAccountableName(), "Responsável pela empresa não pode ser nulo");
-        this.setPassword(validateAndAssign(this.getPassword(), request.getPassword(), "Senha da empresa não pode ser nula"));
+
+        if (request.getPassword() == null) {
+            this.setPassword(validateAndAssign(this.getPassword(), new BCryptPasswordEncoder().encode(request.getPassword()), "Senha da empresa não pode ser nula"));
+        }
 
         if (request.getAddress() != null) {
             if (this.address == null) {

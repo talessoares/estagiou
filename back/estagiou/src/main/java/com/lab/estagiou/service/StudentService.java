@@ -33,7 +33,7 @@ public class StudentService extends UtilService {
     private StudentRepository studentRepository;
 
     @Autowired
-    private EmailService emailService;
+    private EmailSendService emailService;
 
     @Autowired
     private EmailConfirmationTokenRepository emailConfirmationTokenRepository;
@@ -90,11 +90,10 @@ public class StudentService extends UtilService {
     public ResponseEntity<Object> deleteStudentById(UUID id, Authentication authentication) {
         super.verifyAuthorization(authentication, id);
 
-        if (!studentRepository.existsById(id)) {
-            throw new NotFoundException(STUDENT_NOT_FOUND + id);
-        }
+        StudentEntity student = studentRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(STUDENT_NOT_FOUND + id));
 
-        studentRepository.deleteById(id);
+        studentRepository.delete(student);
 
         log(LogEnum.INFO, "Student deleted: " + id, HttpStatus.NO_CONTENT.value());
         return ResponseEntity.noContent().build();

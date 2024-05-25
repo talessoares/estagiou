@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -25,11 +26,10 @@ public class SecurityExceptionHandler extends HandlerExceptionUtil {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(HttpStatus.FORBIDDEN.value(), "Usuário não está habilitado", request));
     }
 
-    @ExceptionHandler(value = BadCredentialsException.class)
+    @ExceptionHandler(value = {BadCredentialsException.class, InternalAuthenticationServiceException.class})
     public ResponseEntity<Object> handleBadCredentialsException(Exception e, HttpServletRequest request) {
         log(LogEnum.WARN, e.getMessage(), HttpStatus.BAD_REQUEST.value(), request);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Usuário ou senha inválida", request));
     }
-    
 }
 

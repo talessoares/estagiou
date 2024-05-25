@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.validator.routines.EmailValidator;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lab.estagiou.dto.request.model.student.StudentRegisterRequest;
 import com.lab.estagiou.exception.generic.RegisterException;
 import com.lab.estagiou.exception.generic.UpdateException;
@@ -111,10 +113,12 @@ public class StudentEntity extends UserEntity {
         return this.enrollments.contains(enrollment);
     }
 
+    @JsonIgnore
     public boolean isEnrollmentsEmpty() {
         return this.enrollments.isEmpty();
     }
 
+    @JsonIgnore
     public int getQuantityEnrollments() {
         return this.enrollments.size();
     }
@@ -135,7 +139,10 @@ public class StudentEntity extends UserEntity {
         this.setName(validateAndAssign(super.getName(), request.getName(), "Nome do aluno não pode ser nulo"));
         this.setLastName(validateAndAssign(this.lastName, request.getLastName(), "Sobrenome do aluno não pode ser nulo"));
         this.setEmail(validateAndAssign(super.getEmail(), request.getEmail(), "Email do aluno não pode ser nulo"));
-        this.setPassword(validateAndAssign(super.getPassword(), request.getPassword(), "Senha do aluno não pode ser nula"));
+
+        if (request.getPassword() == null) {
+            this.setPassword(validateAndAssign(this.getPassword(), new BCryptPasswordEncoder().encode(request.getPassword()), "Senha do aluno não pode ser nula"));
+        }
     
         if (request.getAddress() != null) {
             if (this.address == null) {

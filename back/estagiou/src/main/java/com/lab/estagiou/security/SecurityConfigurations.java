@@ -61,7 +61,7 @@ public class SecurityConfigurations {
     
     private void authRequests(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authorize) {
         authorize.requestMatchers(HttpMethod.POST, API_VERSION + "/auth/login").permitAll();
-        authorize.requestMatchers(HttpMethod.POST, API_VERSION + "/auth/register").permitAll();
+        authorize.requestMatchers(HttpMethod.POST, API_VERSION + "/auth/logout").authenticated();
     }
     
     private void studentRequests(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authorize) {
@@ -95,7 +95,13 @@ public class SecurityConfigurations {
     }
 
     private void adminRequests(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authorize) {
+        final String ADMIN_BY_ID = "/admin/*/";
+        
         authorize.requestMatchers(HttpMethod.POST, API_VERSION + "/admin/register").hasRole(ADMIN);
+        authorize.requestMatchers(HttpMethod.GET, API_VERSION + "/admin/list").hasRole(ADMIN);
+        authorize.requestMatchers(HttpMethod.GET, API_VERSION + ADMIN_BY_ID).hasRole(ADMIN);
+        authorize.requestMatchers(HttpMethod.DELETE, API_VERSION + ADMIN_BY_ID).hasRole(ADMIN);
+        authorize.requestMatchers(HttpMethod.PUT, API_VERSION + ADMIN_BY_ID).hasRole(ADMIN);
     }
     
 }

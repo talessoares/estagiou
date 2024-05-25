@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.lab.estagiou.dto.response.error.ErrorResponse;
 import com.lab.estagiou.exception.generic.NotFoundException;
 import com.lab.estagiou.exception.handler.util.HandlerExceptionUtil;
 import com.lab.estagiou.model.log.LogEnum;
@@ -21,7 +20,7 @@ public class NotFoundExceptionHandler extends HandlerExceptionUtil {
     @ExceptionHandler(value = NotFoundException.class)
     public ResponseEntity<Object> handleNotFoundException(Exception e, HttpServletRequest request) {
         log(LogEnum.WARN, e.getClass().getSimpleName() + ": " + e.getMessage(), HttpStatus.NOT_FOUND.value(), request);
-        return ResponseEntity.badRequest().body(new ErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage(), request));
+        return ResponseEntity.notFound().build();
     }
     
 }

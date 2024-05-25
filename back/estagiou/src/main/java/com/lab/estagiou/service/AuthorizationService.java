@@ -48,8 +48,7 @@ public class AuthorizationService extends UtilService implements UserDetailsServ
     public ResponseEntity<LoginResponse> login(@RequestBody @Valid RequestAuthentication data) {
         AuthenticationManager authenticationManager = context.getBean(AuthenticationManager.class);
 
-        UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(data.getEmail(),
-                data.getPassword());
+        UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(data.getEmail(), data.getPassword());
         Authentication auth = authenticationManager.authenticate(usernamePassword);
         String token = tokenService.generateToken((UserEntity) auth.getPrincipal());
 
