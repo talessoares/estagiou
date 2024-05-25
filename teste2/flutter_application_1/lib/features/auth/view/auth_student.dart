@@ -22,6 +22,8 @@ GoogleSignIn _googleSignIn = GoogleSignIn(
 );
 
 class _AuthStudentState extends State<AuthStudent> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   @override
   void dispose() {
     super.dispose();
@@ -82,9 +84,15 @@ class _AuthStudentState extends State<AuthStudent> {
             const SizedBox(height: 40),
             Column(
               children: [
-                const LoginTextField(labelText: 'Email'),
+                LoginTextField(
+                    labelText: 'Email',
+                    controller: _emailController,
+                    isPassword: false),
                 const SizedBox(height: 20),
-                const LoginTextField(labelText: 'Senha'),
+                LoginTextField(
+                    labelText: 'Senha',
+                    controller: _passwordController,
+                    isPassword: true),
                 const SizedBox(height: 30),
                 ElevatedButton(
                   onPressed: () {

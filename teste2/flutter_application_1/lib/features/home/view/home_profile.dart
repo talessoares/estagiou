@@ -6,6 +6,7 @@ class HomeProfile extends StatefulWidget {
   const HomeProfile({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _HomeProfileState createState() => _HomeProfileState();
 }
 
@@ -18,9 +19,9 @@ class _HomeProfileState extends State<HomeProfile> {
       _selectedIndex = index;
       if (_selectedIndex == 0) {
         // Se o índice for 0 (Menu), navegue para HomePage
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => HomePage()),
+          MaterialPageRoute(builder: (context) => const HomePage()),
         );
       }
     });
@@ -53,22 +54,23 @@ class _HomeProfileState extends State<HomeProfile> {
                       color: Colors.black.withOpacity(0.2), // Cor da sombra
                       spreadRadius: 2, // Propagação da sombra
                       blurRadius: 5, // Desfoque da sombra
-                      offset: Offset(0, 3), // Posição da sombra
+                      offset: const Offset(0, 3), // Posição da sombra
                     ),
                   ],
                 ),
-                child: Center(
+                child: const Center(
                   child: Icon(
                     Icons.person,
                     size: 70.0, // Ajuste o tamanho do ícone conforme necessário
-                    color: Palette.lightGreen, // Ajuste a cor do ícone conforme necessário
+                    color: Palette
+                        .lightGreen, // Ajuste a cor do ícone conforme necessário
                   ),
                 ),
               ),
             ),
           ),
           // Exibição do nome de usuário
-          Positioned(
+          const Positioned(
             top: 200.0, // Ajuste a posição conforme necessário
             left: 0,
             right: 0,
@@ -80,7 +82,7 @@ class _HomeProfileState extends State<HomeProfile> {
             ),
           ),
           // Exibição da descrição
-          Positioned(
+          const Positioned(
             top: 240.0, // Ajuste a posição conforme necessário
             left: 0,
             right: 0,
@@ -112,15 +114,17 @@ class _HomeProfileState extends State<HomeProfile> {
                         width: 1.0, // Largura do contorno
                       ),
                     ),
-                    child: Center(
+                    child: const Center(
                       child: Icon(
                         Icons.phone,
-                        size: 30.0, // Ajuste o tamanho do ícone conforme necessário
-                        color: Palette.lightGreen, // Ajuste a cor do ícone conforme necessário
+                        size:
+                            30.0, // Ajuste o tamanho do ícone conforme necessário
+                        color: Palette
+                            .lightGreen, // Ajuste a cor do ícone conforme necessário
                       ),
                     ),
                   ),
-                  SizedBox(width: 20), // Espaçamento entre os ícones
+                  const SizedBox(width: 20), // Espaçamento entre os ícones
                   Container(
                     width: 60.0, // Tamanho do fundo redondo
                     height: 60.0, // Tamanho do fundo redondo
@@ -132,11 +136,13 @@ class _HomeProfileState extends State<HomeProfile> {
                         width: 1.0, // Largura do contorno
                       ),
                     ),
-                    child: Center(
+                    child: const Center(
                       child: Icon(
                         Icons.mail,
-                        size: 30.0, // Ajuste o tamanho do ícone conforme necessário
-                        color: Palette.lightGreen, // Ajuste a cor do ícone conforme necessário
+                        size:
+                            30.0, // Ajuste o tamanho do ícone conforme necessário
+                        color: Palette
+                            .lightGreen, // Ajuste a cor do ícone conforme necessário
                       ),
                     ),
                   ),
