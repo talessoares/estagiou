@@ -1,15 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/extensions/custom_padding.dart';
+import 'package:flutter_application_1/features/home/view/home_profile.dart';
 import 'package:flutter_application_1/theme/palette.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  int _selectedIndex = 0; // Índice inicial do item selecionado
+
+  // Lista de itens da barra de navegação
+  static const List<BottomNavigationBarItem> _navItems = [
+    BottomNavigationBarItem(
+      icon: Icon(Icons.home, color: Palette.lightGreen),
+      label: 'Menu',
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.article, color: Palette.lightGreen),
+      label: 'Documentos',
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.person, color: Palette.lightGreen),
+      label: 'Perfil',
+    ),
+  ];
+
+  // Função chamada ao selecionar um item da barra de navegação
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      if (_selectedIndex == 2) {
+        // Se o índice for 2 (Perfil), navegue para HomeProfile
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HomeProfile()),
+        );
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -180,20 +213,10 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Menu',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Documentos',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Perfil',
-          ),
-        ],
+        items: _navItems,
+        currentIndex: _selectedIndex,
+        selectedItemColor: Palette.lightGreen,
+        onTap: _onItemTapped,
       ),
     );
   }
