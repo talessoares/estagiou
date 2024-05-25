@@ -1,5 +1,6 @@
 package com.lab.estagiou.service;
 
+import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
@@ -10,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.lab.estagiou.dto.request.model.jobvacancy.JobVacancyRegisterRequest;
+import com.lab.estagiou.exception.generic.NoContentException;
 import com.lab.estagiou.exception.generic.NotFoundException;
 import com.lab.estagiou.exception.generic.UnauthorizedUserException;
 import com.lab.estagiou.model.company.CompanyEntity;
@@ -27,7 +29,7 @@ public class JobVacancyService extends UtilService {
 
     private static final String JOB_VACANCY_NOT_FOUND = "Job Vacancy not found: ";
 
-    public ResponseEntity<Object> registerJobVacancy(JobVacancyRegisterRequest request, Authentication authentication) {
+    public ResponseEntity<JobVacancyEntity> registerJobVacancy(JobVacancyRegisterRequest request, Authentication authentication) {
         if (authentication == null) {
             throw new UnauthorizedUserException(UNAUTHORIZED_ACESS_ATTEMPT);
         }
@@ -42,22 +44,24 @@ public class JobVacancyService extends UtilService {
         JobVacancyEntity jobVacancy = new JobVacancyEntity(request, company);
         jobVacancyRepository.save(jobVacancy);
 
+        URI location = URI.create("/jobvacancy/" + jobVacancy.getId());
+
         log(LogEnum.INFO, "Job vacancy registered: " + jobVacancy.getId(), HttpStatus.OK.value());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.created(location).build();
     }
 
-    public ResponseEntity<Object> listJobVacancies() {
+    public ResponseEntity<List<JobVacancyEntity>> listJobVacancies() {
         List<JobVacancyEntity> jobVacancies = jobVacancyRepository.findAll();
 
         if (jobVacancies.isEmpty()) {
-            throw new NotFoundException("No job vacancies registered");
+            throw new NoContentException("No job vacancies registered");
         }
 
         log(LogEnum.INFO, "List job vacancies: " + jobVacancies.size() + " job vacancies", HttpStatus.OK.value());
         return ResponseEntity.ok(jobVacancies);
     }
 
-    public ResponseEntity<Object> searchJobVacancyById(UUID id) {
+    public ResponseEntity<JobVacancyEntity> searchJobVacancyById(UUID id) {
         JobVacancyEntity jobVacancy = jobVacancyRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(JOB_VACANCY_NOT_FOUND + id));      
 

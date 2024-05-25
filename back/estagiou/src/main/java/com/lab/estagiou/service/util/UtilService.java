@@ -35,18 +35,24 @@ public abstract class UtilService extends HandlerExceptionUtil {
         }
     }
 
-    private boolean userIsSameOrAdmin(Authentication authentication, UUID id) {
+    public boolean userIsSameOrAdmin(Authentication authentication, UUID id) {
         if (authentication == null) {
             throw new UnauthorizedUserException(UNAUTHORIZED_ACESS_ATTEMPT);
         }
 
-        UserEntity user = (UserEntity) authentication.getPrincipal();
-        return user.getId().equals(id) || userIsAdmin(authentication);
+        return userIsSame(authentication, id) || userIsAdmin(authentication);
     }
 
     public boolean userIsAdmin(Authentication authentication) {
         return ((UserEntity) authentication.getPrincipal()).getRole().equals(UserRoleEnum.ADMIN);
     }
 
-    
+    public boolean userIsSame(Authentication authentication, UUID id) {
+        if (authentication == null) {
+            throw new UnauthorizedUserException(UNAUTHORIZED_ACESS_ATTEMPT);
+        }
+
+        return ((UserEntity) authentication.getPrincipal()).getId().equals(id);
+    }
+
 }

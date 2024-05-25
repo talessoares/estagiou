@@ -90,33 +90,28 @@ public class AddressEntity implements Serializable {
             throw new UpdateException("Endereço não pode ser nulo");
         }
 
-        if (address.getCountry() != null && !address.getCountry().isBlank()) {
-            this.country = address.getCountry();
-        }
+        this.country = validateAndAssign(country, address.getCountry(), "País não pode ser nulo");
+        this.state = validateAndAssign(state, address.getState(), "Estado não pode ser nulo");
+        this.city = validateAndAssign(city, address.getCity(), "Cidade não pode ser nula");
+        this.neighborhood = validateAndAssign(neighborhood, address.getNeighborhood(), "Bairro não pode ser nulo");
+        this.street = validateAndAssign(street, address.getStreet(), "Rua não pode ser nula");
+        this.number = validateAndAssign(number, address.getNumber(), "Número não pode ser nulo");
 
-        if (address.getState() != null && !address.getState().isBlank()) {
-            this.state = address.getState();
-        }
-
-        if (address.getCity() != null && !address.getCity().isBlank()) {
-            this.city = address.getCity();
-        }
-
-        if (address.getNeighborhood() != null && !address.getNeighborhood().isBlank()) {
-            this.neighborhood = address.getNeighborhood();
-        }
-
-        if (address.getStreet() != null && !address.getStreet().isBlank()) {
-            this.street = address.getStreet();
-        }
-
-        if (address.getNumber() != null && !address.getNumber().isBlank()) {
-            this.number = address.getNumber();
-        }
-
-        if (address.getComplement() != null && !address.getComplement().isBlank()) {
+        if (address.getComplement() != null) {
             this.complement = address.getComplement();
         }
+    }
+
+    private String validateAndAssign(String originalValue, String value, String errorMessage) {
+        if (value == null) {
+            return originalValue;
+        }
+
+        if (value.isBlank()) {
+            throw new UpdateException(errorMessage);
+        }
+
+        return value;
     }
     
 }

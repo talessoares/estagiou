@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.validator.routines.EmailValidator;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lab.estagiou.dto.request.model.student.StudentRegisterRequest;
 import com.lab.estagiou.exception.generic.RegisterException;
 import com.lab.estagiou.exception.generic.UpdateException;
@@ -111,10 +113,12 @@ public class StudentEntity extends UserEntity {
         return this.enrollments.contains(enrollment);
     }
 
+    @JsonIgnore
     public boolean isEnrollmentsEmpty() {
         return this.enrollments.isEmpty();
     }
 
+    @JsonIgnore
     public int getQuantityEnrollments() {
         return this.enrollments.size();
     }
@@ -131,17 +135,13 @@ public class StudentEntity extends UserEntity {
         if (request == null) {
             throw new UpdateException("Requisição de atualização do aluno não pode ser nula");
         }
-    
-        if (request.getName() != null && !request.getName().isBlank()) {
-            super.setName(request.getName());
-        }
-    
-        if (request.getLastName() != null && !request.getLastName().isBlank()) {
-            this.lastName = request.getLastName();
-        }
-    
-        if (request.getPassword() != null && !request.getPassword().isBlank()) {
-            super.setPassword(request.getPassword());
+
+        this.setName(validateAndAssign(super.getName(), request.getName(), "Nome do aluno não pode ser nulo"));
+        this.setLastName(validateAndAssign(this.lastName, request.getLastName(), "Sobrenome do aluno não pode ser nulo"));
+        this.setEmail(validateAndAssign(super.getEmail(), request.getEmail(), "Email do aluno não pode ser nulo"));
+
+        if (request.getPassword() == null) {
+            this.setPassword(validateAndAssign(this.getPassword(), new BCryptPasswordEncoder().encode(request.getPassword()), "Senha do aluno não pode ser nula"));
         }
     
         if (request.getAddress() != null) {
@@ -151,6 +151,18 @@ public class StudentEntity extends UserEntity {
                 this.address.update(request.getAddress());
             }
         }
+    }
+
+    private String validateAndAssign(String originalValue, String value, String errorMessage) {
+        if (value == null) {
+            return originalValue;
+        }
+
+        if (value.isBlank()) {
+            throw new UpdateException(errorMessage);
+        }
+
+        return value;
     }
 
     @Override

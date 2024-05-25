@@ -3,6 +3,8 @@ package com.lab.estagiou.model.company;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lab.estagiou.dto.request.model.company.CompanyRegisterRequest;
@@ -115,24 +117,13 @@ public class CompanyEntity extends UserEntity {
             throw new UpdateException("Requisição não pode ser nula");
         }
 
-        if (request.getName() != null && !request.getName().isBlank()) {
-            this.setName(request.getName());
-        }
+        this.setName(validateAndAssign(this.getName(), request.getName(), "Nome da empresa não pode ser nulo"));
+        this.setEmail(validateAndAssign(this.getEmail(), request.getEmail(), "Email da empresa não pode ser nulo"));
+        this.cnpj = validateAndAssign(this.cnpj, request.getCnpj(), "CNPJ da empresa não pode ser nulo");
+        this.accountableName = validateAndAssign(this.accountableName, request.getAccountableName(), "Responsável pela empresa não pode ser nulo");
 
-        if (request.getEmail() != null && !request.getEmail().isBlank()) {
-            this.setEmail(request.getEmail());
-        }
-
-        if (request.getCnpj() != null && !request.getCnpj().isBlank()) {
-            this.cnpj = request.getCnpj();
-        }
-
-        if (request.getAccountableName() != null && !request.getAccountableName().isBlank()) {
-            this.accountableName = request.getAccountableName();
-        }
-
-        if (request.getPassword() != null && !request.getPassword().isBlank()) {
-            this.setPassword(request.getPassword());
+        if (request.getPassword() == null) {
+            this.setPassword(validateAndAssign(this.getPassword(), new BCryptPasswordEncoder().encode(request.getPassword()), "Senha da empresa não pode ser nula"));
         }
 
         if (request.getAddress() != null) {
@@ -142,6 +133,18 @@ public class CompanyEntity extends UserEntity {
                 this.address.update(request.getAddress());
             }
         }
+    }
+
+    private String validateAndAssign(String originalValue, String value, String errorMessage) {
+        if (value == null) {
+            return originalValue;
+        }
+
+        if (value.isBlank()) {
+            throw new UpdateException(errorMessage);
+        }
+
+        return value;
     }
 
     @Override
