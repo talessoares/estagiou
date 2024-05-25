@@ -18,9 +18,11 @@ import com.lab.estagiou.dto.response.auth.LoginResponse;
 import com.lab.estagiou.model.log.LogEnum;
 import com.lab.estagiou.model.user.UserEntity;
 import com.lab.estagiou.model.user.UserRepository;
+import com.lab.estagiou.security.SecurityFilter;
 import com.lab.estagiou.security.TokenService;
 import com.lab.estagiou.service.util.UtilService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @Service
@@ -34,6 +36,9 @@ public class AuthorizationService extends UtilService implements UserDetailsServ
 
     @Autowired
     private TokenService tokenService;
+
+    @Autowired
+    private SecurityFilter securityFilter;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -50,6 +55,13 @@ public class AuthorizationService extends UtilService implements UserDetailsServ
 
         log(LogEnum.INFO, "Login user: " + ((UserEntity) auth.getPrincipal()).getId(), HttpStatus.OK.value());
         return ResponseEntity.ok(new LoginResponse(token));
+    }
+
+    public ResponseEntity<Object> logout(HttpServletRequest request) {
+        String token = securityFilter.recoverToken(request);
+        tokenService.blacklistToken(token);
+        
+        return ResponseEntity.ok().build();
     }
 
 }

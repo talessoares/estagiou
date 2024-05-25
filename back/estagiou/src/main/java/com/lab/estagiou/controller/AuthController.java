@@ -20,6 +20,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @Controller
@@ -39,6 +40,16 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody @Valid RequestAuthentication authetinticationDto) {
         return authorizationService.login(authetinticationDto);
+    }
+
+    @Operation(summary = "Logout", description = "Logout user from system")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Logout successfully", content = @Content),
+        @ApiResponse(responseCode = "401", description = "Expired authentication", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
+    @PostMapping("/logout")
+    public ResponseEntity<Object> logout(HttpServletRequest request) {
+        return authorizationService.logout(request);
     }
 
 }
