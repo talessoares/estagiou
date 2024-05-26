@@ -68,7 +68,7 @@ public class SecurityConfigurations {
         final String STUDENT_BY_ID = "/student/*/";
 
         authorize.requestMatchers(HttpMethod.POST, API_VERSION + "/student/register").permitAll();
-        authorize.requestMatchers(HttpMethod.GET, API_VERSION + "/student/list").hasRole(ADMIN);
+        authorize.requestMatchers(HttpMethod.GET, API_VERSION + "/student/list").permitAll();
         authorize.requestMatchers(HttpMethod.GET, API_VERSION + STUDENT_BY_ID).hasRole(USER);
         authorize.requestMatchers(HttpMethod.DELETE, API_VERSION + STUDENT_BY_ID).hasRole(USER);
         authorize.requestMatchers(HttpMethod.PUT, API_VERSION + STUDENT_BY_ID).hasRole(USER);

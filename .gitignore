@@ -30,9 +30,9 @@ build/
 !**/src/test/**/build/
 
 ### VS Code ###
-.vscode/
+estagio_u/.vscode
 
 ### Application properties ###
-src/main/resources/application.yml
+
 estagio_u/back/estagiou/src/main/resources/application.yml
 
